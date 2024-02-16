@@ -11,6 +11,12 @@
 		598446602B7FB57200613DA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465F2B7FB57200613DA8 /* ContentView.swift */; };
 		598446622B7FB57400613DA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 598446612B7FB57400613DA8 /* Assets.xcassets */; };
 		598446652B7FB57400613DA8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 598446642B7FB57400613DA8 /* Preview Assets.xcassets */; };
+		5984466D2B7FB5D300613DA8 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984466C2B7FB5D300613DA8 /* GameScene.swift */; };
+		598446732B7FBB6E00613DA8 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446722B7FBB6E00613DA8 /* VisualEffectView.swift */; };
+		598446762B7FC6BA00613DA8 /* SwiftImageReadWrite in Frameworks */ = {isa = PBXBuildFile; productRef = 598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */; };
+		5984467B2B7FD20B00613DA8 /* Sprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984467A2B7FD20B00613DA8 /* Sprite.swift */; };
+		5984467F2B7FD81400613DA8 /* Storyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984467E2B7FD81400613DA8 /* Storyboard.swift */; };
+		598446812B7FD84300613DA8 /* BaseAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446802B7FD84300613DA8 /* BaseAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +26,11 @@
 		598446612B7FB57400613DA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		598446642B7FB57400613DA8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		598446662B7FB57400613DA8 /* storyboard_editor_front.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = storyboard_editor_front.entitlements; sourceTree = "<group>"; };
+		5984466C2B7FB5D300613DA8 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		598446722B7FBB6E00613DA8 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		5984467A2B7FD20B00613DA8 /* Sprite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sprite.swift; sourceTree = "<group>"; };
+		5984467E2B7FD81400613DA8 /* Storyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboard.swift; sourceTree = "<group>"; };
+		598446802B7FD84300613DA8 /* BaseAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				598446762B7FC6BA00613DA8 /* SwiftImageReadWrite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,11 +64,14 @@
 		5984465C2B7FB57200613DA8 /* storyboard-editor-front */ = {
 			isa = PBXGroup;
 			children = (
+				598446782B7FD1F600613DA8 /* Animation */,
 				5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */,
 				5984465F2B7FB57200613DA8 /* ContentView.swift */,
+				5984466C2B7FB5D300613DA8 /* GameScene.swift */,
 				598446612B7FB57400613DA8 /* Assets.xcassets */,
 				598446662B7FB57400613DA8 /* storyboard_editor_front.entitlements */,
 				598446632B7FB57400613DA8 /* Preview Content */,
+				598446722B7FBB6E00613DA8 /* VisualEffectView.swift */,
 			);
 			path = "storyboard-editor-front";
 			sourceTree = "<group>";
@@ -67,6 +82,24 @@
 				598446642B7FB57400613DA8 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		598446782B7FD1F600613DA8 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				598446792B7FD1FD00613DA8 /* Commands */,
+				5984467A2B7FD20B00613DA8 /* Sprite.swift */,
+				5984467E2B7FD81400613DA8 /* Storyboard.swift */,
+				598446802B7FD84300613DA8 /* BaseAnimation.swift */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
+		598446792B7FD1FD00613DA8 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Commands;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -85,6 +118,9 @@
 			dependencies = (
 			);
 			name = "storyboard-editor-front";
+			packageProductDependencies = (
+				598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */,
+			);
 			productName = "storyboard-editor-front";
 			productReference = 5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +149,9 @@
 				Base,
 			);
 			mainGroup = 598446512B7FB57200613DA8;
+			packageReferences = (
+				598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */,
+			);
 			productRefGroup = 5984465B2B7FB57200613DA8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -139,7 +178,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				598446812B7FD84300613DA8 /* BaseAnimation.swift in Sources */,
+				5984467B2B7FD20B00613DA8 /* Sprite.swift in Sources */,
+				5984466D2B7FB5D300613DA8 /* GameScene.swift in Sources */,
+				598446732B7FBB6E00613DA8 /* VisualEffectView.swift in Sources */,
 				598446602B7FB57200613DA8 /* ContentView.swift in Sources */,
+				5984467F2B7FD81400613DA8 /* Storyboard.swift in Sources */,
 				5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,6 +385,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dagronf/SwiftImageReadWrite.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */;
+			productName = SwiftImageReadWrite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 598446522B7FB57200613DA8 /* Project object */;
 }
