@@ -60,23 +60,34 @@ class Sprite : SKSpriteNode {
     func update(timePosition: Double){
         for command in moveXCommands {
             command.setTimePosition(position: timePosition)
-            self.position.x = command.value
+            if command.isActive{
+                self.position.x = command.value
+            }
         }
         for command in moveYCommands {
             command.setTimePosition(position: timePosition)
-            self.position.x = command.value
+            if command.isActive{
+                self.position.y = command.value
+            }
         }
-        for command in moveXCommands {
+        for command in fadeCommands {
             command.setTimePosition(position: timePosition)
-            self.position.x = command.value
+            if command.isActive{
+                self.alpha = command.value
+            }
         }
-        for command in moveXCommands {
+        for command in scaleCommands {
             command.setTimePosition(position: timePosition)
-            self.position.x = command.value
+            if command.isActive{
+                self.size.width = self.size.width * command.value
+                self.size.height = self.size.height * command.value
+            }
         }
-        for command in moveXCommands {
+        for command in rotateCommands {
             command.setTimePosition(position: timePosition)
-            self.position.x = command.value
+            if command.isActive{
+                self.position.x = command.value
+            }
         }
     }
     

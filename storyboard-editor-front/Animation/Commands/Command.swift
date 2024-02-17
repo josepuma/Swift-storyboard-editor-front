@@ -20,6 +20,16 @@ class Command {
         return (position - startTime) / duration
     }
     
+    var isActive : Bool {
+        if position <= startTime {
+            return false
+        }
+        if endTime <= position {
+            return false
+        }
+        return true
+    }
+    
     var value: Double {
         if position <= startTime {
             return startValue

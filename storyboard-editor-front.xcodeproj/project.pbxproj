@@ -20,7 +20,6 @@
 		598446842B80587100613DA8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446832B80587100613DA8 /* Player.swift */; };
 		598446862B8060D600613DA8 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446852B8060D500613DA8 /* ContentViewModel.swift */; };
 		598446882B8061EE00613DA8 /* StoryboardScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446872B8061EE00613DA8 /* StoryboardScene.swift */; };
-		5984468A2B807EC700613DA8 /* MoveXCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446892B807EC700613DA8 /* MoveXCommand.swift */; };
 		5984468C2B808A0800613DA8 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984468B2B808A0800613DA8 /* Command.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +38,6 @@
 		598446832B80587100613DA8 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		598446852B8060D500613DA8 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		598446872B8061EE00613DA8 /* StoryboardScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardScene.swift; sourceTree = "<group>"; };
-		598446892B807EC700613DA8 /* MoveXCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveXCommand.swift; sourceTree = "<group>"; };
 		5984468B2B808A0800613DA8 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,7 +109,6 @@
 		598446792B7FD1FD00613DA8 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
-				598446892B807EC700613DA8 /* MoveXCommand.swift */,
 				5984468B2B808A0800613DA8 /* Command.swift */,
 			);
 			path = Commands;
@@ -207,7 +204,6 @@
 				598446732B7FBB6E00613DA8 /* VisualEffectView.swift in Sources */,
 				598446842B80587100613DA8 /* Player.swift in Sources */,
 				598446862B8060D600613DA8 /* ContentViewModel.swift in Sources */,
-				5984468A2B807EC700613DA8 /* MoveXCommand.swift in Sources */,
 				598446602B7FB57200613DA8 /* ContentView.swift in Sources */,
 				598446882B8061EE00613DA8 /* StoryboardScene.swift in Sources */,
 				5984467F2B7FD81400613DA8 /* Storyboard.swift in Sources */,

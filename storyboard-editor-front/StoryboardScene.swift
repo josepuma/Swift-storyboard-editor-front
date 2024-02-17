@@ -38,6 +38,9 @@ class StoryboardScene: SKScene, ObservableObject{
         
         let bg = Sprite(spritePath: "spark.png")
         bg.moveX(startTime: 10, endTime: 10000, startValue: 0, endValue: 854)
+        bg.moveY(startTime: 10, endTime: 10000, startValue: 0, endValue: 480)
+        bg.fade(startTime: 10, endTime: 5000, startValue: 0, endValue: 1)
+        bg.fade(startTime: 5000, endTime: 10000, startValue: 1, endValue: 0)
         storyboard.addSprite(sprite: bg)
         
         let sprites = storyboard.getSprites()
