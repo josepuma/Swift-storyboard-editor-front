@@ -8,13 +8,25 @@ import SpriteKit
 class Sprite : SKSpriteNode {
     private var sprite = SKSpriteNode()
     var spritePath : String = ""
-    
+    private var timeLinePosition : Double = 0
     //Commands
     private var moveXCommands : [Command] = []
     private var moveYCommands : [Command] = []
     private var fadeCommands : [Command] = []
     private var scaleCommands : [Command] = []
     private var rotateCommands : [Command] = []
+    
+    private var startTimes : [Double] = []
+    private var endTimes : [Double] = []
+    
+    var isActive : Bool {
+        let start = startTimes.min()
+        let end = endTimes.max()
+        if timeLinePosition >= start! && end! >= timeLinePosition{
+            return true
+        }
+        return false
+    }
     
     convenience init(spritePath: String) {
         self.init(imageNamed: spritePath)
@@ -30,22 +42,32 @@ class Sprite : SKSpriteNode {
     }
     
     func moveX(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        startTimes.append(startTime)
+        endTimes.append(endTime)
         moveXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
     func moveY(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        startTimes.append(startTime)
+        endTimes.append(endTime)
         moveYCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
     func fade(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        startTimes.append(startTime)
+        endTimes.append(endTime)
         fadeCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
     func scale(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        startTimes.append(startTime)
+        endTimes.append(endTime)
         scaleCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
     func rotate(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        startTimes.append(startTime)
+        endTimes.append(endTime)
         rotateCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
@@ -58,37 +80,44 @@ class Sprite : SKSpriteNode {
     }
     
     func update(timePosition: Double){
-        for command in moveXCommands {
-            command.setTimePosition(position: timePosition)
-            if command.isActive{
-                self.position.x = command.value
+        timeLinePosition = timePosition
+        print(isActive)
+        if isActive {
+            self.isHidden = true
+            for command in moveXCommands {
+                command.setTimePosition(position: timePosition)
+                if command.isActive{
+                    self.position.x = command.value
+                }
+            }
+            for command in moveYCommands {
+                command.setTimePosition(position: timePosition)
+                if command.isActive{
+                    self.position.y = command.value
+                }
+            }
+            for command in fadeCommands {
+                command.setTimePosition(position: timePosition)
+                if command.isActive{
+                    self.alpha = command.value
+                }
+            }
+            for command in scaleCommands {
+                command.setTimePosition(position: timePosition)
+                if command.isActive{
+                    self.size.width = self.size.width * command.value
+                    self.size.height = self.size.height * command.value
+                }
+            }
+            for command in rotateCommands {
+                command.setTimePosition(position: timePosition)
+                if command.isActive{
+                    self.position.x = command.value
+                }
             }
         }
-        for command in moveYCommands {
-            command.setTimePosition(position: timePosition)
-            if command.isActive{
-                self.position.y = command.value
-            }
-        }
-        for command in fadeCommands {
-            command.setTimePosition(position: timePosition)
-            if command.isActive{
-                self.alpha = command.value
-            }
-        }
-        for command in scaleCommands {
-            command.setTimePosition(position: timePosition)
-            if command.isActive{
-                self.size.width = self.size.width * command.value
-                self.size.height = self.size.height * command.value
-            }
-        }
-        for command in rotateCommands {
-            command.setTimePosition(position: timePosition)
-            if command.isActive{
-                self.position.x = command.value
-            }
-        }
+        self.isHidden = false
     }
+    
     
 }

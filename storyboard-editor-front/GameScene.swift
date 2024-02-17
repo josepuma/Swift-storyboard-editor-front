@@ -33,8 +33,6 @@ class GameScene : SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        let position = sound?.getPosition()
-        //print("\(position ?? 0)")
     }
     
     private func loadTextures(path: String) -> [String: SKTexture]{
