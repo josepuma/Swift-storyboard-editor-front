@@ -11,30 +11,45 @@ import SceneKit
 struct ContentView: View {
     
     @State private var musicPosition: Double = 0
-    
+    @State private var music: Double = 0
+    @StateObject private var contentViewmodel = ContentViewModel()
     //define a scene
-    var scene: SKScene{
+    /*var scene: SKScene{
         let scene = GameScene()
         scene.size = CGSize(width: 854, height: 480)
         scene.scaleMode = .fill
         scene.backgroundColor = .clear
         return scene
-    }
+    }*/
     
     var body: some View {
         VStack {
+            
             HStack{
+                Button("Play"){
+                    contentViewmodel.currentTargetScene?.player.play()
+                }
+                Button("View Position"){
+                    contentViewmodel.getAudioPosition()
+                }
+                Text("Position: \(music)")
                 VStack{
                     Slider(
-                        value: $musicPosition,
-                        in: 0...1000,
-                        step: 10
+                        value: Binding(get: {
+                           musicPosition
+                        }, set: {
+                            (newVal) in
+                            musicPosition = newVal
+                            contentViewmodel.currentTargetScene?.updateAudioPosition(position: musicPosition)
+                        }),
+                        in: 0...(contentViewmodel.currentTargetScene?.getAudioLength())!
                     ){
-                        Text("\(musicPosition)")
-                    }
+                    }.onReceive(contentViewmodel.currentTargetScene!.musicPublisher, perform: { target in
+                        print(target)
+                    })
                 }
             }
-            SpriteView(scene: scene, options: [.allowsTransparency],
+            SpriteView(scene: contentViewmodel.scene, options: [.allowsTransparency],
                        debugOptions: [.showsFPS, .showsNodeCount]
             )
                 .frame(width: 854, height: 480, alignment: .center)
