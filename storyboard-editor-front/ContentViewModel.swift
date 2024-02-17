@@ -20,11 +20,9 @@ class ContentViewModel : ObservableObject {
         currentTargetScene = scene as? StoryboardScene
     }
     
-    @Published var musicPosition : Double = 0
     
     func getAudioPosition(){
-        musicPosition = currentTargetScene?.musicPosition ?? musicPosition
-        //print(musicPosition)
+        
     }
     
 }

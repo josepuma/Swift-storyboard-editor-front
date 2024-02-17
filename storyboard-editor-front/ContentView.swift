@@ -11,7 +11,7 @@ import SceneKit
 struct ContentView: View {
     
     @State private var musicPosition: Double = 0
-    @State private var music: Double = 0
+    @State private var musicPositionTime: String = "00:00:00"
     @StateObject private var contentViewmodel = ContentViewModel()
     //define a scene
     /*var scene: SKScene{
@@ -32,7 +32,7 @@ struct ContentView: View {
                 Button("View Position"){
                     contentViewmodel.getAudioPosition()
                 }
-                Text("Position: \(music)")
+                Text("\(musicPositionTime)")
                 VStack{
                     Slider(
                         value: Binding(get: {
@@ -44,8 +44,9 @@ struct ContentView: View {
                         }),
                         in: 0...(contentViewmodel.currentTargetScene?.getAudioLength())!
                     ){
-                    }.onReceive(contentViewmodel.currentTargetScene!.musicPublisher, perform: { target in
-                        print(target)
+                    }
+                    .onReceive(contentViewmodel.currentTargetScene!.musicPublisher, perform: { target in
+                        musicPositionTime = target
                     })
                 }
             }

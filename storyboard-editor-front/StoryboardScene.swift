@@ -12,8 +12,8 @@ import Combine
 class StoryboardScene: SKScene, ObservableObject{
     weak var contentViewModal: ContentViewModel?
     public var player : Player!
-    @Published var musicPosition : Double = 20
-    public let musicPublisher = CurrentValueSubject<Double, Never>(0)
+    @Published var musicPosition : String = "00:00:00"
+    public let musicPublisher = CurrentValueSubject<String, Never>("00:00:00")
     private var cancellableSet = Set<AnyCancellable>()
     
     override init(){
@@ -38,14 +38,15 @@ class StoryboardScene: SKScene, ObservableObject{
         player = Player(soundPath: "/Users/josepuma/Documents/sprites/Niicap - Lifeline.mp3")
     }
     
-    @Published var finalMusicPosition : Double = 20 {
+    @Published var finalMusicPosition : String = "00:00:00" {
         didSet {
-            musicPublisher.send(Double(self.musicPosition))
+            musicPublisher.send(String(self.musicPosition))
         }
     }
     
     override func update(_ currentTime: TimeInterval) {
-        musicPosition = getAudioPosition()
+        musicPosition = player.getPositionFormatted()
+        finalMusicPosition = self.musicPosition
     }
     
     
