@@ -15,7 +15,7 @@ class StoryboardScene: SKScene, ObservableObject{
     @Published var musicPosition : String = "00:00:00"
     public let musicPublisher = CurrentValueSubject<String, Never>("00:00:00")
     private var cancellableSet = Set<AnyCancellable>()
-    
+    private var renderSprites: [Sprite] = []
     var textures : [String: SKTexture] = [:]
     var storyboard = Storyboard()
     var osbReader : OsbReader?
@@ -34,27 +34,21 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Documents/SB")
+        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
         storyboard.loadTextures(textures: textures)
         
-        osbReader = OsbReader(osbPath: "/Users/josepuma/Documents/SB/storyboard.txt")
+        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/ginkiha - EOS (alacat).txt")
         storyboard.addSprites(sprites: osbReader!.spriteList)
-        let bg = Sprite(spritePath: "spark.png")
-        bg.moveX(startTime: 100, endTime: 10000, startValue: 0, endValue: 854)
-        bg.moveY(startTime: 100, endTime: 10000, startValue: 0, endValue: 480)
-        bg.fade(startTime: 100, endTime: 5000, startValue: 0, endValue: 1)
-        bg.fade(startTime: 5000, endTime: 10000, startValue: 1, endValue: 0)
-        storyboard.addSprite(sprite: bg)
         
-        let sprites = storyboard.getSprites()
-        for sprite in sprites {
+        renderSprites = storyboard.getSprites()
+        for sprite in renderSprites {
             addChild(sprite)
         }
     }
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Documents/SB/Lia-Toki wo Kizamu Uta.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -67,7 +61,7 @@ class StoryboardScene: SKScene, ObservableObject{
         musicPosition = player.getPositionFormatted()
         finalMusicPosition = self.musicPosition
         let positionTimeLine = player.getPosition()
-        for sprite in storyboard.getSprites() {
+        for sprite in renderSprites {
             sprite.update(timePosition: positionTimeLine)
         }
     }
