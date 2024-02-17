@@ -18,6 +18,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     var textures : [String: SKTexture] = [:]
     var storyboard = Storyboard()
+    var osbReader : OsbReader?
     
     override init(){
         super.init(size: CGSize(width: 854, height: 480))
@@ -33,9 +34,11 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Documents/sprites")
+        textures = loadTextures(path: "/Users/josepuma/Documents/SB")
         storyboard.loadTextures(textures: textures)
         
+        osbReader = OsbReader(osbPath: "/Users/josepuma/Documents/SB/storyboard.txt")
+        storyboard.addSprites(sprites: osbReader!.spriteList)
         let bg = Sprite(spritePath: "spark.png")
         bg.moveX(startTime: 100, endTime: 10000, startValue: 0, endValue: 854)
         bg.moveY(startTime: 100, endTime: 10000, startValue: 0, endValue: 480)
@@ -51,7 +54,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Documents/sprites/Niicap - Lifeline.mp3")
+        player = Player(soundPath: "/Users/josepuma/Documents/SB/Lia-Toki wo Kizamu Uta.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -64,10 +67,8 @@ class StoryboardScene: SKScene, ObservableObject{
         musicPosition = player.getPositionFormatted()
         finalMusicPosition = self.musicPosition
         let positionTimeLine = player.getPosition()
-        if positionTimeLine > 0{
-            for sprite in storyboard.getSprites() {
-                sprite.update(timePosition: positionTimeLine)
-            }
+        for sprite in storyboard.getSprites() {
+            sprite.update(timePosition: positionTimeLine)
         }
     }
     

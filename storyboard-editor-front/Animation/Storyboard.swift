@@ -14,9 +14,22 @@ class Storyboard {
         self.textures = textures
     }
     
+    func addSprites(sprites: [Sprite]){
+        for sprite in sprites {
+            let texture = self.textures[sprite.spritePath]
+            if texture != nil {
+                sprite.loadTexture(texture: texture!)
+                self.sprites.append(sprite)
+            }
+        }
+    }
+    
     func addSprite(sprite: Sprite){
-        sprite.loadTexture(texture: self.textures[sprite.spritePath]!)
-        sprites.append(sprite)
+        let texture = self.textures[sprite.spritePath]
+        if texture != nil {
+            sprite.loadTexture(texture: texture!)
+            sprites.append(sprite)
+        }
     }
     
     func getSprites() -> [Sprite]{

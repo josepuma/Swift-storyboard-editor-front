@@ -22,8 +22,10 @@ class Sprite : SKSpriteNode {
     var isActive : Bool {
         let start = startTimes.min()
         let end = endTimes.max()
-        if timeLinePosition >= start! && end! >= timeLinePosition{
-            return true
+        if(start != nil && end != nil){
+            if timeLinePosition >= start! && end! >= timeLinePosition{
+                return true
+            }
         }
         return false
     }
@@ -81,9 +83,8 @@ class Sprite : SKSpriteNode {
     
     func update(timePosition: Double){
         timeLinePosition = timePosition
-        print(isActive)
         if isActive {
-            self.isHidden = true
+            self.isHidden = false
             for command in moveXCommands {
                 command.setTimePosition(position: timePosition)
                 if command.isActive{
@@ -105,8 +106,8 @@ class Sprite : SKSpriteNode {
             for command in scaleCommands {
                 command.setTimePosition(position: timePosition)
                 if command.isActive{
-                    self.size.width = self.size.width * command.value
-                    self.size.height = self.size.height * command.value
+                    self.xScale = command.value
+                    self.yScale = command.value
                 }
             }
             for command in rotateCommands {
@@ -115,8 +116,10 @@ class Sprite : SKSpriteNode {
                     self.position.x = command.value
                 }
             }
+        }else{
+            self.isHidden = true
         }
-        self.isHidden = false
+        //self.isHidden = false
     }
     
     

@@ -48,7 +48,6 @@ class Command {
     }
     
     func setTimePosition(position: Double){
-        //print(position)
         self.position = position;
     }
 }
