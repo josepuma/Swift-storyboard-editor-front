@@ -20,16 +20,14 @@ class Sprite : SKSpriteNode {
     private var areCommandsCalculated :  Bool = false;
     private var startTimes : [Double] = []
     private var endTimes : [Double] = []
+    private var start : Double = 0
+    private var end : Double = 0
     
     var isLoaded : Bool = false
     
     var isActive : Bool {
-        let start = startTimes.min()
-        let end = endTimes.max()
-        if(start != nil && end != nil){
-            if timeLinePosition >= start! && end! >= timeLinePosition{
-                return true
-            }
+        if timeLinePosition >= start && end >= timeLinePosition{
+            return true
         }
         return false
     }
@@ -100,7 +98,6 @@ class Sprite : SKSpriteNode {
     func loadTexture(texture: SKTexture){
         self.texture = texture
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.color = .blue
         self.size = CGSize(width: texture.size().width, height: texture.size().height)
     }
     
@@ -161,6 +158,8 @@ class Sprite : SKSpriteNode {
     }
     
     func setInitialValues(){
+        start = startTimes.min()!
+        end = endTimes.max()!
         if(fadeCommands.count > 0){
             self.alpha = fadeCommands[0].startValue;
         }

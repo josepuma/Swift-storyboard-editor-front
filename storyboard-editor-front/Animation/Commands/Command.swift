@@ -11,6 +11,7 @@ class Command {
     var startValue: Double = 0.0
     var endValue: Double = 0.0
     private var position : Double = 0
+    //var value : Double = 0
     
     var duration: Double {
         return endTime - startTime
@@ -29,6 +30,7 @@ class Command {
         }
         return true
     }
+    
     
     var value: Double {
         if position <= startTime {

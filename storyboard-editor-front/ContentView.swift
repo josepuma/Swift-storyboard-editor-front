@@ -51,7 +51,7 @@ struct ContentView: View {
                 }
             }
             SpriteView(scene: contentViewmodel.scene, options: [.allowsTransparency],
-                       debugOptions: [.showsFPS, .showsNodeCount]
+                       debugOptions: [.showsFPS, .showsDrawCount, .showsNodeCount]
             )
                 .frame(width: 854, height: 480, alignment: .center)
                 .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)

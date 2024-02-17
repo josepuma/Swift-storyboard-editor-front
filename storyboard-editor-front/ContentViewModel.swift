@@ -16,7 +16,6 @@ class ContentViewModel : ObservableObject {
     init(){
         scene = StoryboardScene()
         scene.size = CGSize(width: 854, height: 480)
-        scene.scaleMode = .fill
         currentTargetScene = scene as? StoryboardScene
     }
     
