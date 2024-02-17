@@ -9,6 +9,13 @@ class Sprite : SKSpriteNode {
     private var sprite = SKSpriteNode()
     var spritePath : String = ""
     
+    //Commands
+    private var moveXCommands : [Command] = []
+    private var moveYCommands : [Command] = []
+    private var fadeCommands : [Command] = []
+    private var scaleCommands : [Command] = []
+    private var rotateCommands : [Command] = []
+    
     convenience init(spritePath: String) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
@@ -22,8 +29,24 @@ class Sprite : SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func moveX(){
-        
+    func moveX(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        moveXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+    }
+    
+    func moveY(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        moveYCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+    }
+    
+    func fade(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        fadeCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+    }
+    
+    func scale(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        scaleCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+    }
+    
+    func rotate(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+        rotateCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
     func loadTexture(texture: SKTexture){
@@ -32,6 +55,29 @@ class Sprite : SKSpriteNode {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.color = .blue
         self.size = CGSize(width: texture.size().width, height: texture.size().height)
+    }
+    
+    func update(timePosition: Double){
+        for command in moveXCommands {
+            command.setTimePosition(position: timePosition)
+            self.position.x = command.value
+        }
+        for command in moveYCommands {
+            command.setTimePosition(position: timePosition)
+            self.position.x = command.value
+        }
+        for command in moveXCommands {
+            command.setTimePosition(position: timePosition)
+            self.position.x = command.value
+        }
+        for command in moveXCommands {
+            command.setTimePosition(position: timePosition)
+            self.position.x = command.value
+        }
+        for command in moveXCommands {
+            command.setTimePosition(position: timePosition)
+            self.position.x = command.value
+        }
     }
     
 }

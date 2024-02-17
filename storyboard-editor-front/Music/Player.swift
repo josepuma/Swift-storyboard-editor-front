@@ -25,7 +25,7 @@ class Player {
     }
     
     func getPositionFormatted() -> String{
-        let miliseconds = Int(player.currentTime * 1000)
+        //let miliseconds = Int(player.currentTime * 1000)
         let seconds = Int(player.currentTime)
         let minutes = seconds / 60
         return String(format:"%02d:%02d", minutes, seconds)
