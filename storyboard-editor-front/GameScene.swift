@@ -12,11 +12,17 @@ import SwiftImageReadWrite
 class GameScene : SKScene {
     var textures : [String: SKTexture] = [:]
     var storyboard = Storyboard()
+    var sound : Player?
     override func didMove(to view: SKView) {
         textures = loadTextures(path: "/Users/josepuma/Documents/sprites")
         storyboard.loadTextures(textures: textures)
         
-        let bg = Sprite(spritePath: "bg.jpeg")
+        sound = Player(soundPath: "/Users/josepuma/Documents/sprites/Niicap - Lifeline.mp3")
+        //sound?.play()
+        let length = sound?.getLength()
+        print("\(length ?? 0)")
+        
+        let bg = Sprite(spritePath: "spark.png")
         storyboard.addSprite(sprite: bg)
         
         
@@ -27,6 +33,8 @@ class GameScene : SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        let position = sound?.getPosition()
+        //print("\(position ?? 0)")
     }
     
     private func loadTextures(path: String) -> [String: SKTexture]{

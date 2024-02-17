@@ -10,6 +10,8 @@ import SpriteKit
 import SceneKit
 struct ContentView: View {
     
+    @State private var musicPosition: Double = 0
+    
     //define a scene
     var scene: SKScene{
         let scene = GameScene()
@@ -21,7 +23,17 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            //Text("Hello, world!")
+            HStack{
+                VStack{
+                    Slider(
+                        value: $musicPosition,
+                        in: 0...1000,
+                        step: 10
+                    ){
+                        Text("\(musicPosition)")
+                    }
+                }
+            }
             SpriteView(scene: scene, options: [.allowsTransparency],
                        debugOptions: [.showsFPS, .showsNodeCount]
             )
