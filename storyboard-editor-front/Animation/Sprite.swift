@@ -36,14 +36,14 @@ class Sprite : SKSpriteNode {
     convenience init(spritePath: String) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.position = CGPoint(x: 427 , y: -240)
+        self.position = CGPoint(x: 427 * 2 , y: (-240) * 2)
     }
     
     convenience init(spritePath: String, position: CGPoint) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.position.x = position.x + 107
-        self.position.y = position.y * -1
+        self.position.x = (position.x + 107) * 2
+        self.position.y = (position.y * -1) * 2
     }
     
     override init(texture: SKTexture!, color: NSColor, size: CGSize) {
@@ -172,6 +172,7 @@ class Sprite : SKSpriteNode {
     
     func update(timePosition: Double){
         timeLinePosition = timePosition
+        let displaySize : Double = 2
         if(areCommandsCalculated){
             if isActive {
                 self.isHidden = false
@@ -183,24 +184,32 @@ class Sprite : SKSpriteNode {
                 
                 if(scaleCommands.count > 0){
                     let scale = valueAt(position: timePosition, commands: scaleCommands)
-                    self.xScale = scale
-                    self.yScale = scale
+                    self.xScale = scale * displaySize
+                    self.yScale = scale * displaySize
+                    if(scale == 0){
+                        return
+                    }
                 }else{
-                    self.yScale = valueAt(position: timePosition, commands: scaleYCommands)
-                    self.xScale = valueAt(position: timePosition, commands: scaleXCommands)
+                    let scaleX = valueAt(position: timePosition, commands: scaleYCommands)
+                    let scaleY = valueAt(position: timePosition, commands: scaleXCommands)
+                    self.yScale = scaleX * displaySize
+                    self.xScale = scaleX * displaySize
+                    if scaleX == 0 || scaleY == 0{
+                        return 
+                    }
                 }
                 
-                
-                if(moveCommands.count > 0){
-                    let positionFinal = valueAtVector(position: timePosition, commands: moveCommands, defaultVale: CGPoint(x: 427 , y: -240))
-                    self.position.x = positionFinal.x
-                    self.position.y = positionFinal.y * -1
+                if moveCommands.count > 0 {
+                    let positionMove = valueAtVector(position: timePosition, commands: moveCommands)
+                    self.position.x = positionMove.x * displaySize
+                    self.position.y = (positionMove.y * -1) * displaySize
                 }else{
-                    //self.position.x = valueAt(position: timePosition, commands: moveXCommands)
-                    //self.position.y = valueAt(position: timePosition, commands: moveYCommands) * -1
+                    self.position.x = valueAt(position: timePosition, commands: moveXCommands, defaultValue: 427) * displaySize
+                    self.position.y = (valueAt(position: timePosition, commands: moveYCommands, defaultValue: 240) * -1) * displaySize
                 }
+                
                 let rotation = valueAt(position: timePosition, commands: rotateCommands, defaultValue: 0)
-                self.zRotation = rotation > 0 ? .pi / rotation : rotation
+                self.zRotation = rotation
             }else{
                 self.isHidden = true
                 return
@@ -221,10 +230,10 @@ class Sprite : SKSpriteNode {
             self.yScale = scaleCommands[0].value
         }
         if(moveXCommands.count > 0){
-            self.position.x = moveXCommands[0].value
+            self.position.x = moveXCommands[0].value * 2
         }
         if(moveYCommands.count > 0){
-            self.position.y = moveYCommands[0].value * -1
+            self.position.y = (moveYCommands[0].value * -1) * 2
         }
         if(scaleXCommands.count > 0){
             self.xScale = scaleXCommands[0].value

@@ -13,7 +13,9 @@ class StoryboardScene: SKScene, ObservableObject{
     weak var contentViewModal: ContentViewModel?
     public var player : Player!
     @Published var musicPosition : String = "00:00:00"
+    @Published var musicPositionTime : Double = 0
     public let musicPublisher = CurrentValueSubject<String, Never>("00:00:00")
+    public let musicTimePublisher = CurrentValueSubject<Double, Never>(0)
     private var cancellableSet = Set<AnyCancellable>()
     private var renderSprites: [Sprite] = []
     var textures : [String: SKTexture] = [:]
@@ -21,10 +23,15 @@ class StoryboardScene: SKScene, ObservableObject{
     var osbReader : OsbReader?
     
     override init(){
-        super.init(size: CGSize(width: 854, height: 480))
+        super.init(size: CGSize(width: 1708, height: 960))
         musicPublisher
             .sink(receiveValue: { [unowned self] target in
                             self.musicPosition = target
+                        })
+                        .store(in: &cancellableSet)
+        musicTimePublisher
+            .sink(receiveValue: { [unowned self] target in
+                            self.musicPositionTime = target
                         })
                         .store(in: &cancellableSet)
     }
@@ -34,10 +41,10 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
+        textures = loadTextures(path: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/sb")
         storyboard.loadTextures(textures: textures)
         
-        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
+        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/RADWIMPS - Hikari (Haruto).osb")
         storyboard.addSprites(sprites: osbReader!.spriteList)
         
         renderSprites = storyboard.getSprites()
@@ -48,7 +55,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/audio.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -57,9 +64,17 @@ class StoryboardScene: SKScene, ObservableObject{
         }
     }
     
+    @Published var finalMusicPositionTime : Double = 0 {
+        didSet {
+            musicTimePublisher.send(self.musicPositionTime)
+        }
+    }
+    
     override func update(_ currentTime: TimeInterval) {
         musicPosition = player.getPositionFormatted()
         finalMusicPosition = self.musicPosition
+        musicPositionTime = player.getPosition()
+        finalMusicPositionTime = player.getPosition()
         let positionTimeLine = player.getPosition()
         for sprite in renderSprites {
             sprite.update(timePosition: positionTimeLine)

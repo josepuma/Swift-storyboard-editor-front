@@ -15,13 +15,14 @@ class ContentViewModel : ObservableObject {
     
     init(){
         scene = StoryboardScene()
-        let  blur = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": 5])
-        scene.size = CGSize(width: 854, height: 480)
+        let  blur = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": 20])
+        scene.size = CGSize(width: 1708, height: 960)
         scene.anchorPoint = CGPoint(x: 0, y: 1)
-        scene.backgroundColor = .black
-        /*scene.filter = blur
-        scene.shouldRasterize = true
-        scene.shouldEnableEffects = true*/
+        scene.scaleMode = .aspectFit
+        scene.backgroundColor = .clear
+        //scene.filter = blur
+        //scene.shouldRasterize = true
+        //scene.shouldEnableEffects = true
         currentTargetScene = scene as? StoryboardScene
     }
     

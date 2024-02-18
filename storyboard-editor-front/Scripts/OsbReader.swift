@@ -43,6 +43,10 @@ class OsbReader {
                     
                     sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!))
                     
+                    case "L":
+                        sprite = nil;
+                        break
+                    
                     default:
                         if(values[3].isEmpty){
                             values[3] = values[2]
