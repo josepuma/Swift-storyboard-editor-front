@@ -23,7 +23,7 @@ class Sprite : SKSpriteNode {
     private var endTimes : [Double] = []
     private var start : Double = 0
     private var end : Double = 0
-    
+    private var spritePosition : CGPoint = CGPoint(x: 1708, y: (-240) * 2)
     var isLoaded : Bool = false
     
     var isActive : Bool {
@@ -36,14 +36,13 @@ class Sprite : SKSpriteNode {
     convenience init(spritePath: String) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.position = CGPoint(x: 427 * 2 , y: (-240) * 2)
+        self.spritePosition = CGPoint(x: 427 * 2 , y: (-240) * 2)
     }
     
     convenience init(spritePath: String, position: CGPoint) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.position.x = (position.x + 107) * 2
-        self.position.y = (position.y * -1) * 2
+        self.spritePosition = CGPoint(x: (position.x + 107) , y: (position.y * -1))
     }
     
     override init(texture: SKTexture!, color: NSColor, size: CGSize) {
@@ -170,9 +169,8 @@ class Sprite : SKSpriteNode {
         return command.valueAt(position: position)
     }
     
-    func update(timePosition: Double){
+    func update(timePosition: Double, displaySize: Double = 2){
         timeLinePosition = timePosition
-        let displaySize : Double = 2
         if(areCommandsCalculated){
             if isActive {
                 self.isHidden = false
@@ -190,23 +188,33 @@ class Sprite : SKSpriteNode {
                         return
                     }
                 }else{
-                    let scaleX = valueAt(position: timePosition, commands: scaleYCommands)
-                    let scaleY = valueAt(position: timePosition, commands: scaleXCommands)
-                    self.yScale = scaleX * displaySize
+                    let scaleX = valueAt(position: timePosition, commands: scaleXCommands)
+                    let scaleY = valueAt(position: timePosition, commands: scaleYCommands)
+                    self.yScale = scaleY * displaySize
                     self.xScale = scaleX * displaySize
                     if scaleX == 0 || scaleY == 0{
                         return 
                     }
                 }
                 
+                if(moveCommands.count == 0 && moveXCommands.count == 0 && moveYCommands.count == 0){
+                    self.position.x = self.spritePosition.x * displaySize
+                    self.position.y = self.spritePosition.y * displaySize
+                }
+                
                 if moveCommands.count > 0 {
                     let positionMove = valueAtVector(position: timePosition, commands: moveCommands)
                     self.position.x = positionMove.x * displaySize
                     self.position.y = (positionMove.y * -1) * displaySize
-                }else{
+                }
+                if moveXCommands.count > 0{
                     self.position.x = valueAt(position: timePosition, commands: moveXCommands, defaultValue: 427) * displaySize
+                }
+            
+                if moveYCommands.count > 0 {
                     self.position.y = (valueAt(position: timePosition, commands: moveYCommands, defaultValue: 240) * -1) * displaySize
                 }
+                
                 
                 let rotation = valueAt(position: timePosition, commands: rotateCommands, defaultValue: 0)
                 self.zRotation = rotation
@@ -229,11 +237,15 @@ class Sprite : SKSpriteNode {
             self.xScale = scaleCommands[0].value
             self.yScale = scaleCommands[0].value
         }
+        if(moveCommands.count > 0){
+            self.position.x = moveCommands[0].value.x
+            self.position.y = moveCommands[0].value.y
+        }
         if(moveXCommands.count > 0){
-            self.position.x = moveXCommands[0].value * 2
+            self.position.x = moveXCommands[0].value
         }
         if(moveYCommands.count > 0){
-            self.position.y = (moveYCommands[0].value * -1) * 2
+            self.position.y = (moveYCommands[0].value)
         }
         if(scaleXCommands.count > 0){
             self.xScale = scaleXCommands[0].value

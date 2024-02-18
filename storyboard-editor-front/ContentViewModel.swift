@@ -16,9 +16,9 @@ class ContentViewModel : ObservableObject {
     init(){
         scene = StoryboardScene()
         let  blur = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": 20])
-        scene.size = CGSize(width: 1708, height: 960)
+        //scene.size = CGSize(width: 1708, height: 960)
         scene.anchorPoint = CGPoint(x: 0, y: 1)
-        scene.scaleMode = .aspectFit
+        scene.scaleMode = .aspectFill
         scene.backgroundColor = .clear
         //scene.filter = blur
         //scene.shouldRasterize = true

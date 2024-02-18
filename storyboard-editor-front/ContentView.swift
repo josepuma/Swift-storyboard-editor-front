@@ -12,6 +12,7 @@ struct ContentView: View {
     
     @State private var musicPosition: Double = 0
     @State private var musicPositionTime: String = "00:00:00"
+    @State private var zoomSize : Double = 100
     @StateObject private var contentViewmodel = ContentViewModel()
 
     var body: some View {
@@ -46,10 +47,23 @@ struct ContentView: View {
                    
                 }
             }
+            
+            // 100 - 1708
+            // 50 - x
+            Stepper(
+                value: $zoomSize,
+                in: 10...100,
+                step: 10,
+                onEditingChanged: { editing in
+                    contentViewmodel.currentTargetScene!.updateZoomSize(percentage: zoomSize)
+                }
+            ){
+                Text("Zoom: \(zoomSize)")
+            }
             SpriteView(scene: contentViewmodel.scene, options: [.allowsTransparency],
                        debugOptions: [.showsFPS, .showsDrawCount, .showsNodeCount]
             )
-                .frame(width: 1708, height: 960, alignment: .center)
+                .frame(width: (1708 * zoomSize) / 100, height: (960 * zoomSize) / 100, alignment: .center)
                 .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
         }
         .background(VisualEffectView().ignoresSafeArea())

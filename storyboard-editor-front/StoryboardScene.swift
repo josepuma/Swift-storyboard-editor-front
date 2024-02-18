@@ -11,6 +11,7 @@ import Combine
 
 class StoryboardScene: SKScene, ObservableObject{
     weak var contentViewModal: ContentViewModel?
+    private var displaySize : Double = 2
     public var player : Player!
     @Published var musicPosition : String = "00:00:00"
     @Published var musicPositionTime : Double = 0
@@ -41,10 +42,10 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/sb")
+        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
         storyboard.loadTextures(textures: textures)
         
-        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/RADWIMPS - Hikari (Haruto).osb")
+        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
         storyboard.addSprites(sprites: osbReader!.spriteList)
         
         renderSprites = storyboard.getSprites()
@@ -55,7 +56,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/audio.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -77,10 +78,13 @@ class StoryboardScene: SKScene, ObservableObject{
         finalMusicPositionTime = player.getPosition()
         let positionTimeLine = player.getPosition()
         for sprite in renderSprites {
-            sprite.update(timePosition: positionTimeLine)
+            sprite.update(timePosition: positionTimeLine, displaySize: displaySize)
         }
     }
     
+    func updateZoomSize(percentage: Double){
+        displaySize = (percentage / 100) * 2
+    }
     
     func getAudioPosition() -> Double {
         return player.getPosition()
