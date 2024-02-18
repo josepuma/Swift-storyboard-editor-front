@@ -5,15 +5,20 @@
 //  Created by José Puma on 17-02-24.
 //
 import Accelerate
-class Command {
+import SpriteKit
+class VectorCommand {
     var startTime: Double = 0
     var endTime: Double = 0
-    var startValue: Double = 0.0
-    var endValue: Double = 0.0
+    var startValue: CGPoint = CGPoint(x: 0, y:0)
+    var endValue: CGPoint = CGPoint(x: 0, y:0)
     private var position : Double = 0
     private var interpolation = Interpolation()
-    private var duration : Double = 0
- 
+    //var value : Double = 0
+    
+    var duration: Double {
+        return endTime - startTime
+    }
+    
     var progress: Double {
         return (position - startTime) / duration
     }
@@ -28,25 +33,26 @@ class Command {
         return true
     }
     
-    var value: Double {
+    
+    var value: CGPoint {
         if position <= startTime {
             return startValue
         }
         if endTime <= position {
             return endValue
         }
+        
         return interpolation.lerp(startValue, endValue, progress)
     }
     
-    init(startTime: Double, endTime: Double, startValue: Double, endValue: Double) {
+    init(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint) {
         self.startTime = startTime
         self.endTime = endTime
         self.startValue = startValue
         self.endValue = endValue
-        self.duration = endTime - startTime
     }
     
-    func valueAt(position: Double) -> Double{
+    func valueAt(position: Double) -> CGPoint{
         if position < startTime{
             return valueAtProgress(progress: 0)
         }
@@ -58,8 +64,8 @@ class Command {
         return valueAtProgress(progress: progress)
     }
     
-    func valueAtProgress(progress: Double) -> Double {
-        return startValue + (endValue - startValue) * progress
+    func valueAtProgress(progress: Double) -> CGPoint {
+        return interpolation.lerp(startValue, endValue, progress)
     }
     
     func setTimePosition(position: Double){

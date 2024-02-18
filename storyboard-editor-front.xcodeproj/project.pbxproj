@@ -22,6 +22,8 @@
 		598446882B8061EE00613DA8 /* StoryboardScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446872B8061EE00613DA8 /* StoryboardScene.swift */; };
 		5984468C2B808A0800613DA8 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984468B2B808A0800613DA8 /* Command.swift */; };
 		598446932B8098C900613DA8 /* OsbReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446922B8098C900613DA8 /* OsbReader.swift */; };
+		598446952B8167BE00613DA8 /* VectorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446942B8167BE00613DA8 /* VectorCommand.swift */; };
+		5984469A2B8169D200613DA8 /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446992B8169D200613DA8 /* Interpolation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 		598446872B8061EE00613DA8 /* StoryboardScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardScene.swift; sourceTree = "<group>"; };
 		5984468B2B808A0800613DA8 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		598446922B8098C900613DA8 /* OsbReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsbReader.swift; sourceTree = "<group>"; };
+		598446942B8167BE00613DA8 /* VectorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorCommand.swift; sourceTree = "<group>"; };
+		598446992B8169D200613DA8 /* Interpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpolation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,7 @@
 		5984465C2B7FB57200613DA8 /* storyboard-editor-front */ = {
 			isa = PBXGroup;
 			children = (
+				598446962B8168D000613DA8 /* Extensions */,
 				5984468F2B80988E00613DA8 /* Scripts */,
 				598446822B80586500613DA8 /* Music */,
 				598446782B7FD1F600613DA8 /* Animation */,
@@ -113,6 +118,8 @@
 			isa = PBXGroup;
 			children = (
 				5984468B2B808A0800613DA8 /* Command.swift */,
+				598446942B8167BE00613DA8 /* VectorCommand.swift */,
+				598446992B8169D200613DA8 /* Interpolation.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -131,6 +138,13 @@
 				598446922B8098C900613DA8 /* OsbReader.swift */,
 			);
 			path = Scripts;
+			sourceTree = "<group>";
+		};
+		598446962B8168D000613DA8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,8 +226,10 @@
 				598446812B7FD84300613DA8 /* BaseAnimation.swift in Sources */,
 				598446932B8098C900613DA8 /* OsbReader.swift in Sources */,
 				5984467B2B7FD20B00613DA8 /* Sprite.swift in Sources */,
+				598446952B8167BE00613DA8 /* VectorCommand.swift in Sources */,
 				5984466D2B7FB5D300613DA8 /* GameScene.swift in Sources */,
 				598446732B7FBB6E00613DA8 /* VisualEffectView.swift in Sources */,
+				5984469A2B8169D200613DA8 /* Interpolation.swift in Sources */,
 				598446842B80587100613DA8 /* Player.swift in Sources */,
 				598446862B8060D600613DA8 /* ContentViewModel.swift in Sources */,
 				598446602B7FB57200613DA8 /* ContentView.swift in Sources */,

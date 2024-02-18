@@ -37,7 +37,7 @@ class StoryboardScene: SKScene, ObservableObject{
         textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
         storyboard.loadTextures(textures: textures)
         
-        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/ginkiha - EOS (alacat).txt")
+        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
         storyboard.addSprites(sprites: osbReader!.spriteList)
         
         renderSprites = storyboard.getSprites()
@@ -98,4 +98,8 @@ class StoryboardScene: SKScene, ObservableObject{
         }
         return [:]
     }
+}
+
+struct Global {
+    static var soundPosition : Double = 0
 }

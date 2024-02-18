@@ -15,8 +15,9 @@ class Sprite : SKSpriteNode {
     private var scaleXCommands : [Command] = []
     private var scaleYCommands : [Command] = []
     private var fadeCommands : [Command] = []
-    private var scaleCommands : [Command] = []
     private var rotateCommands : [Command] = []
+    private var scaleCommands : [Command] = []
+    private var moveCommands : [VectorCommand] = []
     private var areCommandsCalculated :  Bool = false;
     private var startTimes : [Double] = []
     private var endTimes : [Double] = []
@@ -26,7 +27,7 @@ class Sprite : SKSpriteNode {
     var isLoaded : Bool = false
     
     var isActive : Bool {
-        if timeLinePosition >= start && end >= timeLinePosition{
+        if start <= timeLinePosition && timeLinePosition <= end{
             return true
         }
         return false
@@ -35,14 +36,14 @@ class Sprite : SKSpriteNode {
     convenience init(spritePath: String) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.position = CGPoint(x: 427 , y: 240)
+        self.position = CGPoint(x: 427 , y: -240)
     }
     
     convenience init(spritePath: String, position: CGPoint) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
         self.position.x = position.x + 107
-        self.position.y = position.y
+        self.position.y = position.y * -1
     }
     
     override init(texture: SKTexture!, color: NSColor, size: CGSize) {
@@ -51,6 +52,12 @@ class Sprite : SKSpriteNode {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func move(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint){
+        startTimes.append(startTime)
+        endTimes.append(endTime)
+        moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
     func moveX(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
@@ -95,10 +102,72 @@ class Sprite : SKSpriteNode {
         rotateCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
+    func color(r: Double, g: Double, b: Double){
+        let spriteColor = NSColor(red: r, green: g, blue: b, alpha: 1)
+        self.color = spriteColor
+        self.colorBlendFactor = 1
+    }
+    
     func loadTexture(texture: SKTexture){
         self.texture = texture
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.size = CGSize(width: texture.size().width, height: texture.size().height)
+    }
+    
+    func isActiveAtTime(position: Double) -> Bool{
+        return start <= timeLinePosition && timeLinePosition <= end
+    }
+    
+    func valueAt(position: Double, commands: [Command], defaultValue: Double = 1) -> Double{
+        var index = 0
+        if(commands.count == 0){
+            return defaultValue
+        }
+        
+        let foundCommand = findCommandIndex(position: position, commands: commands)
+        index = foundCommand.1
+        
+        if !findCommandIndex(position: position, commands: commands).0 && index > 0{
+            index = index - 1
+        }
+        
+        let command = commands[index]
+        return command.valueAt(position: position)
+    }
+    
+    func findCommandIndex(position: Double, commands: [Command]) -> (Bool, Int) {
+        var left = 0
+        var right = commands.count - 1
+        var index = 0
+        while left <= right {
+            index = left + (( right - left ) >> 1)
+            let commandTime = commands[index].startTime
+            if commandTime == position{
+                return (true, index)
+            }
+            else if commandTime < position {
+                left = index + 1
+            }else{
+                right = index - 1
+            }
+        }
+        index = left
+        return (false, index)
+    }
+    
+    func valueAtVector(position: Double, commands: [VectorCommand], defaultVale : CGPoint = CGPoint(x: 1, y: 1)) -> CGPoint{
+        var index = 0
+        if(commands.count == 0){
+            return defaultVale
+        }
+        for (i, command) in commands.enumerated() {
+            if(position < command.endTime){
+                index = i
+                break
+            }
+        }
+        let command = commands[index]
+        return command.valueAt(position: position)
     }
     
     func update(timePosition: Double){
@@ -106,51 +175,35 @@ class Sprite : SKSpriteNode {
         if(areCommandsCalculated){
             if isActive {
                 self.isHidden = false
-                for command in moveXCommands {
-                    command.setTimePosition(position: timePosition)
-                    if command.isActive{
-                        self.position.x = command.value
-                    }
+                let opacity = valueAt(position: timePosition, commands: fadeCommands)
+                if(opacity < 0.00001){
+                    return
                 }
-                for command in moveYCommands {
-                    command.setTimePosition(position: timePosition)
-                    if command.isActive{
-                        self.position.y = command.value
-                    }
+                self.alpha = opacity
+                
+                if(scaleCommands.count > 0){
+                    let scale = valueAt(position: timePosition, commands: scaleCommands)
+                    self.xScale = scale
+                    self.yScale = scale
+                }else{
+                    self.yScale = valueAt(position: timePosition, commands: scaleYCommands)
+                    self.xScale = valueAt(position: timePosition, commands: scaleXCommands)
                 }
-                for command in scaleXCommands {
-                    command.setTimePosition(position: timePosition)
-                    if command.isActive{
-                        self.xScale = command.value
-                    }
+                
+                
+                if(moveCommands.count > 0){
+                    let positionFinal = valueAtVector(position: timePosition, commands: moveCommands, defaultVale: CGPoint(x: 427 , y: -240))
+                    self.position.x = positionFinal.x
+                    self.position.y = positionFinal.y * -1
+                }else{
+                    //self.position.x = valueAt(position: timePosition, commands: moveXCommands)
+                    //self.position.y = valueAt(position: timePosition, commands: moveYCommands) * -1
                 }
-                for command in scaleYCommands {
-                    command.setTimePosition(position: timePosition)
-                    if command.isActive{
-                        self.yScale = command.value
-                    }
-                }
-                for command in fadeCommands {
-                    command.setTimePosition(position: timePosition)
-                    if command.isActive{
-                        self.alpha = command.value
-                    }
-                }
-                for command in scaleCommands {
-                    command.setTimePosition(position: timePosition)
-                    if command.isActive{
-                        self.xScale = command.value
-                        self.yScale = command.value
-                    }
-                }
-                for command in rotateCommands {
-                    command.setTimePosition(position: timePosition)
-                    if command.isActive{
-                        //self.position.x = command.value
-                    }
-                }
+                let rotation = valueAt(position: timePosition, commands: rotateCommands, defaultValue: 0)
+                self.zRotation = rotation > 0 ? .pi / rotation : rotation
             }else{
                 self.isHidden = true
+                return
             }
         }else{
             setInitialValues()
@@ -171,7 +224,7 @@ class Sprite : SKSpriteNode {
             self.position.x = moveXCommands[0].value
         }
         if(moveYCommands.count > 0){
-            self.position.y = moveYCommands[0].value
+            self.position.y = moveYCommands[0].value * -1
         }
         if(scaleXCommands.count > 0){
             self.xScale = scaleXCommands[0].value
@@ -183,4 +236,18 @@ class Sprite : SKSpriteNode {
     }
     
     
+}
+
+extension SKSpriteNode {
+
+    func addGlow(radius: Float = 30) {
+        let effectNode = SKEffectNode()
+        effectNode.shouldRasterize = true
+        addChild(effectNode)
+        let effect = SKSpriteNode(texture: texture)
+        effect.color = self.color
+        effect.colorBlendFactor = 1
+        effectNode.addChild(effect)
+        effectNode.filter = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius":radius])
+    }
 }

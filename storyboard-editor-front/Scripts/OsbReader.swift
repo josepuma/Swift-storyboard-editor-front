@@ -56,8 +56,7 @@ class OsbReader {
                                 let startY = Double(values[5])
                                 let endX = values.count > 6 ? Double(values[6])! + Double(107) : startX
                                 let endY = values.count > 7 ? Double(values[7]) : startY
-                                sprite?.moveX(startTime: startTime!, endTime: endTime!, startValue: startX, endValue: endX)
-                                sprite?.moveY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!)
+                                sprite?.move(startTime: startTime!, endTime: endTime!, startValue: CGPoint(x: startX, y: startY!), endValue: CGPoint(x: endX, y: endY!))
                             case "V":
                                 let startX = Double(values[4])
                                 let startY = Double(values[5])
@@ -81,12 +80,20 @@ class OsbReader {
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
                                 sprite?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!)
+                            case "C":
+                                let startX = Double(values[4])
+                                let startY = Double(values[5])
+                                let startZ = Double(values[6])
+                                let endX = values.count > 7 ? Double(values[7]) : startX
+                                let endY = values.count > 8 ? Double(values[8]) : startY
+                                let endZ = values.count > 9 ? Double(values[9]) : startZ
+                                sprite?.color(r: startX! / 255, g: startY! / 255, b: startZ! / 255)
                             case "P":
-                                var type = values[4]
+                                let type = values[4]
                                 switch type {
                                     case "A":
                                         sprite?.blendMode = .add
-                                default:
+                                    default:
                                         sprite?.blendMode = .alpha
                                 }
                             default:
