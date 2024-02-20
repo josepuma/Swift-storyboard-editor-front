@@ -42,10 +42,10 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
+        textures = loadTextures(path: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/sb")
         storyboard.loadTextures(textures: textures)
         
-        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
+        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/RADWIMPS - Hikari (Haruto).osb")
         storyboard.addSprites(sprites: osbReader!.spriteList)
         
         renderSprites = storyboard.getSprites()
@@ -56,7 +56,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/audio.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {

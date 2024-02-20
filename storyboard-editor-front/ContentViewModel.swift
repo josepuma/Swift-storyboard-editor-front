@@ -19,7 +19,7 @@ class ContentViewModel : ObservableObject {
         //scene.size = CGSize(width: 1708, height: 960)
         scene.anchorPoint = CGPoint(x: 0, y: 1)
         scene.scaleMode = .aspectFill
-        scene.backgroundColor = .clear
+        scene.backgroundColor = .black
         //scene.filter = blur
         //scene.shouldRasterize = true
         //scene.shouldEnableEffects = true

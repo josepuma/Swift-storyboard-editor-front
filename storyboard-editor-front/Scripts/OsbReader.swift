@@ -34,6 +34,7 @@ class OsbReader {
                 switch(values[0]){
                     case "Sprite" :
                         let path = removePathQuotes(path: values[3].lowercased())
+                        let origin = values[2].camelCased
                         let x = Double(values[4])
                         let y = Double(values[5])
                         if(sprite != nil){
@@ -41,10 +42,10 @@ class OsbReader {
                             sprite = nil
                         }
                     
-                    sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!))
+                    sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!), origin: SpriteOrigin(rawValue: origin)!)
                     
                     case "L":
-                        sprite = nil;
+                        //sprite = nil;
                         break
                     
                     default:
@@ -84,6 +85,10 @@ class OsbReader {
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
                                 sprite?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!)
+                            case "R":
+                                let startValue = Double(values[4])
+                                let endValue = values.count > 5 ? Double(values[5]) : startValue
+                                sprite?.rotate(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!)
                             case "C":
                                 let startX = Double(values[4])
                                 let startY = Double(values[5])
@@ -112,5 +117,20 @@ class OsbReader {
     
     private func removePathQuotes(path: String) -> String {
         return path.replacingOccurrences(of: "\"", with: "")
+    }
+    
+}
+
+extension String {
+    var lowercasingFirst: String { prefix(1).lowercased() + dropFirst() }
+    var uppercasingFirst: String { prefix(1).uppercased() + dropFirst() }
+
+    var camelCased: String {
+        guard !isEmpty else { return "" }
+        let parts = components(separatedBy: .alphanumerics.inverted)
+        let first = parts.first!.lowercasingFirst
+        let rest = parts.dropFirst().map { $0.uppercasingFirst }
+
+        return ([first] + rest).joined()
     }
 }

@@ -24,6 +24,7 @@
 		598446932B8098C900613DA8 /* OsbReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446922B8098C900613DA8 /* OsbReader.swift */; };
 		598446952B8167BE00613DA8 /* VectorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446942B8167BE00613DA8 /* VectorCommand.swift */; };
 		5984469A2B8169D200613DA8 /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446992B8169D200613DA8 /* Interpolation.swift */; };
+		599EBFE82B826C2A007F7D10 /* SpriteOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		598446922B8098C900613DA8 /* OsbReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsbReader.swift; sourceTree = "<group>"; };
 		598446942B8167BE00613DA8 /* VectorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorCommand.swift; sourceTree = "<group>"; };
 		598446992B8169D200613DA8 /* Interpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpolation.swift; sourceTree = "<group>"; };
+		599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteOrigin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				5984467A2B7FD20B00613DA8 /* Sprite.swift */,
 				5984467E2B7FD81400613DA8 /* Storyboard.swift */,
 				598446802B7FD84300613DA8 /* BaseAnimation.swift */,
+				599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 				598446932B8098C900613DA8 /* OsbReader.swift in Sources */,
 				5984467B2B7FD20B00613DA8 /* Sprite.swift in Sources */,
 				598446952B8167BE00613DA8 /* VectorCommand.swift in Sources */,
+				599EBFE82B826C2A007F7D10 /* SpriteOrigin.swift in Sources */,
 				5984466D2B7FB5D300613DA8 /* GameScene.swift in Sources */,
 				598446732B7FBB6E00613DA8 /* VisualEffectView.swift in Sources */,
 				5984469A2B8169D200613DA8 /* Interpolation.swift in Sources */,

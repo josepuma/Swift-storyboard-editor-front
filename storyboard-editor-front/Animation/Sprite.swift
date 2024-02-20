@@ -37,12 +37,14 @@ class Sprite : SKSpriteNode {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
         self.spritePosition = CGPoint(x: 427 * 2 , y: (-240) * 2)
+        self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
     }
     
-    convenience init(spritePath: String, position: CGPoint) {
+    convenience init(spritePath: String, position: CGPoint, origin: SpriteOrigin = SpriteOrigin.centre) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
         self.spritePosition = CGPoint(x: (position.x + 107) , y: (position.y * -1))
+        self.anchorPoint = origin.anchorPoint
     }
     
     override init(texture: SKTexture!, color: NSColor, size: CGSize) {
@@ -109,7 +111,6 @@ class Sprite : SKSpriteNode {
     
     func loadTexture(texture: SKTexture){
         self.texture = texture
-        self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.size = CGSize(width: texture.size().width, height: texture.size().height)
     }
     
