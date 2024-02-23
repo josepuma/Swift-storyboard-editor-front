@@ -13,6 +13,7 @@ class Command {
     private var position : Double = 0
     private var interpolation = Interpolation()
     private var duration : Double = 0
+    private var easing = Easing.linear
  
     var progress: Double {
         return (position - startTime) / duration
@@ -38,12 +39,13 @@ class Command {
         return interpolation.lerp(startValue, endValue, progress)
     }
     
-    init(startTime: Double, endTime: Double, startValue: Double, endValue: Double) {
+    init(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear) {
         self.startTime = startTime
         self.endTime = endTime
         self.startValue = startValue
         self.endValue = endValue
         self.duration = endTime - startTime
+        self.easing = easing
     }
     
     func valueAt(position: Double) -> Double{
@@ -54,7 +56,7 @@ class Command {
             return valueAtProgress(progress: 1)
         }
         let duration = endTime - startTime
-        let progress = duration > 0 ? (position - startTime) / duration : 0
+        let progress = duration > 0 ?  easing.getEasingValue(progress: (position - startTime) / duration)  : 0
         return valueAtProgress(progress: progress)
     }
     

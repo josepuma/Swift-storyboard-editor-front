@@ -6,7 +6,7 @@
 //
 import SpriteKit
 enum SpriteOrigin : String{
-    case topLeft,centre, centreLeft, topRight, bottomCentre, topCentre, custom, centreRight, bottomLeft, bottomRight
+    case topLeft, centre, centreLeft, topRight, bottomCentre, topCentre, custom, centreRight, bottomLeft, bottomRight
     var anchorPoint : CGPoint {
         switch(self){
             case .topLeft:

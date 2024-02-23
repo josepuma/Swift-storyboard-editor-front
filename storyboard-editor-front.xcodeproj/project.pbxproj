@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		59277C7B2B893BE5005AAFD6 /* Easing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C7A2B893BE5005AAFD6 /* Easing.swift */; };
 		5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */; };
 		598446602B7FB57200613DA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465F2B7FB57200613DA8 /* ContentView.swift */; };
 		598446622B7FB57400613DA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 598446612B7FB57400613DA8 /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		59277C7A2B893BE5005AAFD6 /* Easing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Easing.swift; sourceTree = "<group>"; };
 		5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "storyboard-editor-front.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storyboard_editor_frontApp.swift; sourceTree = "<group>"; };
 		5984465F2B7FB57200613DA8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				5984467E2B7FD81400613DA8 /* Storyboard.swift */,
 				598446802B7FD84300613DA8 /* BaseAnimation.swift */,
 				599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */,
+				59277C7A2B893BE5005AAFD6 /* Easing.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				598446882B8061EE00613DA8 /* StoryboardScene.swift in Sources */,
 				5984467F2B7FD81400613DA8 /* Storyboard.swift in Sources */,
 				5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */,
+				59277C7B2B893BE5005AAFD6 /* Easing.swift in Sources */,
 				5984468C2B808A0800613DA8 /* Command.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

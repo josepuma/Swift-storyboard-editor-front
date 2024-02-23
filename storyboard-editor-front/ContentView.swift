@@ -60,7 +60,7 @@ struct ContentView: View {
             ){
                 Text("Zoom: \(zoomSize)")
             }
-            SpriteView(scene: contentViewmodel.scene, options: [.allowsTransparency],
+            SpriteView(scene: contentViewmodel.scene, preferredFramesPerSecond: 120, options: [.allowsTransparency],
                        debugOptions: [.showsFPS, .showsDrawCount, .showsNodeCount]
             )
                 .frame(width: (1708 * zoomSize) / 100, height: (960 * zoomSize) / 100, alignment: .center)

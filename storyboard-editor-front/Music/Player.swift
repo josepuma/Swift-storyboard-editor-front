@@ -13,11 +13,16 @@ class Player {
     init(soundPath : String){
         self.soundPath = URL(fileURLWithPath: soundPath);
         player = try! AVAudioPlayer(contentsOf: self.soundPath!)
-
+        player.enableRate = true
     }
     
     func play(){
-        player?.play()
+        if player.isPlaying{
+            player.pause()
+        }else{
+            player?.play()
+            //player.rate = 0.5
+        }
     }
     
     func getPosition() -> Double{

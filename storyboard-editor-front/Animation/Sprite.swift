@@ -6,7 +6,6 @@
 //
 import SpriteKit
 class Sprite : SKSpriteNode {
-    private var sprite = SKSpriteNode()
     var spritePath : String = ""
     private var timeLinePosition : Double = 0
     //Commands
@@ -24,6 +23,7 @@ class Sprite : SKSpriteNode {
     private var start : Double = 0
     private var end : Double = 0
     private var spritePosition : CGPoint = CGPoint(x: 1708, y: (-240) * 2)
+    private var spriteInfoText = SKLabelNode(fontNamed: "Arial")
     var isLoaded : Bool = false
     
     var isActive : Bool {
@@ -43,8 +43,13 @@ class Sprite : SKSpriteNode {
     convenience init(spritePath: String, position: CGPoint, origin: SpriteOrigin = SpriteOrigin.centre) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.spritePosition = CGPoint(x: (position.x + 107) , y: (position.y * -1))
+        self.spritePosition = CGPoint(x: ((position.x + 107) * 2) , y: (position.y * -1) * 2)
+        self.position = spritePosition
         self.anchorPoint = origin.anchorPoint
+        spriteInfoText.fontSize = 10
+        spriteInfoText.fontColor = .white
+        spriteInfoText.position = self.spritePosition
+        spriteInfoText.numberOfLines = 5
     }
     
     override init(texture: SKTexture!, color: NSColor, size: CGSize) {
@@ -55,55 +60,59 @@ class Sprite : SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func move(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint){
+    func drawInfo() -> SKLabelNode{
+        return self.spriteInfoText
+    }
+    
+    func move(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
         moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
     }
     
-    func moveX(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+    func moveX(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        moveXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+        moveXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
-    func moveY(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+    func moveY(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        moveYCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+        moveYCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
-    func scaleX(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+    func scaleX(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        scaleXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+        scaleXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
-    func scaleY(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+    func scaleY(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        scaleYCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+        scaleYCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
-    func fade(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+    func fade(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        fadeCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+        fadeCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
-    func scale(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+    func scale(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        scaleCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+        scaleCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
-    func rotate(startTime: Double, endTime: Double, startValue: Double, endValue: Double){
+    func rotate(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        rotateCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+        rotateCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
-    func color(r: Double, g: Double, b: Double){
+    func color(r: Double, g: Double, b: Double, easing: Easing = .linear){
         let spriteColor = NSColor(red: r, green: g, blue: b, alpha: 1)
         self.color = spriteColor
         self.colorBlendFactor = 1
@@ -174,9 +183,13 @@ class Sprite : SKSpriteNode {
         timeLinePosition = timePosition
         if(areCommandsCalculated){
             if isActive {
+                
                 self.isHidden = false
+                //spriteInfoText.isHidden = false
                 let opacity = valueAt(position: timePosition, commands: fadeCommands)
                 if(opacity < 0.00001){
+                    //spriteInfoText.isHidden = true
+                    self.isHidden = true
                     return
                 }
                 self.alpha = opacity
@@ -186,6 +199,7 @@ class Sprite : SKSpriteNode {
                     self.xScale = scale * displaySize
                     self.yScale = scale * displaySize
                     if(scale == 0){
+                        self.isHidden = true
                         return
                     }
                 }else{
@@ -194,14 +208,18 @@ class Sprite : SKSpriteNode {
                     self.yScale = scaleY * displaySize
                     self.xScale = scaleX * displaySize
                     if scaleX == 0 || scaleY == 0{
-                        return 
+                        self.isHidden = true
+                        return
                     }
                 }
                 
-                if(moveCommands.count == 0 && moveXCommands.count == 0 && moveYCommands.count == 0){
-                    self.position.x = self.spritePosition.x * displaySize
-                    self.position.y = self.spritePosition.y * displaySize
-                }
+                
+                
+                /*if(moveCommands.count == 0 && moveXCommands.count == 0 && moveYCommands.count == 0){
+                    let positionMove = valueAtVector(position: timePosition, commands: moveCommands, defaultVale: spritePosition)
+                    self.position.x = positionMove.x
+                    self.position.y = (positionMove.y * -1)
+                }*/
                 
                 if moveCommands.count > 0 {
                     let positionMove = valueAtVector(position: timePosition, commands: moveCommands)
@@ -217,10 +235,20 @@ class Sprite : SKSpriteNode {
                 }
                 
                 
+                
                 let rotation = valueAt(position: timePosition, commands: rotateCommands, defaultValue: 0)
-                self.zRotation = rotation
+                self.zRotation = rotation * -1
+                
+                /*spriteInfoText.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+                spriteInfoText.text = self.spritePath + " " + self.anchorPoint.debugDescription + "\n" +
+                                      "(x:" + self.position.x.formatted() + " y:" + self.position.y.formatted() + ")\n" +
+                                        "scale: (x:" + self.xScale.description +  "y: " + self.yScale.description + ")\n"
+                                        + "opacity: " + opacity.description + "\n"
+                                        + "rotation: " + rotation.description*/
+                
             }else{
                 self.isHidden = true
+                //spriteInfoText.isHidden = self.isHidden
                 return
             }
         }else{
@@ -229,9 +257,9 @@ class Sprite : SKSpriteNode {
     }
     
     func setInitialValues(){
-        start = startTimes.min()!
-        end = endTimes.max()!
-        if(fadeCommands.count > 0){
+        start = startTimes.count > 0 ? startTimes.min()! : 0
+        end = endTimes.count > 0 ? endTimes.max()! : 0
+        /*if(fadeCommands.count > 0){
             self.alpha = fadeCommands[0].startValue;
         }
         if(scaleCommands.count > 0){
@@ -253,7 +281,7 @@ class Sprite : SKSpriteNode {
         }
         if(scaleYCommands.count > 0){
             self.yScale = scaleYCommands[0].value
-        }
+        }*/
         areCommandsCalculated = true
     }
     

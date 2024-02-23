@@ -33,7 +33,7 @@ class OsbReader {
                 var values = trimmedLine.components(separatedBy: ",")
                 switch(values[0]){
                     case "Sprite" :
-                        let path = removePathQuotes(path: values[3].lowercased())
+                        let path = removePathQuotes(path: values[3])
                         let origin = values[2].camelCased
                         let x = Double(values[4])
                         let y = Double(values[5])
@@ -43,9 +43,8 @@ class OsbReader {
                         }
                     
                     sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!), origin: SpriteOrigin(rawValue: origin)!)
-                    
                     case "L":
-                        //sprite = nil;
+                        sprite = nil;
                         break
                     
                     default:
@@ -57,46 +56,54 @@ class OsbReader {
                         let endTime = Double(values[3])
                         switch commandType {
                             case "M":
+                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startX = Double(values[4])! + Double(107)
                                 let startY = Double(values[5])
                                 let endX = values.count > 6 ? Double(values[6])! + Double(107) : startX
                                 let endY = values.count > 7 ? Double(values[7]) : startY
-                                sprite?.move(startTime: startTime!, endTime: endTime!, startValue: CGPoint(x: startX, y: startY!), endValue: CGPoint(x: endX, y: endY!))
+                                sprite?.move(startTime: startTime!, endTime: endTime!, startValue: CGPoint(x: startX, y: startY!), endValue: CGPoint(x: endX, y: endY!), easing: easing)
                             case "V":
+                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startX = Double(values[4])
                                 let startY = Double(values[5])
                                 let endX = values.count > 6 ? Double(values[6]) : startX
                                 let endY = values.count > 7 ? Double(values[7]) : startY
-                                sprite?.scaleX(startTime: startTime!, endTime: endTime!, startValue: startX!, endValue: endX!)
-                                sprite?.scaleY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!)
+                                sprite?.scaleX(startTime: startTime!, endTime: endTime!, startValue: startX!, endValue: endX!, easing: easing)
+                                sprite?.scaleY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!, easing: easing)
                             case "MX":
+                            let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])! + Double(107)
                                 let endValue = values.count > 5 ? Double(values[5])! + Double(107) : startValue
-                                sprite?.moveX(startTime: startTime!, endTime: endTime!, startValue: startValue, endValue: endValue)
+                                sprite?.moveX(startTime: startTime!, endTime: endTime!, startValue: startValue, endValue: endValue, easing: easing)
                             case "MY":
+                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                sprite?.moveY(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!)
+                                sprite?.moveY(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                             case "F":
+                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                sprite?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!)
+                                sprite?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                             case "S":
+                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                sprite?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!)
+                                sprite?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                             case "R":
+                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                sprite?.rotate(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!)
+                                sprite?.rotate(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                             case "C":
+                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startX = Double(values[4])
                                 let startY = Double(values[5])
                                 let startZ = Double(values[6])
                                 let endX = values.count > 7 ? Double(values[7]) : startX
                                 let endY = values.count > 8 ? Double(values[8]) : startY
                                 let endZ = values.count > 9 ? Double(values[9]) : startZ
-                                sprite?.color(r: startX! / 255, g: startY! / 255, b: startZ! / 255)
+                                sprite?.color(r: startX! / 255, g: startY! / 255, b: startZ! / 255, easing: easing)
                             case "P":
                                 let type = values[4]
                                 switch type {

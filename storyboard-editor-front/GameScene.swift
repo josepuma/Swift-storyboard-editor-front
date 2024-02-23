@@ -13,6 +13,7 @@ class GameScene : SKScene {
     var textures : [String: SKTexture] = [:]
     var storyboard = Storyboard()
     var sound : Player?
+    private var spriteInfoText = SKLabelNode(fontNamed: "Chalkduster")
     override func didMove(to view: SKView) {
         textures = loadTextures(path: "/Users/josepuma/Documents/sprites")
         storyboard.loadTextures(textures: textures)
@@ -25,11 +26,16 @@ class GameScene : SKScene {
         let bg = Sprite(spritePath: "spark.png")
         storyboard.addSprite(sprite: bg)
         
+        spriteInfoText.text = "owo"
+        spriteInfoText.fontSize = 200
+        spriteInfoText.fontColor = .white
+        spriteInfoText.position = CGPoint(x: frame.midX, y: frame.midY)
         
         let sprites = storyboard.getSprites()
         for sprite in sprites {
             addChild(sprite)
         }
+        addChild(spriteInfoText)
     }
     
     override func update(_ currentTime: TimeInterval) {

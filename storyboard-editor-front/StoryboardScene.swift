@@ -22,7 +22,6 @@ class StoryboardScene: SKScene, ObservableObject{
     var textures : [String: SKTexture] = [:]
     var storyboard = Storyboard()
     var osbReader : OsbReader?
-    
     override init(){
         super.init(size: CGSize(width: 1708, height: 960))
         musicPublisher
@@ -51,6 +50,7 @@ class StoryboardScene: SKScene, ObservableObject{
         renderSprites = storyboard.getSprites()
         for sprite in renderSprites {
             addChild(sprite)
+            //addChild(sprite.drawInfo())
         }
     }
     
@@ -78,7 +78,7 @@ class StoryboardScene: SKScene, ObservableObject{
         finalMusicPositionTime = player.getPosition()
         let positionTimeLine = player.getPosition()
         for sprite in renderSprites {
-            sprite.update(timePosition: positionTimeLine, displaySize: displaySize)
+            sprite.update(timePosition: positionTimeLine)
         }
     }
     
