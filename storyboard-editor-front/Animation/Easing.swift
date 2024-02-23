@@ -15,9 +15,9 @@ enum Easing : CaseIterable {
         case .linear:
             return progress
         case .easingOut:
-            return progress
+            return -progress * (progress - 2)
         case .easingIn:
-            return progress
+            return progress * progress
         case .quadIn:
             return progress
         case .quadOut:
