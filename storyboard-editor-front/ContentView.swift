@@ -17,7 +17,11 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            
+            SpriteView(scene: contentViewmodel.scene, preferredFramesPerSecond: 120, options: [.allowsTransparency],
+                       debugOptions: [.showsFPS, .showsDrawCount, .showsNodeCount]
+            )
+                .frame(width: (1708 * zoomSize) / 100, height: (960 * zoomSize) / 100, alignment: .center)
+                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
             HStack{
                 Button("Play"){
                     contentViewmodel.currentTargetScene?.player.play()
@@ -60,11 +64,6 @@ struct ContentView: View {
             ){
                 Text("Zoom: \(zoomSize)")
             }
-            SpriteView(scene: contentViewmodel.scene, preferredFramesPerSecond: 120, options: [.allowsTransparency],
-                       debugOptions: [.showsFPS, .showsDrawCount, .showsNodeCount]
-            )
-                .frame(width: (1708 * zoomSize) / 100, height: (960 * zoomSize) / 100, alignment: .center)
-                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
         }
         .background(VisualEffectView().ignoresSafeArea())
     }
