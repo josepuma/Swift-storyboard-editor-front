@@ -23,7 +23,7 @@ class StoryboardScene: SKScene, ObservableObject{
     var storyboard = Storyboard()
     var osbReader : OsbReader?
     override init(){
-        super.init(size: CGSize(width: 1708, height: 960))
+        super.init(size: CGSize(width: 854, height: 480))
         musicPublisher
             .sink(receiveValue: { [unowned self] target in
                             self.musicPosition = target

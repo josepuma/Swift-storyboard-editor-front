@@ -22,7 +22,7 @@ class Sprite : SKSpriteNode {
     private var endTimes : [Double] = []
     private var start : Double = 0
     private var end : Double = 0
-    private var spritePosition : CGPoint = CGPoint(x: 1708, y: (-240) * 2)
+    private var spritePosition : CGPoint = CGPoint(x: 854, y: (-240) * 1)
     private var spriteInfoText = SKLabelNode(fontNamed: "Arial")
     var isLoaded : Bool = false
     
@@ -36,14 +36,14 @@ class Sprite : SKSpriteNode {
     convenience init(spritePath: String) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.spritePosition = CGPoint(x: 427 * 2 , y: (-240) * 2)
+        self.spritePosition = CGPoint(x: 427 * 1 , y: (-240) * 1)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
     }
     
     convenience init(spritePath: String, position: CGPoint, origin: SpriteOrigin = SpriteOrigin.centre) {
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.spritePosition = CGPoint(x: ((position.x + 107) * 2) , y: (position.y * -1) * 2)
+        self.spritePosition = CGPoint(x: ((position.x + 107) * 1) , y: (position.y * -1) * 1)
         self.position = spritePosition
         self.anchorPoint = origin.anchorPoint
         spriteInfoText.fontSize = 10
@@ -180,7 +180,7 @@ class Sprite : SKSpriteNode {
         return command.valueAt(position: position)
     }
     
-    func update(timePosition: Double, displaySize: Double = 2){
+    func update(timePosition: Double, displaySize: Double = 1){
         timeLinePosition = timePosition
         if(areCommandsCalculated){
             if isActive {

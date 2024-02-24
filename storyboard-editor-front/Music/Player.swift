@@ -9,7 +9,7 @@ import AVFoundation
 
 class Player {
     private var soundPath : URL?
-    private var player : AVAudioPlayer!
+    public var player : AVAudioPlayer!
     init(soundPath : String){
         self.soundPath = URL(fileURLWithPath: soundPath);
         player = try! AVAudioPlayer(contentsOf: self.soundPath!)
