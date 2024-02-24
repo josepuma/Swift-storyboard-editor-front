@@ -50,6 +50,7 @@ class Sprite : SKSpriteNode {
         spriteInfoText.fontColor = .white
         spriteInfoText.position = self.spritePosition
         spriteInfoText.numberOfLines = 5
+        self.isHidden = true
     }
     
     override init(texture: SKTexture!, color: NSColor, size: CGSize) {
