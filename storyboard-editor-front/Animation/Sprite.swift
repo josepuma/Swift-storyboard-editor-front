@@ -11,18 +11,28 @@ import JavaScriptCore
     var spritePath: String{ get set}
     static func createWith(spritePath: String) -> Sprite
     func setOpacity(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setOpacity(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    
     func setScale(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setScale(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    
     func setRotation(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setRotation(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    
     func setMoveX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setMoveX(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    
     func setMoveY(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setMoveY(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    
+    func setMove(_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double, _ endValueY: Double)
+    func setMove(easing: String, _ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double, _ endValueY: Double)
+    
     func setAdditiveBlend()
 }
 
 @objc public class Sprite : SKSpriteNode, SpriteExport {
    
-    
-    
-    
     dynamic var spritePath : String = ""
     private var timeLinePosition : Double = 0
     //Commands
@@ -55,7 +65,7 @@ import JavaScriptCore
     }
     
     convenience init(spritePath: String) {
-        print("# init done #")
+        //print("# init done #")
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
         self.spritePosition = CGPoint(x: ((320 + 107) * 1) , y: (240 * -1) * 1)
@@ -149,20 +159,49 @@ import JavaScriptCore
         fade(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
     }
     
+    func setOpacity(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        fade(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+    }
+    
     func setScale(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
         scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setScale(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
     }
     
     func setRotation(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
         rotate(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
     }
     
+    func setRotation(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        rotate(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+    }
+    
     func setMoveX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
         moveX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
     }
     
+    func setMoveX(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        moveX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+    }
+    
+    
     func setMoveY(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
         moveY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setMoveY(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        moveY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+    }
+    
+    func setMove(_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double,  _ endValueY: Double) {
+        move(startTime: startTime, endTime: endTime, startValue: CGPoint(x: startValueX, y: startValueY), endValue: CGPoint(x: endValueX, y: endValueY))
+    }
+    
+    func setMove(easing: String,_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double,  _ endValueY: Double) {
+        move(startTime: startTime, endTime: endTime, startValue: CGPoint(x: startValueX, y: startValueY), endValue: CGPoint(x: endValueX, y: endValueY), easing: Easing(rawValue: easing)!)
     }
     
     func setAdditiveBlend(){

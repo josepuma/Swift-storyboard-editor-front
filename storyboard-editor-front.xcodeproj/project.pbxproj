@@ -13,6 +13,8 @@
 		59277C862B8A45E3005AAFD6 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C852B8A45E3005AAFD6 /* Filters.swift */; };
 		59277C892B8AC576005AAFD6 /* SwiftyLua in Frameworks */ = {isa = PBXBuildFile; productRef = 59277C882B8AC576005AAFD6 /* SwiftyLua */; };
 		59277C8B2B8ADF99005AAFD6 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C8A2B8ADF99005AAFD6 /* Helpers.swift */; };
+		59277C8E2B8AE866005AAFD6 /* CodeEditorView in Frameworks */ = {isa = PBXBuildFile; productRef = 59277C8D2B8AE866005AAFD6 /* CodeEditorView */; };
+		59277C902B8AE866005AAFD6 /* LanguageSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 59277C8F2B8AE866005AAFD6 /* LanguageSupport */; };
 		5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */; };
 		598446602B7FB57200613DA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465F2B7FB57200613DA8 /* ContentView.swift */; };
 		598446622B7FB57400613DA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 598446612B7FB57400613DA8 /* Assets.xcassets */; };
@@ -65,6 +67,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59277C902B8AE866005AAFD6 /* LanguageSupport in Frameworks */,
+				59277C8E2B8AE866005AAFD6 /* CodeEditorView in Frameworks */,
 				598446762B7FC6BA00613DA8 /* SwiftImageReadWrite in Frameworks */,
 				59277C892B8AC576005AAFD6 /* SwiftyLua in Frameworks */,
 			);
@@ -194,6 +198,8 @@
 			packageProductDependencies = (
 				598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */,
 				59277C882B8AC576005AAFD6 /* SwiftyLua */,
+				59277C8D2B8AE866005AAFD6 /* CodeEditorView */,
+				59277C8F2B8AE866005AAFD6 /* LanguageSupport */,
 			);
 			productName = "storyboard-editor-front";
 			productReference = 5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */;
@@ -226,6 +232,7 @@
 			packageReferences = (
 				598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */,
 				59277C872B8AC576005AAFD6 /* XCRemoteSwiftPackageReference "SwiftyLua" */,
+				59277C8C2B8AE866005AAFD6 /* XCRemoteSwiftPackageReference "CodeEditorView" */,
 			);
 			productRefGroup = 5984465B2B7FB57200613DA8 /* Products */;
 			projectDirPath = "";
@@ -483,6 +490,14 @@
 				kind = branch;
 			};
 		};
+		59277C8C2B8AE866005AAFD6 /* XCRemoteSwiftPackageReference "CodeEditorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mchakravarty/CodeEditorView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.13.0;
+			};
+		};
 		598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dagronf/SwiftImageReadWrite.git";
@@ -498,6 +513,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 59277C872B8AC576005AAFD6 /* XCRemoteSwiftPackageReference "SwiftyLua" */;
 			productName = SwiftyLua;
+		};
+		59277C8D2B8AE866005AAFD6 /* CodeEditorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59277C8C2B8AE866005AAFD6 /* XCRemoteSwiftPackageReference "CodeEditorView" */;
+			productName = CodeEditorView;
+		};
+		59277C8F2B8AE866005AAFD6 /* LanguageSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59277C8C2B8AE866005AAFD6 /* XCRemoteSwiftPackageReference "CodeEditorView" */;
+			productName = LanguageSupport;
 		};
 		598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */ = {
 			isa = XCSwiftPackageProductDependency;

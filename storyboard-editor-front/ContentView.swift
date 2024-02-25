@@ -12,7 +12,7 @@ struct ContentView: View {
     
     @State private var musicPosition: Double = 0
     @State private var musicPositionTime: String = "00:00:00"
-    @State private var zoomSize : Double = 100
+    @State private var zoomSize : Double = 80
     @State private var buttonPlayerStatusText = "Play"
     @State private var selectedEffectName : Effect = Effect(name: "None", filter: CIFilter())
     @StateObject private var contentViewmodel = ContentViewModel()
@@ -78,9 +78,9 @@ struct ContentView: View {
                 ){
                     Text("Zoom: \(zoomSize)")
                 }*/
-            }.frame(width: 854 * 2)
-            EffectsContainer()
-                .padding()
+            }.frame(width: (1708 * zoomSize) / 100)
+            //EffectsContainer()
+            //    .padding()
         }
         //.background(VisualEffectView().ignoresSafeArea())
     }
