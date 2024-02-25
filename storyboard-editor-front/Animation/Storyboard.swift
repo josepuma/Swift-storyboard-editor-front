@@ -24,6 +24,10 @@ class Storyboard {
         }
     }
     
+    func clearSprites(){
+        sprites.removeAll()
+    }
+    
     func addSprite(sprite: Sprite){
         let texture = self.textures[sprite.spritePath]
         if texture != nil {

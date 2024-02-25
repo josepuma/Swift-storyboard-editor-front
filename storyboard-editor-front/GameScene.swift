@@ -23,8 +23,8 @@ class GameScene : SKScene {
         let length = sound?.getLength()
         print("\(length ?? 0)")
         
-        let bg = Sprite(spritePath: "spark.png")
-        storyboard.addSprite(sprite: bg)
+        /*let bg = Sprite(spritePath: "spark.png")
+        storyboard.addSprite(sprite: bg)*/
         
         spriteInfoText.text = "owo"
         spriteInfoText.fontSize = 200

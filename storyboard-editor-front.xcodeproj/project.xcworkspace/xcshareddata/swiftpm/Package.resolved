@@ -1,12 +1,39 @@
 {
   "pins" : [
     {
+      "identity" : "clua",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyLua/CLua",
+      "state" : {
+        "revision" : "cbe3f84d05a245273c95064aee0430d4c0bd96ea",
+        "version" : "5.4.3"
+      }
+    },
+    {
+      "identity" : "lua4swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyLua/lua4swift",
+      "state" : {
+        "revision" : "ceb89fd07e8ea09b1f06fe847207bea7cef04662",
+        "version" : "1.1.2"
+      }
+    },
+    {
       "identity" : "swiftimagereadwrite",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/dagronf/SwiftImageReadWrite.git",
       "state" : {
         "revision" : "96361ba7f9dce5184d95aba8ea90d9faa4acabb2",
         "version" : "1.6.1"
+      }
+    },
+    {
+      "identity" : "swiftylua",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyLua/SwiftyLua",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9ae553dee83815f9da752d53fbaa4508530fb607"
       }
     }
   ],

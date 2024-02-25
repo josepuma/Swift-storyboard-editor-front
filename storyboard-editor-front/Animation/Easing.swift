@@ -6,8 +6,11 @@
 //
 import SpriteKit
 import SwiftUI
+import JavaScriptCore
 
-enum Easing : CaseIterable {
+
+
+enum Easing : String, CaseIterable {
     case linear, easingOut, easingIn, quadIn, quadOut, quadInout, cubicIn, cubicOut, cubicInOut, quartIn, quartOut, quartInOut, quintIn
     
     func getEasingValue(progress: Double) -> Double{
@@ -41,3 +44,5 @@ enum Easing : CaseIterable {
         }
     }
 }
+
+

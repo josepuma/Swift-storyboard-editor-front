@@ -14,11 +14,15 @@ struct ContentView: View {
     @State private var musicPositionTime: String = "00:00:00"
     @State private var zoomSize : Double = 100
     @State private var buttonPlayerStatusText = "Play"
+    @State private var selectedEffectName : Effect = Effect(name: "None", filter: CIFilter())
     @StateObject private var contentViewmodel = ContentViewModel()
 
     var body: some View {
         HStack{
-            SpriteContainer()
+            SpriteContainer(selectedEffectName: $selectedEffectName)
+                .onChange(of: selectedEffectName){
+                    contentViewmodel.applyFilter(filter: selectedEffectName)
+                }
                 .padding()
             ZStack(alignment: .bottom) {
                 SpriteView(scene: contentViewmodel.scene, options: [.allowsTransparency],
@@ -37,9 +41,9 @@ struct ContentView: View {
                     }){
                         Text(buttonPlayerStatusText)
                     }
-                    /*Button("View Position"){
-                        contentViewmodel.getAudioPosition()
-                    }*/
+                    Button("Reload Storyboard"){
+                        contentViewmodel.currentTargetScene!.loadStoryboardScript()
+                    }
                     Text("\(musicPositionTime)")
                     VStack{
                         Slider(
@@ -75,11 +79,10 @@ struct ContentView: View {
                     Text("Zoom: \(zoomSize)")
                 }*/
             }.frame(width: 854 * 2)
+            EffectsContainer()
+                .padding()
         }
         //.background(VisualEffectView().ignoresSafeArea())
     }
 }
 
-#Preview {
-    ContentView()
-}

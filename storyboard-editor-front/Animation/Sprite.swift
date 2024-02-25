@@ -5,15 +5,32 @@
 //  Created by José Puma on 16-02-24.
 //
 import SpriteKit
-class Sprite : SKSpriteNode {
-    var spritePath : String = ""
+import JavaScriptCore
+
+@objc protocol SpriteExport: JSExport{
+    var spritePath: String{ get set}
+    static func createWith(spritePath: String) -> Sprite
+    func setOpacity(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setScale(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setRotation(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setMoveX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setMoveY(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setAdditiveBlend()
+}
+
+@objc public class Sprite : SKSpriteNode, SpriteExport {
+   
+    
+    
+    
+    dynamic var spritePath : String = ""
     private var timeLinePosition : Double = 0
     //Commands
     private var moveXCommands : [Command] = []
     private var moveYCommands : [Command] = []
     private var scaleXCommands : [Command] = []
     private var scaleYCommands : [Command] = []
-    private var fadeCommands : [Command] = []
+    var fadeCommands : [Command] = []
     private var rotateCommands : [Command] = []
     private var scaleCommands : [Command] = []
     private var moveCommands : [VectorCommand] = []
@@ -33,11 +50,18 @@ class Sprite : SKSpriteNode {
         return false
     }
     
+    class func createWith(spritePath: String) -> Sprite {
+        return Sprite(spritePath: spritePath)
+    }
+    
     convenience init(spritePath: String) {
+        print("# init done #")
         self.init(imageNamed: spritePath)
         self.spritePath = spritePath
-        self.spritePosition = CGPoint(x: 427 * 1 , y: (-240) * 1)
+        self.spritePosition = CGPoint(x: ((320 + 107) * 1) , y: (240 * -1) * 1)
+        self.position = spritePosition
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        self.isHidden = true
     }
     
     convenience init(spritePath: String, position: CGPoint, origin: SpriteOrigin = SpriteOrigin.centre) {
@@ -118,6 +142,34 @@ class Sprite : SKSpriteNode {
         self.color = spriteColor
         self.colorBlendFactor = 1
     }
+    
+    //JavascriptCore Functions
+    
+    func setOpacity(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        fade(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setScale(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setRotation(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        rotate(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setMoveX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        moveX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setMoveY(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        moveY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setAdditiveBlend(){
+        self.blendMode = .add
+    }
+    
+    //
     
     func loadTexture(texture: SKTexture){
         self.texture = texture
@@ -260,31 +312,11 @@ class Sprite : SKSpriteNode {
     func setInitialValues(){
         start = startTimes.count > 0 ? startTimes.min()! : 0
         end = endTimes.count > 0 ? endTimes.max()! : 0
-        /*if(fadeCommands.count > 0){
-            self.alpha = fadeCommands[0].startValue;
-        }
-        if(scaleCommands.count > 0){
-            self.xScale = scaleCommands[0].value
-            self.yScale = scaleCommands[0].value
-        }
-        if(moveCommands.count > 0){
-            self.position.x = moveCommands[0].value.x
-            self.position.y = moveCommands[0].value.y
-        }
-        if(moveXCommands.count > 0){
-            self.position.x = moveXCommands[0].value
-        }
-        if(moveYCommands.count > 0){
-            self.position.y = (moveYCommands[0].value)
-        }
-        if(scaleXCommands.count > 0){
-            self.xScale = scaleXCommands[0].value
-        }
-        if(scaleYCommands.count > 0){
-            self.yScale = scaleYCommands[0].value
-        }*/
         areCommandsCalculated = true
     }
+    
+    
+    
     
     
 }

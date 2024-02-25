@@ -5,54 +5,39 @@
 //  Created by José Puma on 24-02-24.
 //
 import SwiftUI
+import SpriteKit
 struct SpriteContainer : View {
-    struct Sea: Hashable, Identifiable {
-            let name: String
-            let id = UUID()
-        }
-
-
-        struct OceanRegion: Identifiable {
-            let name: String
-            let seas: [Sea]
-            let id = UUID()
-        }
-
-
-        private let oceanRegions: [OceanRegion] = [
-            OceanRegion(name: "Pacific",
-                        seas: [Sea(name: "Australasian Mediterranean"),
-                               Sea(name: "Philippine"),
-                               Sea(name: "Coral"),
-                               Sea(name: "South China")]),
-            OceanRegion(name: "Atlantic",
-                        seas: [Sea(name: "American Mediterranean"),
-                               Sea(name: "Sargasso"),
-                               Sea(name: "Caribbean")]),
-            OceanRegion(name: "Indian",
-                        seas: [Sea(name: "Bay of Bengal")]),
-            OceanRegion(name: "Southern",
-                        seas: [Sea(name: "Weddell")]),
-            OceanRegion(name: "Arctic",
-                        seas: [Sea(name: "Greenland")])
+        private let filterGroups: [FilterGroup] = [
+            FilterGroup(name: "Filters",
+                        effects: [
+                            Effect(name: "None", filter: CIFilter()),
+                            Effect(name: "CIGaussianBlur", filter: CIFilter(name: "CIGaussianBlur")!),
+                            Effect(name: "CIGloom", filter: CIFilter(name: "CIGloom", parameters: ["inputIntensity": 0.8, "inputRadius": 10])!),
+                            Effect(name: "CIKaleidoscope", filter: CIFilter(name: "CIKaleidoscope", parameters: [:])!)])
         ]
 
 
-        @State private var singleSelection: UUID?
+        @Binding var selectedEffectName: Effect
 
 
         var body: some View {
-            NavigationView {
-                List(selection: $singleSelection) {
-                    ForEach(oceanRegions) { region in
-                        Section(header: Text("Major \(region.name) Ocean Seas")) {
-                            ForEach(region.seas) { sea in
-                                Text(sea.name)
+            VStack{
+                List() {
+                    ForEach(filterGroups) { group in
+                        Section(header: Text("\(group.name)")) {
+                            ForEach(group.effects) { effect in
+                                Button(action: {
+                                    selectedEffectName = effect
+                                }){
+                                    Text(effect.name)
+                                }
                             }
                         }
                     }
                 }
                 .navigationTitle("Oceans and Seas")
+                Text("Selected Effect \(selectedEffectName.name)")
             }
+            
         }
 }

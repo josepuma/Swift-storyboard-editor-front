@@ -8,6 +8,8 @@
 import Foundation
 import SpriteKit
 import Combine
+import JavaScriptCore
+import SwiftyLua
 
 class StoryboardScene: SKScene, ObservableObject{
     weak var contentViewModal: ContentViewModel?
@@ -26,14 +28,14 @@ class StoryboardScene: SKScene, ObservableObject{
         super.init(size: CGSize(width: 854, height: 480))
         musicPublisher
             .sink(receiveValue: { [unowned self] target in
-                            self.musicPosition = target
-                        })
-                        .store(in: &cancellableSet)
+                self.musicPosition = target
+            })
+            .store(in: &cancellableSet)
         musicTimePublisher
             .sink(receiveValue: { [unowned self] target in
-                            self.musicPositionTime = target
-                        })
-                        .store(in: &cancellableSet)
+                self.musicPositionTime = target
+            })
+            .store(in: &cancellableSet)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,22 +43,17 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
+        textures = loadTextures(path: "/Users/josepuma/Downloads/355065 Molly - Beneath The Lights (Darren Styles Remix)/SB")
         storyboard.loadTextures(textures: textures)
         
-        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
-        storyboard.addSprites(sprites: osbReader!.spriteList)
-        
-        renderSprites = storyboard.getSprites()
-        for sprite in renderSprites {
-            addChild(sprite)
-            //addChild(sprite.drawInfo())
-        }
+        //loadStoryboard()
+
+        loadStoryboardScript()
     }
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/355065 Molly - Beneath The Lights (Darren Styles Remix)/Molly - Beneath The Lights (Darren Styles Remix) XinCrin.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -80,6 +77,46 @@ class StoryboardScene: SKScene, ObservableObject{
         for sprite in renderSprites {
             sprite.update(timePosition: positionTimeLine)
         }
+    }
+    
+    func loadStoryboardScript(){
+        clearStoryboard()
+        let path = "/Users/josepuma/Downloads/35701 Lia - Toki wo Kizamu Uta 2/script.js"
+        let context = JSContext()
+        context?.setObject(Sprite.self, forKeyedSubscript: NSString(string: "Sprite"))
+        context?.setObject(Helpers.self, forKeyedSubscript: NSString(string: "Helpers"))
+        let sprites : [Sprite] = []
+        do{
+            let contents = try String(contentsOfFile: path)
+            context!.evaluateScript(contents)
+            let generateFunction = context?.objectForKeyedSubscript("generate")
+            let response = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
+            if(response!.count > 0){
+                storyboard.addSprites(sprites: response!)
+                loadStoryboard()
+            }
+            
+        }catch{
+            print(error)
+        }
+    }
+    
+    func loadStoryboard(){
+        /*osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/355065 Molly - Beneath The Lights (Darren Styles Remix)/Molly - Beneath The Lights (Darren Styles Remix) (XinCrin).osb")
+        storyboard.addSprites(sprites: osbReader!.spriteList)*/
+        
+        renderSprites = storyboard.getSprites()
+        print(renderSprites.count)
+        for sprite in renderSprites {
+            addChild(sprite)
+        }
+    }
+    
+    func clearStoryboard(){
+        removeAllChildren()
+        renderSprites.removeAll()
+        storyboard.clearSprites()
+        //loadStoryboard()
     }
     
     func updateZoomSize(percentage: Double){

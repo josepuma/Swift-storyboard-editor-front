@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		59277C7B2B893BE5005AAFD6 /* Easing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C7A2B893BE5005AAFD6 /* Easing.swift */; };
 		59277C822B89A981005AAFD6 /* SpriteContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C812B89A981005AAFD6 /* SpriteContainer.swift */; };
+		59277C842B8A3B40005AAFD6 /* EffectsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C832B8A3B40005AAFD6 /* EffectsContainer.swift */; };
+		59277C862B8A45E3005AAFD6 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C852B8A45E3005AAFD6 /* Filters.swift */; };
+		59277C892B8AC576005AAFD6 /* SwiftyLua in Frameworks */ = {isa = PBXBuildFile; productRef = 59277C882B8AC576005AAFD6 /* SwiftyLua */; };
+		59277C8B2B8ADF99005AAFD6 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C8A2B8ADF99005AAFD6 /* Helpers.swift */; };
 		5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */; };
 		598446602B7FB57200613DA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465F2B7FB57200613DA8 /* ContentView.swift */; };
 		598446622B7FB57400613DA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 598446612B7FB57400613DA8 /* Assets.xcassets */; };
@@ -32,6 +36,9 @@
 /* Begin PBXFileReference section */
 		59277C7A2B893BE5005AAFD6 /* Easing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Easing.swift; sourceTree = "<group>"; };
 		59277C812B89A981005AAFD6 /* SpriteContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteContainer.swift; sourceTree = "<group>"; };
+		59277C832B8A3B40005AAFD6 /* EffectsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsContainer.swift; sourceTree = "<group>"; };
+		59277C852B8A45E3005AAFD6 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
+		59277C8A2B8ADF99005AAFD6 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "storyboard-editor-front.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storyboard_editor_frontApp.swift; sourceTree = "<group>"; };
 		5984465F2B7FB57200613DA8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,6 +66,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				598446762B7FC6BA00613DA8 /* SwiftImageReadWrite in Frameworks */,
+				59277C892B8AC576005AAFD6 /* SwiftyLua in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +77,8 @@
 			isa = PBXGroup;
 			children = (
 				59277C812B89A981005AAFD6 /* SpriteContainer.swift */,
+				59277C832B8A3B40005AAFD6 /* EffectsContainer.swift */,
+				59277C852B8A45E3005AAFD6 /* Filters.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -127,6 +137,7 @@
 				598446802B7FD84300613DA8 /* BaseAnimation.swift */,
 				599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */,
 				59277C7A2B893BE5005AAFD6 /* Easing.swift */,
+				59277C8A2B8ADF99005AAFD6 /* Helpers.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -182,6 +193,7 @@
 			name = "storyboard-editor-front";
 			packageProductDependencies = (
 				598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */,
+				59277C882B8AC576005AAFD6 /* SwiftyLua */,
 			);
 			productName = "storyboard-editor-front";
 			productReference = 5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */;
@@ -213,6 +225,7 @@
 			mainGroup = 598446512B7FB57200613DA8;
 			packageReferences = (
 				598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */,
+				59277C872B8AC576005AAFD6 /* XCRemoteSwiftPackageReference "SwiftyLua" */,
 			);
 			productRefGroup = 5984465B2B7FB57200613DA8 /* Products */;
 			projectDirPath = "";
@@ -243,17 +256,20 @@
 				598446812B7FD84300613DA8 /* BaseAnimation.swift in Sources */,
 				598446932B8098C900613DA8 /* OsbReader.swift in Sources */,
 				5984467B2B7FD20B00613DA8 /* Sprite.swift in Sources */,
+				59277C8B2B8ADF99005AAFD6 /* Helpers.swift in Sources */,
 				598446952B8167BE00613DA8 /* VectorCommand.swift in Sources */,
 				599EBFE82B826C2A007F7D10 /* SpriteOrigin.swift in Sources */,
 				5984466D2B7FB5D300613DA8 /* GameScene.swift in Sources */,
 				598446732B7FBB6E00613DA8 /* VisualEffectView.swift in Sources */,
 				5984469A2B8169D200613DA8 /* Interpolation.swift in Sources */,
 				598446842B80587100613DA8 /* Player.swift in Sources */,
+				59277C862B8A45E3005AAFD6 /* Filters.swift in Sources */,
 				598446862B8060D600613DA8 /* ContentViewModel.swift in Sources */,
 				598446602B7FB57200613DA8 /* ContentView.swift in Sources */,
 				598446882B8061EE00613DA8 /* StoryboardScene.swift in Sources */,
 				5984467F2B7FD81400613DA8 /* Storyboard.swift in Sources */,
 				5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */,
+				59277C842B8A3B40005AAFD6 /* EffectsContainer.swift in Sources */,
 				59277C822B89A981005AAFD6 /* SpriteContainer.swift in Sources */,
 				59277C7B2B893BE5005AAFD6 /* Easing.swift in Sources */,
 				5984468C2B808A0800613DA8 /* Command.swift in Sources */,
@@ -459,6 +475,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		59277C872B8AC576005AAFD6 /* XCRemoteSwiftPackageReference "SwiftyLua" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyLua/SwiftyLua";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dagronf/SwiftImageReadWrite.git";
@@ -470,6 +494,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		59277C882B8AC576005AAFD6 /* SwiftyLua */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59277C872B8AC576005AAFD6 /* XCRemoteSwiftPackageReference "SwiftyLua" */;
+			productName = SwiftyLua;
+		};
 		598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */;

@@ -13,7 +13,7 @@ class Command {
     private var position : Double = 0
     private var interpolation = Interpolation()
     private var duration : Double = 0
-    private var easing = Easing.linear
+    var easing = Easing.linear
  
     var progress: Double {
         return (position - startTime) / duration
