@@ -51,6 +51,7 @@ import JavaScriptCore
     private var end : Double = 0
     private var spritePosition : CGPoint = CGPoint(x: 854, y: (-240) * 1)
     private var spriteInfoText = SKLabelNode(fontNamed: "Arial")
+    private var spriteBorder : SKShapeNode?
     var isLoaded : Bool = false
     
     var isActive : Bool {
@@ -85,6 +86,8 @@ import JavaScriptCore
         spriteInfoText.position = self.spritePosition
         spriteInfoText.numberOfLines = 5
         self.isHidden = true
+        
+        
     }
     
     override init(texture: SKTexture!, color: NSColor, size: CGSize) {
@@ -97,6 +100,19 @@ import JavaScriptCore
     
     func drawInfo() -> SKLabelNode{
         return self.spriteInfoText
+    }
+    
+    func drawBorder() -> SKShapeNode{
+        spriteBorder = SKShapeNode(rectOf: CGSize(width: self.frame.width, height: self.frame.height))
+        spriteBorder!.fillColor = .clear
+        spriteBorder!.strokeColor = .white
+        spriteBorder!.lineWidth = 1
+        spriteBorder!.position = self.position
+        spriteBorder!.zRotation = self.zRotation
+        spriteBorder?.isHidden = self.isHidden
+        spriteBorder?.isAccessibilityElement = false
+        spriteBorder?.isUserInteractionEnabled = false
+        return self.spriteBorder!
     }
     
     func move(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint, easing: Easing = .linear){
@@ -271,6 +287,10 @@ import JavaScriptCore
         return command.valueAt(position: position)
     }
     
+    public func showBorder(){
+        spriteBorder?.isHidden = false
+    }
+    
     func update(timePosition: Double, displaySize: Double = 1){
         timeLinePosition = timePosition
         if(areCommandsCalculated){
@@ -299,6 +319,10 @@ import JavaScriptCore
                     let scaleY = valueAt(position: timePosition, commands: scaleYCommands)
                     self.yScale = scaleY * displaySize
                     self.xScale = scaleX * displaySize
+                    
+                    spriteBorder?.yScale = scaleY * displaySize
+                    spriteBorder?.xScale = scaleX * displaySize
+                    
                     if scaleX == 0 || scaleY == 0{
                         self.isHidden = true
                         return
@@ -306,17 +330,12 @@ import JavaScriptCore
                 }
                 
                 
-                
-                /*if(moveCommands.count == 0 && moveXCommands.count == 0 && moveYCommands.count == 0){
-                    let positionMove = valueAtVector(position: timePosition, commands: moveCommands, defaultVale: spritePosition)
-                    self.position.x = positionMove.x
-                    self.position.y = (positionMove.y * -1)
-                }*/
-                
                 if moveCommands.count > 0 {
                     let positionMove = valueAtVector(position: timePosition, commands: moveCommands)
                     self.position.x = positionMove.x * displaySize
                     self.position.y = (positionMove.y * -1) * displaySize
+                    
+                    
                 }
                 if moveXCommands.count > 0{
                     self.position.x = valueAt(position: timePosition, commands: moveXCommands, defaultValue: 427) * displaySize
@@ -326,10 +345,11 @@ import JavaScriptCore
                     self.position.y = (valueAt(position: timePosition, commands: moveYCommands, defaultValue: 240) * -1) * displaySize
                 }
                 
-                
+                spriteBorder?.position = self.position
                 
                 let rotation = valueAt(position: timePosition, commands: rotateCommands, defaultValue: 0)
                 self.zRotation = rotation * -1
+                spriteBorder?.zRotation = self.zRotation
                 
                 /*spriteInfoText.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
                 spriteInfoText.text = self.spritePath + " " + self.anchorPoint.debugDescription + "\n" +
@@ -340,6 +360,7 @@ import JavaScriptCore
                 
             }else{
                 self.isHidden = true
+                spriteBorder?.isHidden = self.isHidden
                 //spriteInfoText.isHidden = self.isHidden
                 return
             }

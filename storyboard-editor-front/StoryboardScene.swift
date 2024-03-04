@@ -23,8 +23,8 @@ class StoryboardScene: SKScene, ObservableObject{
     private var renderSprites: [Sprite] = []
     var textures : [String: SKTexture] = [:]
     var storyboard = Storyboard()
-    var osbReader : OsbReader?
     let serialSpritesQueue = DispatchQueue(label: "sprites.adding.queue")
+    let dispatchGroup = DispatchGroup()
     
     override init(){
         super.init(size: CGSize(width: 854, height: 480))
@@ -77,59 +77,100 @@ class StoryboardScene: SKScene, ObservableObject{
         musicPositionTime = player.getPosition()
         finalMusicPositionTime = player.getPosition()
         let positionTimeLine = player.getPosition()
-        for sprite in renderSprites {
+        for sprite in self.renderSprites {
             sprite.update(timePosition: positionTimeLine)
         }
+        
     }
     
-    func loadStoryboardScript(){
+    func loadStoryboardScript(completion: @escaping(_ spriteArray: [Sprite]) -> Void ){
         let path = "/Users/josepuma/Downloads/35701 Lia - Toki wo Kizamu Uta 2/script.js"
         let context = JSContext()
         context?.setObject(Sprite.self, forKeyedSubscript: NSString(string: "Sprite"))
         context?.setObject(Helpers.self, forKeyedSubscript: NSString(string: "Helpers"))
         let sprites : [Sprite] = []
-        do{
-            let contents = try String(contentsOfFile: path)
-            context!.evaluateScript(contents)
-            let generateFunction = context?.objectForKeyedSubscript("generate")
-            let response = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
-            if(response!.count > 0){
-                storyboard.addSprites(sprites: response!)
+            do{
+                let contents = try String(contentsOfFile: path)
+                context!.evaluateScript(contents)
+                let generateFunction = context?.objectForKeyedSubscript("generate")
+                let response = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
+                completion(response ?? [])
+            }catch{
+                print(error)
+            }
+    }
+    
+    var previousNode = Sprite()
+    var previousknode = SKShapeNode()
+    override func mouseDown(with event: NSEvent) {
+        let location = event.location(in: self)
+        let nodeInPosition = self.atPoint(location)
+        print(nodeInPosition)
+        if let shapeNode = nodeInPosition as? SKShapeNode{
+            removeChildren(in: [shapeNode])
+        }
+        if let currentNode = nodeInPosition as? Sprite{
+            let newsknode = currentNode.drawBorder()
+            
+            if newsknode == previousknode{
+                print("entered here?")
+                return
             }
             
             
-        }catch{
-            print(error)
+            if previousNode.spritePath.isEmpty{
+                addChild(newsknode)
+                previousNode = currentNode
+                previousknode = newsknode
+                print("added border")
+            }else{
+                removeChildren(in: [previousknode])
+                addChild(newsknode)
+                previousNode = currentNode
+                previousknode = newsknode
+                print("removed border")
+            }
         }
+        
+        
     }
     
-    func loadOsbStoryboard(){
-        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
-        storyboard.addSprites(sprites: osbReader!.spriteList)
+    func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
+        DispatchQueue.global().async {
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
+            DispatchQueue.main.async {
+                completion(osbReader.spriteList)
+            }
+        }
     }
     
     func reloadStoryboardScene(){
-        serialSpritesQueue.async {
-            self.storyboard.clearSprites()
-            self.loadOsbStoryboard()
-        }
-        serialSpritesQueue.async {
-            self.loadStoryboardScript()
-            print("finished loading osb storyboard")
-        }
-        serialSpritesQueue.async {
-            let osbSprites = self.storyboard.getSprites()
-            print("finished loading script storyboard")
-            self.removeAllChildren()
-            self.renderSprites.removeAll()
-            for sprite in osbSprites{
-                self.addChild(sprite)
-                self.renderSprites.append(sprite)
+        var sprites : [Sprite] = []
+        
+        loadOsbStoryboard(){ spritesArray in
+            sprites.append(contentsOf: spritesArray)
+            print("loaded osb sprites \(spritesArray.count)")
+            
+            self.loadStoryboardScript(){ spritesArray in
+                sprites.append(contentsOf: spritesArray)
+                print("loaded script sprites \(spritesArray.count)")
+                
+                self.storyboard.clearSprites()
+                self.storyboard.addSprites(sprites: sprites)
+                self.removeAllChildren()
+                self.renderSprites.removeAll()
+                for sprite in self.storyboard.getSprites(){
+                    self.addChild(sprite)
+                    //self.addChild(sprite.drawBorder())
+                    self.renderSprites.append(sprite)
+                }
+                print("sprites finished loading")
+                
             }
+            
+            
         }
-    }
-    
-    func clearStoryboard(){
+        
         
     }
     
@@ -169,10 +210,6 @@ class StoryboardScene: SKScene, ObservableObject{
         return [:]
     }
     
-}
-
-struct Global {
-    static var soundPosition : Double = 0
 }
 
 extension NSImage {
