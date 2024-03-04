@@ -302,6 +302,7 @@ import JavaScriptCore
                 if(opacity < 0.00001){
                     //spriteInfoText.isHidden = true
                     self.isHidden = true
+                    spriteBorder?.isHidden = self.isHidden
                     return
                 }
                 self.alpha = opacity
@@ -312,6 +313,7 @@ import JavaScriptCore
                     self.yScale = scale * displaySize
                     if(scale == 0){
                         self.isHidden = true
+                        spriteBorder?.isHidden = self.isHidden
                         return
                     }
                 }else{
@@ -325,6 +327,7 @@ import JavaScriptCore
                     
                     if scaleX == 0 || scaleY == 0{
                         self.isHidden = true
+                        spriteBorder?.isHidden = self.isHidden
                         return
                     }
                 }

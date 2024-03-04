@@ -49,6 +49,9 @@ class OsbReader {
                     sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!), origin: SpriteOrigin(rawValue: origin)!)
                     case "T":
                         break;
+                    case "Animation":
+                    
+                        break;
                     case "L":
                         /*loopStartTime = Int(values[1])!;
                         loopRepetitions = Int(values[2])!;

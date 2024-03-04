@@ -45,7 +45,7 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
+        textures = loadTextures(path: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/SB")
         //let image = NSImage(size: CGSize(width: 14, height: 82)).addTextToImage(drawText: "e")
         //let spriteTexture = SKTexture(cgImage: image)
         //textures["hola.png"] = spriteTexture
@@ -56,7 +56,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/audio.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -80,7 +80,6 @@ class StoryboardScene: SKScene, ObservableObject{
         for sprite in self.renderSprites {
             sprite.update(timePosition: positionTimeLine)
         }
-        
     }
     
     func loadStoryboardScript(completion: @escaping(_ spriteArray: [Sprite]) -> Void ){
@@ -113,7 +112,7 @@ class StoryboardScene: SKScene, ObservableObject{
             let newsknode = currentNode.drawBorder()
             
             if newsknode == previousknode{
-                print("entered here?")
+                //print("entered here?")
                 return
             }
             
@@ -122,13 +121,13 @@ class StoryboardScene: SKScene, ObservableObject{
                 addChild(newsknode)
                 previousNode = currentNode
                 previousknode = newsknode
-                print("added border")
+                //print("added border")
             }else{
                 removeChildren(in: [previousknode])
                 addChild(newsknode)
                 previousNode = currentNode
                 previousknode = newsknode
-                print("removed border")
+                //print("removed border")
             }
         }
         
@@ -137,7 +136,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
         DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/Mili - world.execute(me); (Exile-).osb")
             DispatchQueue.main.async {
                 completion(osbReader.spriteList)
             }
