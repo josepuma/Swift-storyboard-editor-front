@@ -24,6 +24,8 @@ class StoryboardScene: SKScene, ObservableObject{
     var textures : [String: SKTexture] = [:]
     var storyboard = Storyboard()
     var osbReader : OsbReader?
+    let serialSpritesQueue = DispatchQueue(label: "sprites.adding.queue")
+    
     override init(){
         super.init(size: CGSize(width: 854, height: 480))
         musicPublisher
@@ -43,17 +45,18 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/355065 Molly - Beneath The Lights (Darren Styles Remix)/SB")
-        storyboard.loadTextures(textures: textures)
-        
+        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
+        //let image = NSImage(size: CGSize(width: 14, height: 82)).addTextToImage(drawText: "e")
+        //let spriteTexture = SKTexture(cgImage: image)
+        //textures["hola.png"] = spriteTexture
         //loadStoryboard()
-
-        loadStoryboardScript()
+        storyboard.loadTextures(textures: textures)
+        reloadStoryboardScene()
     }
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/355065 Molly - Beneath The Lights (Darren Styles Remix)/Molly - Beneath The Lights (Darren Styles Remix) XinCrin.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -80,7 +83,6 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     func loadStoryboardScript(){
-        clearStoryboard()
         let path = "/Users/josepuma/Downloads/35701 Lia - Toki wo Kizamu Uta 2/script.js"
         let context = JSContext()
         context?.setObject(Sprite.self, forKeyedSubscript: NSString(string: "Sprite"))
@@ -93,30 +95,42 @@ class StoryboardScene: SKScene, ObservableObject{
             let response = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
             if(response!.count > 0){
                 storyboard.addSprites(sprites: response!)
-                loadStoryboard()
             }
+            
             
         }catch{
             print(error)
         }
     }
     
-    func loadStoryboard(){
-        /*osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/355065 Molly - Beneath The Lights (Darren Styles Remix)/Molly - Beneath The Lights (Darren Styles Remix) (XinCrin).osb")
-        storyboard.addSprites(sprites: osbReader!.spriteList)*/
-        
-        renderSprites = storyboard.getSprites()
-        print(renderSprites.count)
-        for sprite in renderSprites {
-            addChild(sprite)
+    func loadOsbStoryboard(){
+        osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
+        storyboard.addSprites(sprites: osbReader!.spriteList)
+    }
+    
+    func reloadStoryboardScene(){
+        serialSpritesQueue.async {
+            self.storyboard.clearSprites()
+            self.loadOsbStoryboard()
+        }
+        serialSpritesQueue.async {
+            self.loadStoryboardScript()
+            print("finished loading osb storyboard")
+        }
+        serialSpritesQueue.async {
+            let osbSprites = self.storyboard.getSprites()
+            print("finished loading script storyboard")
+            self.removeAllChildren()
+            self.renderSprites.removeAll()
+            for sprite in osbSprites{
+                self.addChild(sprite)
+                self.renderSprites.append(sprite)
+            }
         }
     }
     
     func clearStoryboard(){
-        removeAllChildren()
-        renderSprites.removeAll()
-        storyboard.clearSprites()
-        //loadStoryboard()
+        
     }
     
     func updateZoomSize(percentage: Double){
@@ -154,8 +168,68 @@ class StoryboardScene: SKScene, ObservableObject{
         }
         return [:]
     }
+    
 }
 
 struct Global {
     static var soundPosition : Double = 0
 }
+
+extension NSImage {
+    
+    var pngData: Data? {
+            guard let tiffRepresentation = tiffRepresentation, let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else { return nil }
+            return bitmapImage.representation(using: .png, properties: [:])
+        }
+
+    func addTextToImage(drawText text: String) -> CGImage {
+        let textColor = NSColor.white
+        let textFont = NSFont(name: "Arial", size: 36)! //Helvetica Bold
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = NSTextAlignment.center
+        
+        let textFontAttributes = [
+            NSAttributedString.Key.font: textFont,
+            NSAttributedString.Key.foregroundColor: textColor,
+            NSAttributedString.Key.backgroundColor: NSColor.red,
+            ] as [NSAttributedString.Key : Any]
+        
+        let size = (text as NSString).size(withAttributes: textFontAttributes)
+        self.size = size
+        let targetImage = NSImage(size: self.size, flipped: false) { (dstRect: CGRect) -> Bool in
+            
+            /*let textColor = NSColor.white
+            let textFont = NSFont(name: "Arial", size: 36)! //Helvetica Bold
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = NSTextAlignment.center
+
+            let textFontAttributes = [
+                NSAttributedString.Key.font: textFont,
+                NSAttributedString.Key.foregroundColor: textColor,
+                ] as [NSAttributedString.Key : Any]*/
+
+            let textOrigin = CGPoint(x: self.size.width / 2, y: -self.size.height/2)
+            let rect = CGRect(origin: textOrigin, size: self.size)
+            text.draw(in: rect, withAttributes: textFontAttributes)
+            return true
+        }
+        let route = URL.documentsDirectory.appendingPathComponent("j.png")
+        let save = targetImage.pngWrite(to: route)
+        if save {
+            print("saved")
+        }
+        return targetImage.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+    }
+    
+    func pngWrite(to url: URL, options: Data.WritingOptions = .atomic) -> Bool {
+            do {
+                try pngData?.write(to: url, options: options)
+                return true
+            } catch {
+                print(error)
+                return false
+            }
+        }
+}
+
+

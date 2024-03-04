@@ -6,14 +6,20 @@
 //
 
 import AVFoundation
+import SwiftUI
+
 
 class Player {
     private var soundPath : URL?
     public var player : AVAudioPlayer!
+    private var samples: [Float] = []
+    
+    
     init(soundPath : String){
         self.soundPath = URL(fileURLWithPath: soundPath);
         player = try! AVAudioPlayer(contentsOf: self.soundPath!)
         player.enableRate = true
+        
     }
     
     func play(){
@@ -43,5 +49,7 @@ class Player {
     func getLength() -> Double{
         return player.duration * 1000
     }
+    
+    
     
 }

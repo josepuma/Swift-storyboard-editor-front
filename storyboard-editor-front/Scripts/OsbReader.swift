@@ -25,12 +25,16 @@ class OsbReader {
             let contents = try String(contentsOfFile: osbPath)
             let lines = contents.components(separatedBy: "\n")
             var sprite: Sprite?
+            var loop: Loop?
+            var loopStartTime = 0
+            var loopRepetitions = 0
             for line in lines {
                 if(line.starts(with: "//")){ continue }
                 if(line.starts(with: "[")){ continue }
                 if(line.isEmpty){ continue }
                 let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
                 var values = trimmedLine.components(separatedBy: ",")
+                let isPartOfLoop = line.starts(with: "  ")
                 switch(values[0]){
                     case "Sprite" :
                         let path = removePathQuotes(path: values[3])
@@ -43,10 +47,22 @@ class OsbReader {
                         }
                     
                     sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!), origin: SpriteOrigin(rawValue: origin)!)
+                    case "T":
+                        break;
                     case "L":
-                        sprite = nil;
-                        break
-                    
+                        /*loopStartTime = Int(values[1])!;
+                        loopRepetitions = Int(values[2])!;
+                        print("L")
+                        if(loop != nil){
+                            for command in loop!.opacityCommands{
+                                //print(command.startTime, command.endTime, command.startValue, command.endValue)
+                                sprite?.fade(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                            }
+                            loop = nil
+                        }
+                        loop = Loop(startTime: loopStartTime, loopCount: loopRepetitions)*/
+                        sprite = nil
+                        break;
                     default:
                         if(values[3].isEmpty){
                             values[3] = values[2]
@@ -54,6 +70,7 @@ class OsbReader {
                         let commandType = values[0]
                         let startTime = Double(values[2])
                         let endTime = Double(values[3])
+                        let commandDuration = Int(endTime!) - Int(startTime!)
                         switch commandType {
                             case "M":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
@@ -84,7 +101,12 @@ class OsbReader {
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                sprite?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                if isPartOfLoop{
+                                    loop?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                    }else{
+                                        sprite?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                    }
+                                
                             case "S":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
@@ -141,3 +163,4 @@ extension String {
         return ([first] + rest).joined()
     }
 }
+

@@ -40,7 +40,7 @@ import JavaScriptCore
     private var moveYCommands : [Command] = []
     private var scaleXCommands : [Command] = []
     private var scaleYCommands : [Command] = []
-    var fadeCommands : [Command] = []
+    private var fadeCommands : [Command] = []
     private var rotateCommands : [Command] = []
     private var scaleCommands : [Command] = []
     private var moveCommands : [VectorCommand] = []

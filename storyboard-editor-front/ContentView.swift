@@ -42,7 +42,7 @@ struct ContentView: View {
                         Text(buttonPlayerStatusText)
                     }
                     Button("Reload Storyboard"){
-                        contentViewmodel.currentTargetScene!.loadStoryboardScript()
+                        contentViewmodel.currentTargetScene!.reloadStoryboardScene()
                     }
                     Text("\(musicPositionTime)")
                     VStack{
