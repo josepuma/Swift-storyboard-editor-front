@@ -22,9 +22,13 @@ class StoryboardScene: SKScene, ObservableObject{
     private var cancellableSet = Set<AnyCancellable>()
     private var renderSprites: [Sprite] = []
     var textures : [String: SKTexture] = [:]
+    
     var storyboard = Storyboard()
     let serialSpritesQueue = DispatchQueue(label: "sprites.adding.queue")
     let dispatchGroup = DispatchGroup()
+    var scriptsReader : CodeFileReader?
+    
+    
     
     override init(){
         super.init(size: CGSize(width: 854, height: 480))
@@ -45,18 +49,14 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/SB")
-        //let image = NSImage(size: CGSize(width: 14, height: 82)).addTextToImage(drawText: "e")
-        //let spriteTexture = SKTexture(cgImage: image)
-        //textures["hola.png"] = spriteTexture
-        //loadStoryboard()
+        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
         storyboard.loadTextures(textures: textures)
         reloadStoryboardScene()
     }
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/audio.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -136,7 +136,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
         DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/Mili - world.execute(me); (Exile-).osb")
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
             DispatchQueue.main.async {
                 completion(osbReader.spriteList)
             }
@@ -146,13 +146,16 @@ class StoryboardScene: SKScene, ObservableObject{
     func reloadStoryboardScene(){
         var sprites : [Sprite] = []
         
+        scriptsReader = CodeFileReader("/Users/josepuma/Documents/sb scripts")
+       
+        
         loadOsbStoryboard(){ spritesArray in
             sprites.append(contentsOf: spritesArray)
             print("loaded osb sprites \(spritesArray.count)")
             
-            self.loadStoryboardScript(){ spritesArray in
-                sprites.append(contentsOf: spritesArray)
-                print("loaded script sprites \(spritesArray.count)")
+            self.scriptsReader?.loadScripts(){ scriptSpritesArray in
+                sprites.append(contentsOf: scriptSpritesArray)
+                print("loaded script sprites \(scriptSpritesArray.count)")
                 
                 self.storyboard.clearSprites()
                 self.storyboard.addSprites(sprites: sprites)
@@ -167,10 +170,8 @@ class StoryboardScene: SKScene, ObservableObject{
                 
             }
             
-            
         }
-        
-        
+
     }
     
     func updateZoomSize(percentage: Double){

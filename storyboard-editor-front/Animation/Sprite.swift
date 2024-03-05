@@ -16,6 +16,12 @@ import JavaScriptCore
     func setScale(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     func setScale(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     
+    func setScaleX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setScaleX(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    
+    func setScaleY(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    func setScaleY(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
+    
     func setRotation(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     func setRotation(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     
@@ -27,6 +33,8 @@ import JavaScriptCore
     
     func setMove(_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double, _ endValueY: Double)
     func setMove(easing: String, _ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double, _ endValueY: Double)
+    
+    func setColor(_ r : Double, _ g: Double, _ b: Double)
     
     func setAdditiveBlend()
 }
@@ -118,13 +126,13 @@ import JavaScriptCore
     func move(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue))
+        moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: CGPointMake(startValue.x + 107, startValue.y), endValue: CGPointMake(endValue.x + 107, endValue.y)))
     }
     
     func moveX(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        moveXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
+        moveXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue + 107, endValue: endValue + 107, easing: easing))
     }
     
     func moveY(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
@@ -171,6 +179,11 @@ import JavaScriptCore
     
     //JavascriptCore Functions
     
+    
+    func setColor(_ r : Double, _ g: Double, _ b: Double){
+        color(r: r, g: g, b: b)
+    }
+    
     func setOpacity(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
         fade(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
     }
@@ -185,6 +198,22 @@ import JavaScriptCore
     
     func setScale(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
         scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+    }
+    
+    func setScaleX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        scaleX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setScaleX(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        scaleX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+    }
+    
+    func setScaleY(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        scaleY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue)
+    }
+    
+    func setScaleY(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
+        scaleY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
     }
     
     func setRotation(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {

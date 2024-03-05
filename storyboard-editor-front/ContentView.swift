@@ -19,16 +19,13 @@ struct ContentView: View {
 
     var body: some View {
         HStack{
-            SpriteContainer(selectedEffectName: $selectedEffectName)
-                .onChange(of: selectedEffectName){
-                    contentViewmodel.applyFilter(filter: selectedEffectName)
-                }
-                .padding()
+            CodeEditorView()
+            .padding()
             ZStack(alignment: .bottom) {
                 SpriteView(scene: contentViewmodel.scene, options: [.allowsTransparency],
                            debugOptions: [.showsFPS, .showsDrawCount, .showsNodeCount]
                 )
-                    .frame(width: (1708 * zoomSize) / 100, height: (960 * zoomSize) / 100, alignment: .center)
+                    .frame(width: (1281 * zoomSize) / 100, height: (720 * zoomSize) / 100, alignment: .center)
                     .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 HStack{
                     /*Button(buttonPlayerStatusText){
@@ -78,7 +75,7 @@ struct ContentView: View {
                 ){
                     Text("Zoom: \(zoomSize)")
                 }*/
-            }.frame(width: (1708 * zoomSize) / 100)
+            }.frame(width: (1281 * zoomSize) / 100)
             //EffectsContainer()
             //    .padding()
         }

@@ -77,9 +77,9 @@ class OsbReader {
                         switch commandType {
                             case "M":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
-                                let startX = Double(values[4])! + Double(107)
+                                let startX = Double(values[4])!
                                 let startY = Double(values[5])
-                                let endX = values.count > 6 ? Double(values[6])! + Double(107) : startX
+                                let endX = values.count > 6 ? Double(values[6])!: startX
                                 let endY = values.count > 7 ? Double(values[7]) : startY
                                 sprite?.move(startTime: startTime!, endTime: endTime!, startValue: CGPoint(x: startX, y: startY!), endValue: CGPoint(x: endX, y: endY!), easing: easing)
                             case "V":
@@ -92,8 +92,8 @@ class OsbReader {
                                 sprite?.scaleY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!, easing: easing)
                             case "MX":
                             let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
-                                let startValue = Double(values[4])! + Double(107)
-                                let endValue = values.count > 5 ? Double(values[5])! + Double(107) : startValue
+                                let startValue = Double(values[4])! 
+                                let endValue = values.count > 5 ? Double(values[5])!  : startValue
                                 sprite?.moveX(startTime: startTime!, endTime: endTime!, startValue: startValue, endValue: endValue, easing: easing)
                             case "MY":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
