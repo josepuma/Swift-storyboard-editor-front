@@ -17,7 +17,7 @@ class ContentViewModel : ObservableObject {
         scene = StoryboardScene()
         scene.size = CGSize(width: 854, height: 480)
         scene.anchorPoint = CGPoint(x: 0, y: 1)
-        scene.scaleMode = .aspectFill
+        scene.scaleMode = .fill
         scene.backgroundColor = .black
         
         currentTargetScene = scene as? StoryboardScene

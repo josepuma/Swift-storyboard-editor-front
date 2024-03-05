@@ -54,6 +54,28 @@ class StoryboardScene: SKScene, ObservableObject{
         reloadStoryboardScene()
     }
     
+    override func keyDown(with event: NSEvent) {
+        let keyCode: UInt16 = event.keyCode
+        let l : UInt16 = 0x7B
+        let r : UInt16 = 0x7C
+        print(l, r)
+        switch(keyCode){
+            case 49: //spacebar
+                player.play()
+            case 53:
+                self.view?.window?.collectionBehavior = .fullScreenNone
+                self.view?.exitFullScreenMode()
+            case 123:
+                let currentPosition = player.getPosition()
+                player.setPosition(position: Int(currentPosition - 2000))
+            case 124:
+                let currentPosition = player.getPosition()
+                player.setPosition(position: Int(currentPosition + 2000))
+        default:
+            print("")
+        }
+    }
+    
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
         player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
@@ -80,23 +102,6 @@ class StoryboardScene: SKScene, ObservableObject{
         for sprite in self.renderSprites {
             sprite.update(timePosition: positionTimeLine)
         }
-    }
-    
-    func loadStoryboardScript(completion: @escaping(_ spriteArray: [Sprite]) -> Void ){
-        let path = "/Users/josepuma/Downloads/35701 Lia - Toki wo Kizamu Uta 2/script.js"
-        let context = JSContext()
-        context?.setObject(Sprite.self, forKeyedSubscript: NSString(string: "Sprite"))
-        context?.setObject(Helpers.self, forKeyedSubscript: NSString(string: "Helpers"))
-        let sprites : [Sprite] = []
-            do{
-                let contents = try String(contentsOfFile: path)
-                context!.evaluateScript(contents)
-                let generateFunction = context?.objectForKeyedSubscript("generate")
-                let response = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
-                completion(response ?? [])
-            }catch{
-                print(error)
-            }
     }
     
     var previousNode = Sprite()

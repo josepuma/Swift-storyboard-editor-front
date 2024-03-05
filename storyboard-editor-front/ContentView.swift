@@ -11,11 +11,16 @@ import SceneKit
 struct ContentView: View {
     
     @State private var musicPosition: Double = 0
+    @State private var frameWidth: Double = 854
+    @State private var frameHeight: Double = 480
     @State private var musicPositionTime: String = "00:00:00"
     @State private var zoomSize : Double = 80
     @State private var buttonPlayerStatusText = "Play"
     @State private var selectedEffectName : Effect = Effect(name: "None", filter: CIFilter())
     @StateObject private var contentViewmodel = ContentViewModel()
+    
+    let screenWidth  = NSScreen.main?.frame.width
+    let screenHeight = NSScreen.main?.frame.height
 
     var body: some View {
         HStack{
@@ -25,7 +30,7 @@ struct ContentView: View {
                 SpriteView(scene: contentViewmodel.scene, options: [.allowsTransparency],
                            debugOptions: [.showsFPS, .showsDrawCount, .showsNodeCount]
                 )
-                    .frame(width: (1281 * zoomSize) / 100, height: (720 * zoomSize) / 100, alignment: .center)
+                    .frame(width: (frameWidth * zoomSize) / 100, height: (frameHeight * zoomSize) / 100, alignment: .center)
                     .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 HStack{
                     /*Button(buttonPlayerStatusText){
@@ -62,6 +67,17 @@ struct ContentView: View {
                         })
                        
                     }
+                    Button {
+                        //frameWidth = screenWidth! > 0 ? Double(screenWidth!) : 854
+                        //frameHeight = screenHeight! > 0 ? Double(screenHeight!) : 480
+                        //contentViewmodel.scene.size.width = frameWidth
+                        //contentViewmodel.scene.size.height  = frameHeight
+                        
+                        contentViewmodel.scene.view?.window?.collectionBehavior = .fullScreenPrimary
+                        contentViewmodel.scene.view?.enterFullScreenMode(.main!)
+                    } label: {
+                        Image(systemName: "arrow.down.backward.and.arrow.up.forward.square")
+                    }.buttonStyle(.borderless)
                 }.padding(20)
                     
                 
@@ -75,7 +91,7 @@ struct ContentView: View {
                 ){
                     Text("Zoom: \(zoomSize)")
                 }*/
-            }.frame(width: (1281 * zoomSize) / 100)
+            }.frame(width: (frameWidth * zoomSize) / 100)
             //EffectsContainer()
             //    .padding()
         }
