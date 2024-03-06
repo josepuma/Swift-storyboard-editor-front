@@ -46,7 +46,9 @@ class CodeFileReader {
     }
 }
 
-struct CodeFile {
-    var stringPath: String
+struct ScriptFile : Identifiable {
+    let name: String
+    let path: String
     var content: String
+    let id = UUID()
 }

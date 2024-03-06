@@ -9,7 +9,6 @@ import Foundation
 import SpriteKit
 import Combine
 import JavaScriptCore
-import SwiftyLua
 
 class StoryboardScene: SKScene, ObservableObject{
     weak var contentViewModal: ContentViewModel?

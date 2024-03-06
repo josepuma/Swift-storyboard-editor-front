@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EffectsContainer : View {
+    
     var body : some View {
         VStack{
             Button(action: {

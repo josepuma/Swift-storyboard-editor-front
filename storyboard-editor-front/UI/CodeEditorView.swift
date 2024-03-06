@@ -6,28 +6,13 @@
 //
 import SwiftUI
 import SpriteKit
-import CodeEditorView
-import LanguageSupport
-struct CodeEditorView : View {
-        @State private var text: String = "My awesome code..."
-        @State private var position: CodeEditor.Position       = CodeEditor.Position()
-        @State private var messages: Set<TextLocated<Message>> = Set()
-        @Environment(\.colorScheme) private var colorScheme: ColorScheme
-        @State private var showMinimap: Bool = true
-        @State private var wrapText: Bool = true
-        @FocusState private var editorIsFocused: Bool
+import CodeEditor
 
+struct CodeEditorView : View {
+        @Binding var selectedScriptFile : ScriptFile
         var body: some View {
-            VStack{
-                CodeEditor(text: $text,
-                                 position: $position,
-                                 messages: $messages,
-                                 language: .swift(),
-                                 layout: CodeEditor.LayoutConfiguration(showMinimap: showMinimap, wrapText: wrapText))
-                        .environment(\.codeEditorTheme,
-                                     colorScheme == .dark ? Theme.defaultDark : Theme.defaultLight)
-                        .focused($editorIsFocused)
-            }
-            
+            CodeEditor(source: $selectedScriptFile.content, language: .javascript, theme: .atelierSavannaDark,
+                       flags: [ .selectable, .editable, .smartIndent ])
+            .padding(0)
         }
 }

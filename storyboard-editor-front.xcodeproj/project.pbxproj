@@ -11,10 +11,7 @@
 		59277C822B89A981005AAFD6 /* SpriteContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C812B89A981005AAFD6 /* SpriteContainer.swift */; };
 		59277C842B8A3B40005AAFD6 /* EffectsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C832B8A3B40005AAFD6 /* EffectsContainer.swift */; };
 		59277C862B8A45E3005AAFD6 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C852B8A45E3005AAFD6 /* Filters.swift */; };
-		59277C892B8AC576005AAFD6 /* SwiftyLua in Frameworks */ = {isa = PBXBuildFile; productRef = 59277C882B8AC576005AAFD6 /* SwiftyLua */; };
 		59277C8B2B8ADF99005AAFD6 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C8A2B8ADF99005AAFD6 /* Helpers.swift */; };
-		59277C8E2B8AE866005AAFD6 /* CodeEditorView in Frameworks */ = {isa = PBXBuildFile; productRef = 59277C8D2B8AE866005AAFD6 /* CodeEditorView */; };
-		59277C902B8AE866005AAFD6 /* LanguageSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 59277C8F2B8AE866005AAFD6 /* LanguageSupport */; };
 		59277C922B8BF332005AAFD6 /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C912B8BF332005AAFD6 /* WaveformView.swift */; };
 		593E3FF32B8EBFD00058B69F /* Loop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593E3FF22B8EBFD00058B69F /* Loop.swift */; };
 		5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */; };
@@ -37,6 +34,7 @@
 		599EBFE82B826C2A007F7D10 /* SpriteOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */; };
 		59D535612B964FCC00368EED /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535602B964FCC00368EED /* CodeEditorView.swift */; };
 		59D535632B9650B600368EED /* CodeFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535622B9650B600368EED /* CodeFileReader.swift */; };
+		59D535662B98E58B00368EED /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 59D535652B98E58B00368EED /* CodeEditor */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,10 +73,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				59277C902B8AE866005AAFD6 /* LanguageSupport in Frameworks */,
-				59277C8E2B8AE866005AAFD6 /* CodeEditorView in Frameworks */,
 				598446762B7FC6BA00613DA8 /* SwiftImageReadWrite in Frameworks */,
-				59277C892B8AC576005AAFD6 /* SwiftyLua in Frameworks */,
+				59D535662B98E58B00368EED /* CodeEditor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,9 +205,7 @@
 			name = "storyboard-editor-front";
 			packageProductDependencies = (
 				598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */,
-				59277C882B8AC576005AAFD6 /* SwiftyLua */,
-				59277C8D2B8AE866005AAFD6 /* CodeEditorView */,
-				59277C8F2B8AE866005AAFD6 /* LanguageSupport */,
+				59D535652B98E58B00368EED /* CodeEditor */,
 			);
 			productName = "storyboard-editor-front";
 			productReference = 5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */;
@@ -243,8 +237,7 @@
 			mainGroup = 598446512B7FB57200613DA8;
 			packageReferences = (
 				598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */,
-				59277C872B8AC576005AAFD6 /* XCRemoteSwiftPackageReference "SwiftyLua" */,
-				59277C8C2B8AE866005AAFD6 /* XCRemoteSwiftPackageReference "CodeEditorView" */,
+				59D535642B98E58A00368EED /* XCRemoteSwiftPackageReference "CodeEditor" */,
 			);
 			productRefGroup = 5984465B2B7FB57200613DA8 /* Products */;
 			projectDirPath = "";
@@ -498,22 +491,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		59277C872B8AC576005AAFD6 /* XCRemoteSwiftPackageReference "SwiftyLua" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftyLua/SwiftyLua";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		59277C8C2B8AE866005AAFD6 /* XCRemoteSwiftPackageReference "CodeEditorView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mchakravarty/CodeEditorView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.13.0;
-			};
-		};
 		598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dagronf/SwiftImageReadWrite.git";
@@ -522,28 +499,26 @@
 				minimumVersion = 1.6.1;
 			};
 		};
+		59D535642B98E58A00368EED /* XCRemoteSwiftPackageReference "CodeEditor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ZeeZide/CodeEditor.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		59277C882B8AC576005AAFD6 /* SwiftyLua */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 59277C872B8AC576005AAFD6 /* XCRemoteSwiftPackageReference "SwiftyLua" */;
-			productName = SwiftyLua;
-		};
-		59277C8D2B8AE866005AAFD6 /* CodeEditorView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 59277C8C2B8AE866005AAFD6 /* XCRemoteSwiftPackageReference "CodeEditorView" */;
-			productName = CodeEditorView;
-		};
-		59277C8F2B8AE866005AAFD6 /* LanguageSupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 59277C8C2B8AE866005AAFD6 /* XCRemoteSwiftPackageReference "CodeEditorView" */;
-			productName = LanguageSupport;
-		};
 		598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */;
 			productName = SwiftImageReadWrite;
+		};
+		59D535652B98E58B00368EED /* CodeEditor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59D535642B98E58A00368EED /* XCRemoteSwiftPackageReference "CodeEditor" */;
+			productName = CodeEditor;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

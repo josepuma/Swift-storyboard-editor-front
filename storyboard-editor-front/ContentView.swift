@@ -10,6 +10,14 @@ import SpriteKit
 import SceneKit
 struct ContentView: View {
     
+   
+    
+    @State var files = [
+        ScriptFile(name: "Circles", path: "script.js", content: "function generate(sprites)\n{ \n  circles\n  return sprites\n}"),
+        ScriptFile(name: "Background", path: "script.js", content: "function generate(sprites)\n{ \n  background\n  return sprites\n}"),
+        ScriptFile(name: "Waveform", path: "script.js", content: "function generate(sprites)\n{ \n  waveform\n  return sprites\n}")
+    ]
+    
     @State private var musicPosition: Double = 0
     @State private var frameWidth: Double = 854
     @State private var frameHeight: Double = 480
@@ -18,36 +26,76 @@ struct ContentView: View {
     @State private var buttonPlayerStatusText = "Play"
     @State private var selectedEffectName : Effect = Effect(name: "None", filter: CIFilter())
     @StateObject private var contentViewmodel = ContentViewModel()
+    @State private var selectedScriptId: UUID?
     
     let screenWidth  = NSScreen.main?.frame.width
     let screenHeight = NSScreen.main?.frame.height
+    let iconActionsSize = CGFloat(20)
+    
+    @State var selectedScriptFile : ScriptFile = ScriptFile(name: "", path: "", content: "")
 
     var body: some View {
-        HStack{
-            CodeEditorView()
-            .padding()
-            ZStack(alignment: .bottom) {
-                SpriteView(scene: contentViewmodel.scene, options: [.allowsTransparency],
-                           debugOptions: [.showsFPS, .showsDrawCount, .showsNodeCount]
-                )
-                    .frame(width: (frameWidth * zoomSize) / 100, height: (frameHeight * zoomSize) / 100, alignment: .center)
-                    .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                HStack{
-                    /*Button(buttonPlayerStatusText){
-                        contentViewmodel.currentTargetScene?.player.play()
-                        buttonPlayerStatusText = ((contentViewmodel.currentTargetScene?.player.player.isPlaying) != nil) ? "Pause" : "Play"
-                    }*/
-                    Button(action: {
-                        contentViewmodel.currentTargetScene?.player.play()
-                        buttonPlayerStatusText = (contentViewmodel.currentTargetScene!.player.player.isPlaying) ? "Pause" : "Play"
-                    }){
-                        Text(buttonPlayerStatusText)
+        HStack(alignment: .top, spacing: 0){
+            //Sidebar Container
+            VStack(alignment: .leading){
+                /*Text("Scripts")
+                    .bold()
+                    .padding(.top)
+                    .padding(.leading)
+                    .kerning(2)
+                    .textCase(.uppercase)
+                    .foregroundColor(.gray)
+                    .background(.clear)*/
+                    
+                List(selection: $selectedScriptId){
+                    ForEach(files) { file in
+                        Label(file.name, systemImage: "wand.and.stars.inverse")
                     }
-                    Button("Reload Storyboard"){
-                        contentViewmodel.currentTargetScene!.reloadStoryboardScene()
-                    }
-                    Text("\(musicPositionTime)")
-                    VStack{
+                }.onChange(of: selectedScriptId, {
+                    selectedScriptFile = files.first(where: { $0.id == selectedScriptId })!
+                })
+                .navigationTitle("Scripts")
+                    .listStyle(.sidebar)
+                    
+            }.background(.regularMaterial)
+            .frame(width: 240)
+            
+            //Main Content
+            VStack(spacing: 0){
+                //Storyboard Visualizer
+                ZStack(alignment: .bottom){
+                    SpriteView(scene: contentViewmodel.scene)
+                    HStack{
+                        Button{
+                            contentViewmodel.currentTargetScene?.player.play()
+                            buttonPlayerStatusText = (contentViewmodel.currentTargetScene!.player.player.isPlaying) ? "Pause" : "Play"
+                        } label: {
+                            if(contentViewmodel.currentTargetScene!.player.player.isPlaying){
+                                Image(systemName: "pause.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: iconActionsSize, height: iconActionsSize)
+                            }else{
+                                Image(systemName: "play.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: iconActionsSize, height: iconActionsSize)
+                            }
+                            
+                        }.buttonStyle(.borderless)
+                            .foregroundColor(.white)
+                    
+                        Button{
+                            contentViewmodel.currentTargetScene!.reloadStoryboardScene()
+                        } label: {
+                            Image(systemName: "arrow.triangle.2.circlepath.circle.fill" )
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: iconActionsSize, height: iconActionsSize)
+                        }.buttonStyle(.borderless)
+                            .foregroundColor(.white)
+
+                        
                         Slider(
                             value: Binding(get: {
                                 musicPosition
@@ -64,38 +112,28 @@ struct ContentView: View {
                         })
                         .onReceive(contentViewmodel.currentTargetScene!.musicTimePublisher, perform: { target in
                             musicPosition = target
-                        })
-                       
-                    }
-                    Button {
-                        //frameWidth = screenWidth! > 0 ? Double(screenWidth!) : 854
-                        //frameHeight = screenHeight! > 0 ? Double(screenHeight!) : 480
-                        //contentViewmodel.scene.size.width = frameWidth
-                        //contentViewmodel.scene.size.height  = frameHeight
+                        }).accentColor(.white)
                         
-                        contentViewmodel.scene.view?.window?.collectionBehavior = .fullScreenPrimary
-                        contentViewmodel.scene.view?.enterFullScreenMode(.main!)
-                    } label: {
-                        Image(systemName: "arrow.down.backward.and.arrow.up.forward.square")
-                    }.buttonStyle(.borderless)
-                }.padding(20)
-                    
-                
-                /*Stepper(
-                    value: $zoomSize,
-                    in: 10...100,
-                    step: 10,
-                    onEditingChanged: { editing in
-                        contentViewmodel.currentTargetScene!.updateZoomSize(percentage: zoomSize)
-                    }
-                ){
-                    Text("Zoom: \(zoomSize)")
-                }*/
-            }.frame(width: (frameWidth * zoomSize) / 100)
-            //EffectsContainer()
-            //    .padding()
-        }
-        //.background(VisualEffectView().ignoresSafeArea())
+                        
+                        Button {
+                            contentViewmodel.scene.view?.window?.collectionBehavior = .fullScreenPrimary
+                            contentViewmodel.scene.view?.enterFullScreenMode(.main!)
+                        } label: {
+                            Image(systemName: "arrow.down.backward.and.arrow.up.forward.square.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: iconActionsSize, height: iconActionsSize)
+                        }.buttonStyle(.borderless)
+                        .foregroundColor(.white)
+                        .help("View your storyboard in full screen")
+                    }.padding()
+                }
+                //Code Editor
+                CodeEditorView(selectedScriptFile: $selectedScriptFile)
+            }
+            
+        }.frame(maxWidth: .infinity, alignment: .leading)
+
     }
 }
 

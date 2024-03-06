@@ -6,8 +6,7 @@
 //
 import SwiftUI
 import SpriteKit
-import CodeEditorView
-import LanguageSupport
+
 struct SpriteContainer : View {
         private let filterGroups: [FilterGroup] = [
             FilterGroup(name: "Filters",
@@ -20,23 +19,10 @@ struct SpriteContainer : View {
 
         @Binding var selectedEffectName: Effect
         @State private var text: String = "My awesome code..."
-        @State private var position: CodeEditor.Position       = CodeEditor.Position()
-        @State private var messages: Set<TextLocated<Message>> = Set()
-        @Environment(\.colorScheme) private var colorScheme: ColorScheme
-        @State private var showMinimap: Bool = true
-        @State private var wrapText: Bool = true
-        @FocusState private var editorIsFocused: Bool
 
         var body: some View {
             VStack{
-                CodeEditor(text: $text,
-                                 position: $position,
-                                 messages: $messages,
-                                 language: .swift(),
-                                 layout: CodeEditor.LayoutConfiguration(showMinimap: showMinimap, wrapText: wrapText))
-                        .environment(\.codeEditorTheme,
-                                     colorScheme == .dark ? Theme.defaultDark : Theme.defaultLight)
-                        .focused($editorIsFocused)
+               
                 /*List() {
                     ForEach(filterGroups) { group in
                         Section(header: Text("\(group.name)")) {
