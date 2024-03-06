@@ -48,8 +48,10 @@ struct ContentView: View {
                     .background(.clear)*/
                     
                 List(selection: $selectedScriptId){
-                    ForEach(files) { file in
-                        Label(file.name, systemImage: "wand.and.stars.inverse")
+                    Section("Scripts"){
+                        ForEach(files) { file in
+                            Label(file.name, systemImage: "wand.and.stars.inverse")
+                        }
                     }
                 }.onChange(of: selectedScriptId, {
                     selectedScriptFile = files.first(where: { $0.id == selectedScriptId })!
