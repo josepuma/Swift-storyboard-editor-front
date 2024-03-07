@@ -8,6 +8,8 @@
 import SwiftUI
 import SpriteKit
 import SceneKit
+import AppKit
+
 struct ContentView: View {
     
     func saveFiles(){
@@ -36,11 +38,26 @@ struct ContentView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 0){
             //Sidebar Container
-            VStack(alignment: .leading){
+            VStack(alignment: .leading, spacing: 0){
                 List(selection: $selectedScriptId){
                     Section("Scripts"){
                         ForEach(files) { file in
                             Label(file.name, systemImage: "wand.and.stars.inverse")
+                                .contextMenu{
+                                    Button("Open script folder") {
+                                        print("It will open \(file.path) in VS Code")
+                                   }
+                                    Button("Open with VSCode") {
+                                        NSWorkspace.shared.open([URL(filePath: file.path)], withAppBundleIdentifier: "com.microsoft.VSCode", additionalEventParamDescriptor: nil, launchIdentifiers: nil)
+                                        print("It will open \(file.path) in VS Code")
+                                   }
+                                    Button("Delete Script") {
+                                        print("It will delete \(file.path)")
+                                   }
+                                }
+                        }.onMove{ from, to in
+                            files.move(fromOffsets: from, toOffset: to)
+
                         }
                     }
                 }.onChange(of: selectedScriptId, {
@@ -49,7 +66,15 @@ struct ContentView: View {
                     selectedScriptFile = fileToRead
                 })
                 .navigationTitle("Scripts")
-                    .listStyle(.sidebar)
+                .listStyle(.sidebar)
+                Button {
+                    
+                }label: {
+                    Label("Create New Sprite", systemImage: "wand.and.stars.inverse")
+                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                }
+                .padding()
+                
                 
             }.background(.regularMaterial)
             .frame(width: 240)
@@ -135,5 +160,7 @@ struct ContentView: View {
             })
 
     }
+    
 }
+
 

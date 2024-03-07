@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "directorywatcher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GianniCarlo/DirectoryWatcher.git",
+      "state" : {
+        "revision" : "76af69f1d19146b0c5d3e38747bb5eabe547143b",
+        "version" : "2.7.3"
+      }
+    },
+    {
       "identity" : "highlightr",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/raspu/Highlightr",

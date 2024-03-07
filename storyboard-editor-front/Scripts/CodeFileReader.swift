@@ -22,10 +22,11 @@ class CodeFileReader{
         do {
             let scripts = try fm.contentsOfDirectory(atPath: self.scriptsPath)
             for script in scripts {
-                //let contents = try String(contentsOfFile: self.scriptsPath + "/" + script)
-                scriptsFilesPath.append(
-                    ScriptFile(name: (script as NSString).deletingPathExtension.uppercasingFirst, path: self.scriptsPath + "/" + script)
-                )
+                if URL(filePath: script).pathExtension == "js"{
+                    scriptsFilesPath.append(
+                        ScriptFile(name: (script as NSString).deletingPathExtension.uppercasingFirst, path: self.scriptsPath + "/" + script)
+                    )
+                }
             }
             
         }catch{
@@ -50,14 +51,16 @@ class CodeFileReader{
         do {
             let scripts = try fm.contentsOfDirectory(atPath: self.scriptsPath)
             for script in scripts {
-                let contents = try String(contentsOfFile: self.scriptsPath + "/" + script)
-                self.scripts[script] = contents
-                scriptsFiles.append(
-                    ScriptFile(name: script.uppercasingFirst, path: script)
-                )
-                getSpritesFromScript(code: contents){ spriteArray in
-                    print("finished reading script \(script) and found \(spriteArray.count) sprites")
-                    sprites.append(contentsOf: spriteArray)
+                if URL(filePath: script).pathExtension == "js"{
+                    let contents = try String(contentsOfFile: self.scriptsPath + "/" + script)
+                    self.scripts[script] = contents
+                    scriptsFiles.append(
+                        ScriptFile(name: script.uppercasingFirst, path: script)
+                    )
+                    getSpritesFromScript(code: contents){ spriteArray in
+                        print("finished reading script \(script) and found \(spriteArray.count) sprites")
+                        sprites.append(contentsOf: spriteArray)
+                    }
                 }
             }
             completion(ScriptSprite(scripts: scriptsFiles, sprites: sprites))

@@ -10,6 +10,7 @@ import SpriteKit
 import Combine
 import JavaScriptCore
 
+
 class StoryboardScene: SKScene, ObservableObject{
     weak var contentViewModal: ContentViewModel?
     private var displaySize : Double = 2
@@ -27,7 +28,7 @@ class StoryboardScene: SKScene, ObservableObject{
     let dispatchGroup = DispatchGroup()
     public var scriptsReader : CodeFileReader?
     var scripts : [ScriptFile] = []
-    
+    let scriptFolderPath = "/Users/josepuma/Documents/sb scripts"
     
     override init(){
         super.init(size: CGSize(width: 854, height: 480))
@@ -51,6 +52,7 @@ class StoryboardScene: SKScene, ObservableObject{
         textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
         storyboard.loadTextures(textures: textures)
         reloadStoryboardScene()
+
     }
     
     override func keyDown(with event: NSEvent) {
@@ -151,7 +153,7 @@ class StoryboardScene: SKScene, ObservableObject{
     func reloadStoryboardScene(){
         var sprites : [Sprite] = []
         
-        scriptsReader = CodeFileReader("/Users/josepuma/Documents/sb scripts")
+        scriptsReader = CodeFileReader(scriptFolderPath)
        
         
         loadOsbStoryboard(){ spritesArray in
@@ -180,9 +182,6 @@ class StoryboardScene: SKScene, ObservableObject{
 
     }
     
-    func updateZoomSize(percentage: Double){
-        displaySize = (percentage / 100) * 2
-    }
     
     func getAudioPosition() -> Double {
         return player.getPosition()
