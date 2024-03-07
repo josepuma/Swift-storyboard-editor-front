@@ -20,13 +20,13 @@ class StoryboardScene: SKScene, ObservableObject{
     public let musicTimePublisher = CurrentValueSubject<Double, Never>(0)
     private var cancellableSet = Set<AnyCancellable>()
     private var renderSprites: [Sprite] = []
-    var textures : [String: SKTexture] = [:]
+    public var textures : [String: SKTexture] = [:]
     
     var storyboard = Storyboard()
     let serialSpritesQueue = DispatchQueue(label: "sprites.adding.queue")
     let dispatchGroup = DispatchGroup()
-    var scriptsReader : CodeFileReader?
-    
+    public var scriptsReader : CodeFileReader?
+    var scripts : [ScriptFile] = []
     
     
     override init(){
@@ -147,6 +147,7 @@ class StoryboardScene: SKScene, ObservableObject{
         }
     }
     
+    
     func reloadStoryboardScene(){
         var sprites : [Sprite] = []
         
@@ -158,8 +159,9 @@ class StoryboardScene: SKScene, ObservableObject{
             print("loaded osb sprites \(spritesArray.count)")
             
             self.scriptsReader?.loadScripts(){ scriptSpritesArray in
-                sprites.append(contentsOf: scriptSpritesArray)
-                print("loaded script sprites \(scriptSpritesArray.count)")
+                sprites.append(contentsOf: scriptSpritesArray.sprites)
+                self.scripts = scriptSpritesArray.scripts
+                print("loaded script sprites \(scriptSpritesArray.sprites.count)")
                 
                 self.storyboard.clearSprites()
                 self.storyboard.addSprites(sprites: sprites)

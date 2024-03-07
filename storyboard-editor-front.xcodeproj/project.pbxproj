@@ -35,6 +35,7 @@
 		59D535612B964FCC00368EED /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535602B964FCC00368EED /* CodeEditorView.swift */; };
 		59D535632B9650B600368EED /* CodeFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535622B9650B600368EED /* CodeFileReader.swift */; };
 		59D535662B98E58B00368EED /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 59D535652B98E58B00368EED /* CodeEditor */; };
+		59D535682B993F5100368EED /* CodeFileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535672B993F5100368EED /* CodeFileWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteOrigin.swift; sourceTree = "<group>"; };
 		59D535602B964FCC00368EED /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
 		59D535622B9650B600368EED /* CodeFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileReader.swift; sourceTree = "<group>"; };
+		59D535672B993F5100368EED /* CodeFileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileWriter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 			children = (
 				598446922B8098C900613DA8 /* OsbReader.swift */,
 				59D535622B9650B600368EED /* CodeFileReader.swift */,
+				59D535672B993F5100368EED /* CodeFileWriter.swift */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */,
 				59277C842B8A3B40005AAFD6 /* EffectsContainer.swift in Sources */,
 				59277C822B89A981005AAFD6 /* SpriteContainer.swift in Sources */,
+				59D535682B993F5100368EED /* CodeFileWriter.swift in Sources */,
 				59277C7B2B893BE5005AAFD6 /* Easing.swift in Sources */,
 				59D535632B9650B600368EED /* CodeFileReader.swift in Sources */,
 				5984468C2B808A0800613DA8 /* Command.swift in Sources */,

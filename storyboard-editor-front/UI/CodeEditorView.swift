@@ -10,9 +10,15 @@ import CodeEditor
 
 struct CodeEditorView : View {
         @Binding var selectedScriptFile : ScriptFile
+        @FocusState private var focused: Bool
+        @State private var key = ""
         var body: some View {
             CodeEditor(source: $selectedScriptFile.content, language: .javascript, theme: .atelierSavannaDark,
                        flags: [ .selectable, .editable, .smartIndent ])
-            .padding(0)
+            .focusable()
+            .focused($focused)
+            .onAppear {
+                focused = true
+            }
         }
 }

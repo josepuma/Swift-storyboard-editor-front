@@ -10,13 +10,11 @@ import SpriteKit
 import SceneKit
 struct ContentView: View {
     
-   
+    func saveFiles(){
+        print(selectedScriptFile)
+    }
     
-    @State var files = [
-        ScriptFile(name: "Circles", path: "script.js", content: "function generate(sprites)\n{ \n  circles\n  return sprites\n}"),
-        ScriptFile(name: "Background", path: "script.js", content: "function generate(sprites)\n{ \n  background\n  return sprites\n}"),
-        ScriptFile(name: "Waveform", path: "script.js", content: "function generate(sprites)\n{ \n  waveform\n  return sprites\n}")
-    ]
+    @State var files : [ScriptFile] = []
     
     @State private var musicPosition: Double = 0
     @State private var frameWidth: Double = 854
@@ -32,21 +30,13 @@ struct ContentView: View {
     let screenHeight = NSScreen.main?.frame.height
     let iconActionsSize = CGFloat(20)
     
-    @State var selectedScriptFile : ScriptFile = ScriptFile(name: "", path: "", content: "")
+    
+    @State var selectedScriptFile : ScriptFile = ScriptFile(name: "", path: "")
 
     var body: some View {
         HStack(alignment: .top, spacing: 0){
             //Sidebar Container
             VStack(alignment: .leading){
-                /*Text("Scripts")
-                    .bold()
-                    .padding(.top)
-                    .padding(.leading)
-                    .kerning(2)
-                    .textCase(.uppercase)
-                    .foregroundColor(.gray)
-                    .background(.clear)*/
-                    
                 List(selection: $selectedScriptId){
                     Section("Scripts"){
                         ForEach(files) { file in
@@ -54,13 +44,18 @@ struct ContentView: View {
                         }
                     }
                 }.onChange(of: selectedScriptId, {
-                    selectedScriptFile = files.first(where: { $0.id == selectedScriptId })!
+                    var fileToRead = files.first(where: { $0.id == selectedScriptId })!
+                    fileToRead.content = contentViewmodel.currentTargetScene!.scriptsReader!.loadScriptContent(scriptPath: fileToRead.path)
+                    selectedScriptFile = fileToRead
                 })
                 .navigationTitle("Scripts")
                     .listStyle(.sidebar)
-                    
+                
             }.background(.regularMaterial)
             .frame(width: 240)
+            .task(){
+                files = await contentViewmodel.currentTargetScene!.scriptsReader!.loadScriptsFiles()
+            }
             
             //Main Content
             VStack(spacing: 0){
@@ -135,6 +130,9 @@ struct ContentView: View {
             }
             
         }.frame(maxWidth: .infinity, alignment: .leading)
+            .onChange(of: selectedScriptFile.content, {
+                CodeFileWriter.script = selectedScriptFile
+            })
 
     }
 }
