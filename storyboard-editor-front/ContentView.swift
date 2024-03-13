@@ -48,7 +48,7 @@ struct ContentView: View {
                                         print("It will open \(file.path) in VS Code")
                                    }
                                     Button("Open with VSCode") {
-                                        NSWorkspace.shared.open([URL(filePath: file.path)], withAppBundleIdentifier: "com.microsoft.VSCode", additionalEventParamDescriptor: nil, launchIdentifiers: nil)
+                                        /*NSWorkspace.shared.open([URL(filePath: file.path)], withAppBundleIdentifier: "com.microsoft.VSCode", additionalEventParamDescriptor: nil, launchIdentifiers: nil)*/
                                         print("It will open \(file.path) in VS Code")
                                    }
                                     Button("Delete Script") {

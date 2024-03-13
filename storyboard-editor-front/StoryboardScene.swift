@@ -9,6 +9,7 @@ import Foundation
 import SpriteKit
 import Combine
 import JavaScriptCore
+import SFSMonitor
 
 
 class StoryboardScene: SKScene, ObservableObject{
@@ -29,6 +30,7 @@ class StoryboardScene: SKScene, ObservableObject{
     public var scriptsReader : CodeFileReader?
     var scripts : [ScriptFile] = []
     let scriptFolderPath = "/Users/josepuma/Documents/sb scripts"
+    private var queue : SFSMonitor?
     
     override init(){
         super.init(size: CGSize(width: 854, height: 480))
@@ -51,8 +53,11 @@ class StoryboardScene: SKScene, ObservableObject{
     override func didMove(to view: SKView) {
         textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
         storyboard.loadTextures(textures: textures)
+        scriptsReader = CodeFileReader(scriptFolderPath)
         reloadStoryboardScene()
-
+        
+        queue = SFSMonitor(delegate: scriptsReader)
+        queue?.setMaxMonitored(number: 200)
     }
     
     override func keyDown(with event: NSEvent) {
@@ -153,17 +158,21 @@ class StoryboardScene: SKScene, ObservableObject{
     func reloadStoryboardScene(){
         var sprites : [Sprite] = []
         
-        scriptsReader = CodeFileReader(scriptFolderPath)
+        
        
         
         loadOsbStoryboard(){ spritesArray in
             sprites.append(contentsOf: spritesArray)
             print("loaded osb sprites \(spritesArray.count)")
-            
             self.scriptsReader?.loadScripts(){ scriptSpritesArray in
                 sprites.append(contentsOf: scriptSpritesArray.sprites)
                 self.scripts = scriptSpritesArray.scripts
                 print("loaded script sprites \(scriptSpritesArray.sprites.count)")
+                
+                for file in scriptSpritesArray.scripts{
+                    print(file.path)
+                    _ = self.queue?.addURL(URL(filePath: file.path))
+                }
                 
                 self.storyboard.clearSprites()
                 self.storyboard.addSprites(sprites: sprites)

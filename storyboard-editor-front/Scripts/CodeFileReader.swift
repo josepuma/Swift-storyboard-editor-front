@@ -7,13 +7,27 @@
 
 import Foundation
 import JavaScriptCore
-class CodeFileReader{
+import SFSMonitor
+class CodeFileReader : SFSMonitorDelegate {
+    let monitorDispatchQueue =  DispatchQueue(label: "monitorDispatchQueue", qos: .utility)
+        
+       
+    
     private var scriptsPath: String
     private var scriptsFiles : [ScriptFile] = []
     public var scripts : [String: String] = [:]
     
     init(_ scriptsPath: String){
         self.scriptsPath = scriptsPath
+    }
+    
+    func receivedNotification(_ notification: SFSMonitorNotification, url: URL, queue: SFSMonitor) {
+    
+        // Place actions into a utility-level Dispatch Queue.
+        // Remember to call UI updates from DispatchQueue.main.async blocks.
+        monitorDispatchQueue.async(flags: .barrier) { // Multithread protection
+            print("\(notification.toStrings().map { $0.rawValue }) @ \(url.path)")
+        }
     }
     
     func loadScriptsFiles() async -> [ScriptFile]{
@@ -55,7 +69,7 @@ class CodeFileReader{
                     let contents = try String(contentsOfFile: self.scriptsPath + "/" + script)
                     self.scripts[script] = contents
                     scriptsFiles.append(
-                        ScriptFile(name: script.uppercasingFirst, path: script)
+                        ScriptFile(name: script.uppercasingFirst, path: self.scriptsPath + "/" + script)
                     )
                     getSpritesFromScript(code: contents){ spriteArray in
                         print("finished reading script \(script) and found \(spriteArray.count) sprites")

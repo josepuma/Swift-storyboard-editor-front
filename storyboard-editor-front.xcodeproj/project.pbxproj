@@ -37,6 +37,7 @@
 		59D535662B98E58B00368EED /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 59D535652B98E58B00368EED /* CodeEditor */; };
 		59D535682B993F5100368EED /* CodeFileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535672B993F5100368EED /* CodeFileWriter.swift */; };
 		59D5356B2B9942C700368EED /* DirectoryWatcher in Frameworks */ = {isa = PBXBuildFile; productRef = 59D5356A2B9942C700368EED /* DirectoryWatcher */; };
+		59D5356E2B9E2FED00368EED /* SFSMonitor in Frameworks */ = {isa = PBXBuildFile; productRef = 59D5356D2B9E2FED00368EED /* SFSMonitor */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 			files = (
 				598446762B7FC6BA00613DA8 /* SwiftImageReadWrite in Frameworks */,
 				59D5356B2B9942C700368EED /* DirectoryWatcher in Frameworks */,
+				59D5356E2B9E2FED00368EED /* SFSMonitor in Frameworks */,
 				59D535662B98E58B00368EED /* CodeEditor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,6 +214,7 @@
 				598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */,
 				59D535652B98E58B00368EED /* CodeEditor */,
 				59D5356A2B9942C700368EED /* DirectoryWatcher */,
+				59D5356D2B9E2FED00368EED /* SFSMonitor */,
 			);
 			productName = "storyboard-editor-front";
 			productReference = 5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */;
@@ -245,6 +248,7 @@
 				598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */,
 				59D535642B98E58A00368EED /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				59D535692B9942C700368EED /* XCRemoteSwiftPackageReference "DirectoryWatcher" */,
+				59D5356C2B9E2FEC00368EED /* XCRemoteSwiftPackageReference "SFSMonitor" */,
 			);
 			productRefGroup = 5984465B2B7FB57200613DA8 /* Products */;
 			projectDirPath = "";
@@ -523,6 +527,14 @@
 				minimumVersion = 2.7.3;
 			};
 		};
+		59D5356C2B9E2FEC00368EED /* XCRemoteSwiftPackageReference "SFSMonitor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ClassicalDude/SFSMonitor.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -540,6 +552,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 59D535692B9942C700368EED /* XCRemoteSwiftPackageReference "DirectoryWatcher" */;
 			productName = DirectoryWatcher;
+		};
+		59D5356D2B9E2FED00368EED /* SFSMonitor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59D5356C2B9E2FEC00368EED /* XCRemoteSwiftPackageReference "SFSMonitor" */;
+			productName = SFSMonitor;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
