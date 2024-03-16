@@ -62,6 +62,7 @@ import JavaScriptCore
     private var spriteInfoText = SKLabelNode(fontNamed: "Arial")
     private var spriteBorder : SKShapeNode?
     private var orientationFlipValueHorizontally = 1.0
+    private var orientationFlipValueVertically = 1.0
     var isLoaded : Bool = false
     
     var isActive : Bool {
@@ -263,6 +264,10 @@ import JavaScriptCore
         self.orientationFlipValueHorizontally = -1.0
     }
     
+    func setFlipVertically(){
+        self.orientationFlipValueVertically = -1.0
+    }
+    
     //
     
     func loadTexture(texture: SKTexture){
@@ -349,7 +354,7 @@ import JavaScriptCore
                 if(scaleCommands.count > 0){
                     let scale = valueAt(position: timePosition, commands: scaleCommands)
                     self.xScale = (scale * displaySize) * self.orientationFlipValueHorizontally
-                    self.yScale = scale * displaySize
+                    self.yScale = (scale * displaySize) * self.orientationFlipValueVertically
                     if(scale == 0){
                         self.isHidden = true
                         spriteBorder?.isHidden = self.isHidden
@@ -358,11 +363,11 @@ import JavaScriptCore
                 }else{
                     let scaleX = valueAt(position: timePosition, commands: scaleXCommands)
                     let scaleY = valueAt(position: timePosition, commands: scaleYCommands)
-                    self.yScale = scaleY * displaySize
-                    self.xScale = scaleX * displaySize
+                    self.xScale = (scaleX * displaySize) * self.orientationFlipValueHorizontally
+                    self.yScale = (scaleY * displaySize) * self.orientationFlipValueVertically
                     
                     spriteBorder?.yScale = (scaleY * displaySize) * self.orientationFlipValueHorizontally
-                    spriteBorder?.xScale = scaleX * displaySize
+                    spriteBorder?.xScale = (scaleX * displaySize) * self.orientationFlipValueVertically
                     
                     if scaleX == 0 || scaleY == 0{
                         self.isHidden = true
@@ -415,7 +420,6 @@ import JavaScriptCore
         start = startTimes.count > 0 ? startTimes.min()! : 0
         end = endTimes.count > 0 ? endTimes.max()! : 0
         areCommandsCalculated = true
-        //print("fadeCommands: \(self.fadeCommands.count)")
     }
     
     

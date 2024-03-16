@@ -6,7 +6,7 @@
 //
 
 import Swift
-
+import SpriteKit
 class Loop {
     private var fadeCommands : [Command] = []
     private var scaleCommands : [Command] = []
@@ -15,6 +15,7 @@ class Loop {
     private var rotateCommands : [Command] = []
     private var moveXCommands : [Command] = []
     private var moveYCommands : [Command] = []
+    private var moveCommands : [VectorCommand] = []
     private var startTime : Int
     private var loopCount : Int
     
@@ -60,6 +61,22 @@ class Loop {
                 let endTime = start + Int(duration)
                 //print(size.startValue)
                 commands.append(Command(startTime: Double(start), endTime: Double(endTime), startValue: command.startValue, endValue: command.endValue, easing: command.easing))
+                start = start + Int(duration)
+            }
+        }
+        return commands
+    }
+    
+    var movingCommands : [VectorCommand] {
+        var commands : [VectorCommand] = []
+        var start = startTime
+        for _ in 0.until(loopCount){
+            var duration = 0.0
+            for command in moveCommands {
+                duration = command.endTime - command.startTime
+                let endTime = start + Int(duration)
+                //print(size.startValue)
+                commands.append(VectorCommand(startTime: Double(start), endTime: Double(endTime), startValue: CGPointMake(command.startValue.x, command.startValue.y), endValue: CGPointMake(command.endValue.x, command.endValue.y)))
                 start = start + Int(duration)
             }
         }
@@ -148,7 +165,7 @@ class Loop {
     }
     
     func moveX(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
-        moveXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue + 107, endValue: endValue + 107, easing: easing))
+        moveXCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
     func moveY(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
@@ -162,6 +179,10 @@ class Loop {
     
     func scaleY(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         scaleYCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
+    }
+    
+    func move(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint, easing: Easing = .linear){
+        moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: CGPointMake(startValue.x, startValue.y), endValue: CGPointMake(endValue.x, endValue.y)))
     }
 }
 

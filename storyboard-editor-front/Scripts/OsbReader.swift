@@ -65,6 +65,9 @@ class OsbReader {
                                 for command in loop!.sizeYCommands{
                                     sprite?.scaleY(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
                                 }
+                                for command in loop!.movingCommands{
+                                    sprite?.move(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue)
+                                }
                                 loop = nil
                             }
                             sprites.append(sprite!)
@@ -107,6 +110,9 @@ class OsbReader {
                             for command in loop!.sizeYCommands{
                                 sprite?.scaleY(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
                             }
+                            for command in loop!.movingCommands{
+                                sprite?.move(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue)
+                            }
                             loop = nil
                         }
                         loop = Loop(startTime: loopStartTime, loopCount: loopRepetitions)
@@ -122,19 +128,23 @@ class OsbReader {
                         
                         switch commandType {
                             case "M":
-                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
+                                let easing = Int(values[1])! < 24  ? Easing.allCases[Int(values[1])!] : .linear
                                 let startX = Double(values[4])!
                                 let startY = Double(values[5])
                                 let endX = values.count > 6 ? Double(values[6])!: startX
                                 let endY = values.count > 7 ? Double(values[7]) : startY
-                                sprite?.move(startTime: startTime!, endTime: endTime!, startValue: CGPoint(x: startX, y: startY!), endValue: CGPoint(x: endX, y: endY!), easing: easing)
+                                if isPartOfLoop {
+                                    loop?.move(startTime: startTime!, endTime: endTime!, startValue: CGPoint(x: startX, y: startY!), endValue: CGPoint(x: endX, y: endY!), easing: easing)
+                                }else{
+                                    sprite?.move(startTime: startTime!, endTime: endTime!, startValue: CGPoint(x: startX, y: startY!), endValue: CGPoint(x: endX, y: endY!), easing: easing)
+                                }
                             case "V":
-                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
+                                let easing = Int(values[1])! < 24 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startX = Double(values[4])
                                 let startY = Double(values[5])
                                 let endX = values.count > 6 ? Double(values[6]) : startX
                                 let endY = values.count > 7 ? Double(values[7]) : startY
-                                if loop != nil {
+                                if isPartOfLoop {
                                     loop?.scaleX(startTime: startTime!, endTime: endTime!, startValue: startX!, endValue: endX!, easing: easing)
                                     loop?.scaleY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!, easing: easing)
                                 }else{
@@ -142,54 +152,54 @@ class OsbReader {
                                     sprite?.scaleY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!, easing: easing)
                                 }
                             case "MX":
-                            let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
+                            let easing = Int(values[1])! < 24  ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])! 
                                 let endValue = values.count > 5 ? Double(values[5])!  : startValue
-                                if loop != nil{
+                                if isPartOfLoop{
                                     loop?.moveX(startTime: startTime!, endTime: endTime!, startValue: startValue, endValue: endValue, easing: easing)
                                 }else{
                                     sprite?.moveX(startTime: startTime!, endTime: endTime!, startValue: startValue, endValue: endValue, easing: easing)
                                 }
                             case "MY":
-                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
+                                let easing = Int(values[1])! < 24  ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                if loop != nil{
+                                if isPartOfLoop{
                                     loop?.moveY(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                                 }else{
                                     sprite?.moveY(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                                 }
                             case "F":
-                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
+                                let easing = Int(values[1])! < 24  ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                if loop != nil{
+                                if isPartOfLoop{
                                     loop?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                                 }else{
                                     sprite?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                                 }
                                 
                             case "S":
-                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
+                                let easing = Int(values[1])! < 24  ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
                                 
-                                if loop != nil{
+                                if isPartOfLoop{
                                     loop?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                                 }else{
                                     sprite?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                                 }
                             case "R":
-                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
+                                let easing = Int(values[1])! < 24  ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                if loop != nil {
+                                if isPartOfLoop {
                                     loop?.rotate(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                                 }else{
                                     sprite?.rotate(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
                                 }
                             case "C":
-                                let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
+                                let easing = Int(values[1])! < 24  ? Easing.allCases[Int(values[1])!] : .linear
                                 let startX = Double(values[4])
                                 let startY = Double(values[5])
                                 let startZ = Double(values[6])
@@ -204,6 +214,8 @@ class OsbReader {
                                         sprite?.blendMode = .add
                                     case "H":
                                         sprite?.setFlipHorizontally()
+                                    case "V":
+                                        sprite?.setFlipVertically()
                                     default:
                                         break;
                                         //sprite?.blendMode = .alpha
