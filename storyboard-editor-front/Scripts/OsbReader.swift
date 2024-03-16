@@ -35,6 +35,7 @@ class OsbReader {
                 let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
                 var values = trimmedLine.components(separatedBy: ",")
                 let isPartOfLoop = line.starts(with: "  ")
+                //print(line)
                 switch(values[0]){
                     case "Sprite" :
                         let path = removePathQuotes(path: values[3])
@@ -42,29 +43,74 @@ class OsbReader {
                         let x = Double(values[4])
                         let y = Double(values[5])
                         if(sprite != nil){
+                            if(loop != nil){
+                                for command in loop!.opacityCommands{
+                                    sprite?.fade(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                                }
+                                for command in loop!.sizeCommands{
+                                    sprite?.scale(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                                }
+                                for command in loop!.rotationCommands{
+                                    sprite?.rotate(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                                }
+                                for command in loop!.movingXCommands{
+                                    sprite?.moveX(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                                }
+                                for command in loop!.movingYCommands{
+                                    sprite?.moveY(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                                }
+                                for command in loop!.sizeXCommands{
+                                    sprite?.scaleX(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                                }
+                                for command in loop!.sizeYCommands{
+                                    sprite?.scaleY(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                                }
+                                loop = nil
+                            }
                             sprites.append(sprite!)
                             sprite = nil
+                            loop = nil
                         }
                     
                     sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!), origin: SpriteOrigin(rawValue: origin)!)
+                    break;
                     case "T":
+                        //sprite = nil
                         break;
                     case "Animation":
                     
                         break;
                     case "L":
-                        /*loopStartTime = Int(values[1])!;
+                        loopStartTime = Int(values[1])!;
                         loopRepetitions = Int(values[2])!;
-                        print("L")
                         if(loop != nil){
                             for command in loop!.opacityCommands{
-                                //print(command.startTime, command.endTime, command.startValue, command.endValue)
                                 sprite?.fade(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                            }
+                            for command in loop!.sizeCommands{
+                                //print(command.startValue, command.endValue)
+                                sprite?.scale(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                            }
+                            for command in loop!.rotationCommands{
+                                //print(command.startValue, command.endValue)
+                                sprite?.rotate(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                            }
+                            for command in loop!.movingXCommands{
+                                sprite?.moveX(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                            }
+                            for command in loop!.movingYCommands{
+                                sprite?.moveY(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                            }
+                            for command in loop!.sizeXCommands{
+                                sprite?.scaleX(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
+                            }
+                            for command in loop!.sizeYCommands{
+                                sprite?.scaleY(startTime: command.startTime, endTime: command.endTime, startValue: command.startValue, endValue: command.endValue, easing: command.easing)
                             }
                             loop = nil
                         }
-                        loop = Loop(startTime: loopStartTime, loopCount: loopRepetitions)*/
-                        sprite = nil
+                        loop = Loop(startTime: loopStartTime, loopCount: loopRepetitions)
+                        //sprite = nil
                         break;
                     default:
                         if(values[3].isEmpty){
@@ -73,7 +119,7 @@ class OsbReader {
                         let commandType = values[0]
                         let startTime = Double(values[2])
                         let endTime = Double(values[3])
-                        let commandDuration = Int(endTime!) - Int(startTime!)
+                        
                         switch commandType {
                             case "M":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
@@ -88,38 +134,60 @@ class OsbReader {
                                 let startY = Double(values[5])
                                 let endX = values.count > 6 ? Double(values[6]) : startX
                                 let endY = values.count > 7 ? Double(values[7]) : startY
-                                sprite?.scaleX(startTime: startTime!, endTime: endTime!, startValue: startX!, endValue: endX!, easing: easing)
-                                sprite?.scaleY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!, easing: easing)
+                                if loop != nil {
+                                    loop?.scaleX(startTime: startTime!, endTime: endTime!, startValue: startX!, endValue: endX!, easing: easing)
+                                    loop?.scaleY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!, easing: easing)
+                                }else{
+                                    sprite?.scaleX(startTime: startTime!, endTime: endTime!, startValue: startX!, endValue: endX!, easing: easing)
+                                    sprite?.scaleY(startTime: startTime!, endTime: endTime!, startValue: startY!, endValue: endY!, easing: easing)
+                                }
                             case "MX":
                             let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])! 
                                 let endValue = values.count > 5 ? Double(values[5])!  : startValue
-                                sprite?.moveX(startTime: startTime!, endTime: endTime!, startValue: startValue, endValue: endValue, easing: easing)
+                                if loop != nil{
+                                    loop?.moveX(startTime: startTime!, endTime: endTime!, startValue: startValue, endValue: endValue, easing: easing)
+                                }else{
+                                    sprite?.moveX(startTime: startTime!, endTime: endTime!, startValue: startValue, endValue: endValue, easing: easing)
+                                }
                             case "MY":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                sprite?.moveY(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                if loop != nil{
+                                    loop?.moveY(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                }else{
+                                    sprite?.moveY(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                }
                             case "F":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                if isPartOfLoop{
+                                if loop != nil{
                                     loop?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
-                                    }else{
-                                        sprite?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
-                                    }
+                                }else{
+                                    sprite?.fade(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                }
                                 
                             case "S":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                sprite?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                
+                                if loop != nil{
+                                    loop?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                }else{
+                                    sprite?.scale(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                }
                             case "R":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startValue = Double(values[4])
                                 let endValue = values.count > 5 ? Double(values[5]) : startValue
-                                sprite?.rotate(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                if loop != nil {
+                                    loop?.rotate(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                }else{
+                                    sprite?.rotate(startTime: startTime!, endTime: endTime!, startValue: startValue!, endValue: endValue!, easing: easing)
+                                }
                             case "C":
                                 let easing = Int(values[1])! < 13 ? Easing.allCases[Int(values[1])!] : .linear
                                 let startX = Double(values[4])
@@ -134,8 +202,11 @@ class OsbReader {
                                 switch type {
                                     case "A":
                                         sprite?.blendMode = .add
+                                    case "H":
+                                        sprite?.setFlipHorizontally()
                                     default:
-                                        sprite?.blendMode = .alpha
+                                        break;
+                                        //sprite?.blendMode = .alpha
                                 }
                             default:
                             break;

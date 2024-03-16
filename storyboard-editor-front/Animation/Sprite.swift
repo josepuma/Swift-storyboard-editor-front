@@ -52,6 +52,7 @@ import JavaScriptCore
     private var rotateCommands : [Command] = []
     private var scaleCommands : [Command] = []
     private var moveCommands : [VectorCommand] = []
+    private var loopCommands: [Loop] = []
     private var areCommandsCalculated :  Bool = false;
     private var startTimes : [Double] = []
     private var endTimes : [Double] = []
@@ -60,6 +61,7 @@ import JavaScriptCore
     private var spritePosition : CGPoint = CGPoint(x: 854, y: (-240) * 1)
     private var spriteInfoText = SKLabelNode(fontNamed: "Arial")
     private var spriteBorder : SKShapeNode?
+    private var orientationFlipValueHorizontally = 1.0
     var isLoaded : Bool = false
     
     var isActive : Bool {
@@ -171,6 +173,10 @@ import JavaScriptCore
         rotateCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
+    func startLoop(loop : Loop){
+        
+    }
+    
     func color(r: Double, g: Double, b: Double, easing: Easing = .linear){
         let spriteColor = NSColor(red: r, green: g, blue: b, alpha: 1)
         self.color = spriteColor
@@ -251,6 +257,10 @@ import JavaScriptCore
     
     func setAdditiveBlend(){
         self.blendMode = .add
+    }
+    
+    func setFlipHorizontally(){
+        self.orientationFlipValueHorizontally = -1.0
     }
     
     //
@@ -338,7 +348,7 @@ import JavaScriptCore
                 
                 if(scaleCommands.count > 0){
                     let scale = valueAt(position: timePosition, commands: scaleCommands)
-                    self.xScale = scale * displaySize
+                    self.xScale = (scale * displaySize) * self.orientationFlipValueHorizontally
                     self.yScale = scale * displaySize
                     if(scale == 0){
                         self.isHidden = true
@@ -351,7 +361,7 @@ import JavaScriptCore
                     self.yScale = scaleY * displaySize
                     self.xScale = scaleX * displaySize
                     
-                    spriteBorder?.yScale = scaleY * displaySize
+                    spriteBorder?.yScale = (scaleY * displaySize) * self.orientationFlipValueHorizontally
                     spriteBorder?.xScale = scaleX * displaySize
                     
                     if scaleX == 0 || scaleY == 0{
@@ -405,6 +415,7 @@ import JavaScriptCore
         start = startTimes.count > 0 ? startTimes.min()! : 0
         end = endTimes.count > 0 ? endTimes.max()! : 0
         areCommandsCalculated = true
+        //print("fadeCommands: \(self.fadeCommands.count)")
     }
     
     

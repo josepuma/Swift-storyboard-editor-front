@@ -51,7 +51,7 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/151720 ginkiha - EOS/sb")
+        textures = loadTextures(path: "/Users/josepuma/Downloads/144171 Nekomata Master - Far east nightbird (kors k Remix)/sb")
         storyboard.loadTextures(textures: textures)
         scriptsReader = CodeFileReader(scriptFolderPath)
         reloadStoryboardScene()
@@ -84,7 +84,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/eos.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/144171 Nekomata Master - Far east nightbird (kors k Remix)/16 Far east nightbird (kors k Remix).mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -147,8 +147,9 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
         DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/151720 ginkiha - EOS/storyboard.txt")
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/144171 Nekomata Master - Far east nightbird (kors k Remix)/Nekomata Master - Far east nightbird (kors k Remix) (jonathanlfj).osb")
             DispatchQueue.main.async {
+                print("sprites", osbReader.spriteList.count)
                 completion(osbReader.spriteList)
             }
         }

@@ -86,7 +86,7 @@ struct ContentView: View {
             VStack(spacing: 0){
                 //Storyboard Visualizer
                 ZStack(alignment: .bottom){
-                    SpriteView(scene: contentViewmodel.scene)
+                    SpriteView(scene: contentViewmodel.scene, debugOptions: [.showsFPS, .showsNodeCount, .showsPhysics, .showsQuadCount, .showsFields, .showsDrawCount])
                     HStack{
                         Button{
                             contentViewmodel.currentTargetScene?.player.play()
