@@ -51,13 +51,14 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextures(path: "/Users/josepuma/Downloads/373744 Domino Brothers - Just 4 You (Nightcore Mix)/sb")
+        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);"))
         storyboard.loadTextures(textures: textures)
         scriptsReader = CodeFileReader(scriptFolderPath)
         reloadStoryboardScene()
         
-        queue = SFSMonitor(delegate: scriptsReader)
-        queue?.setMaxMonitored(number: 200)
+        //queue = SFSMonitor(delegate: scriptsReader)
+        //queue?.setMaxMonitored(number: 200)
+
     }
     
     override func keyDown(with event: NSEvent) {
@@ -84,7 +85,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/373744 Domino Brothers - Just 4 You (Nightcore Mix)/MP3 192KBPS.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/audio.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -147,7 +148,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
         DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/373744 Domino Brothers - Just 4 You (Nightcore Mix)/Domino Brothers - Just 4 You (Nightcore Mix) (MkGuh).osb")
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/Mili - world.execute(me); (Exile-).osb")
             DispatchQueue.main.async {
                 print("sprites", osbReader.spriteList.count)
                 completion(osbReader.spriteList)
@@ -203,6 +204,28 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func updateAudioPosition(position: Double){
         player.setPosition(position: Int(position))
+    }
+    
+    private func loadTextureAssets(url: URL)  -> [String: SKTexture] {
+        var sprites : [String: SKTexture] = [:]
+        if let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+            for case let fileURL as URL in enumerator {
+                do {
+                    let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
+                    if fileAttributes.isRegularFile! {
+                        if fileURL.pathExtension == "png" || fileURL.pathExtension == "jpeg" || fileURL.pathExtension == "jpg" {
+                            let fileName = fileURL.relativeString.replacingOccurrences(of: "\(url.relativeString)/", with: "").removingPercentEncoding
+                            let spriteImage = try CGImage.load(fileURL: fileURL)
+                            let spriteTexture = SKTexture(cgImage: spriteImage)
+                            sprites[fileName!] = spriteTexture
+                            //print(fileName!)
+                        }
+                    }
+                } catch { print(error, fileURL) }
+            }
+            return sprites
+        }
+        return sprites
     }
     
     private func loadTextures(path: String) -> [String: SKTexture]{
