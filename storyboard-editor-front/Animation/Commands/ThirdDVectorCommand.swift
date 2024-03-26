@@ -1,19 +1,22 @@
 //
-//  MoveXCommand.swift
+//  ThirdDVectorCommand.swift
 //  storyboard-editor-front
 //
 //  Created by José Puma on 17-02-24.
 //
 import Accelerate
 import SpriteKit
-class VectorCommand {
+import simd
+
+class ThirdDVectorCommand {
     var startTime: Double = 0
     var endTime: Double = 0
-    var startValue: CGPoint = CGPoint(x: 0, y:0)
-    var endValue: CGPoint = CGPoint(x: 0, y:0)
+    var startValue: SIMD3 = SIMD3<Double>(x: 1, y: 1, z: 1)
+    var endValue: SIMD3 = SIMD3<Double>(x: 1, y: 1, z: 1)
     private var position : Double = 0
     private var interpolation = Interpolation()
     var easing = Easing.linear
+    //var value : Double = 0
     
     var duration: Double {
         return endTime - startTime
@@ -34,7 +37,7 @@ class VectorCommand {
     }
     
     
-    var value: CGPoint {
+    var value: SIMD3<Double> {
         if position <= startTime {
             return startValue
         }
@@ -42,10 +45,10 @@ class VectorCommand {
             return endValue
         }
         
-        return interpolation.lerp(startValue, endValue, progress)
+        return interpolation.lerp3D(startValue, endValue, progress)
     }
     
-    init(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint, easing: Easing) {
+    init(startTime: Double, endTime: Double, startValue: SIMD3<Double>, endValue: SIMD3<Double>, easing: Easing) {
         self.startTime = startTime
         self.endTime = endTime
         self.startValue = startValue
@@ -53,7 +56,7 @@ class VectorCommand {
         self.easing = easing
     }
     
-    func valueAt(position: Double) -> CGPoint{
+    func valueAt(position: Double) -> SIMD3<Double>{
         if position < startTime{
             return valueAtProgress(progress: 0)
         }
@@ -61,13 +64,12 @@ class VectorCommand {
             return valueAtProgress(progress: 1)
         }
         let duration = endTime - startTime
-        //let progress = duration > 0 ? (position - startTime) / duration : 0
-        let progress = duration > 0 ?  easing.getEasingValue(progress: (position - startTime) / duration)  : 0
+        let progress = duration > 0 ? (position - startTime) / duration : 0
         return valueAtProgress(progress: progress)
     }
     
-    func valueAtProgress(progress: Double) -> CGPoint {
-        return interpolation.lerp(startValue, endValue, progress)
+    func valueAtProgress(progress: Double) -> SIMD3<Double> {
+        return interpolation.lerp3D(startValue, endValue, progress)
     }
     
     func setTimePosition(position: Double){

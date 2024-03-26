@@ -206,7 +206,7 @@ class OsbReader {
                                 let endX = values.count > 7 ? Double(values[7]) : startX
                                 let endY = values.count > 8 ? Double(values[8]) : startY
                                 let endZ = values.count > 9 ? Double(values[9]) : startZ
-                                sprite?.color(r: startX! / 255, g: startY! / 255, b: startZ! / 255, easing: easing)
+                                sprite?.color(startTime: startTime!, endTime: endTime!, r: startX! / 255, g: startY! / 255, b: startZ! / 255, r2: endX! / 255, g2: endY! / 255, b2: endZ! / 255, easing: easing)
                             case "P":
                                 let type = values[4]
                                 switch type {

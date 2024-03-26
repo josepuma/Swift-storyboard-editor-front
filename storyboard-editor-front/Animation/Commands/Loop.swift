@@ -76,7 +76,7 @@ class Loop {
                 duration = command.endTime - command.startTime
                 let endTime = start + Int(duration)
                 //print(size.startValue)
-                commands.append(VectorCommand(startTime: Double(start), endTime: Double(endTime), startValue: CGPointMake(command.startValue.x, command.startValue.y), endValue: CGPointMake(command.endValue.x, command.endValue.y)))
+                commands.append(VectorCommand(startTime: Double(start), endTime: Double(endTime), startValue: CGPointMake(command.startValue.x, command.startValue.y), endValue: CGPointMake(command.endValue.x, command.endValue.y), easing: command.easing))
                 start = start + Int(duration)
             }
         }
@@ -182,7 +182,7 @@ class Loop {
     }
     
     func move(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint, easing: Easing = .linear){
-        moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: CGPointMake(startValue.x, startValue.y), endValue: CGPointMake(endValue.x, endValue.y)))
+        moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: CGPointMake(startValue.x, startValue.y), endValue: CGPointMake(endValue.x, endValue.y), easing: easing))
     }
 }
 

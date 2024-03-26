@@ -32,6 +32,7 @@
 		598446952B8167BE00613DA8 /* VectorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446942B8167BE00613DA8 /* VectorCommand.swift */; };
 		5984469A2B8169D200613DA8 /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598446992B8169D200613DA8 /* Interpolation.swift */; };
 		599EBFE82B826C2A007F7D10 /* SpriteOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */; };
+		59A72B272BB3097200A5F329 /* ThirdDVectorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A72B262BB3097200A5F329 /* ThirdDVectorCommand.swift */; };
 		59D535612B964FCC00368EED /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535602B964FCC00368EED /* CodeEditorView.swift */; };
 		59D535632B9650B600368EED /* CodeFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535622B9650B600368EED /* CodeFileReader.swift */; };
 		59D535662B98E58B00368EED /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 59D535652B98E58B00368EED /* CodeEditor */; };
@@ -67,6 +68,7 @@
 		598446942B8167BE00613DA8 /* VectorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorCommand.swift; sourceTree = "<group>"; };
 		598446992B8169D200613DA8 /* Interpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpolation.swift; sourceTree = "<group>"; };
 		599EBFE72B826C2A007F7D10 /* SpriteOrigin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteOrigin.swift; sourceTree = "<group>"; };
+		59A72B262BB3097200A5F329 /* ThirdDVectorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdDVectorCommand.swift; sourceTree = "<group>"; };
 		59D535602B964FCC00368EED /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
 		59D535622B9650B600368EED /* CodeFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileReader.swift; sourceTree = "<group>"; };
 		59D535672B993F5100368EED /* CodeFileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileWriter.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				598446942B8167BE00613DA8 /* VectorCommand.swift */,
 				598446992B8169D200613DA8 /* Interpolation.swift */,
 				593E3FF22B8EBFD00058B69F /* Loop.swift */,
+				59A72B262BB3097200A5F329 /* ThirdDVectorCommand.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				598446602B7FB57200613DA8 /* ContentView.swift in Sources */,
 				598446882B8061EE00613DA8 /* StoryboardScene.swift in Sources */,
 				5984467F2B7FD81400613DA8 /* Storyboard.swift in Sources */,
+				59A72B272BB3097200A5F329 /* ThirdDVectorCommand.swift in Sources */,
 				5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */,
 				59277C842B8A3B40005AAFD6 /* EffectsContainer.swift in Sources */,
 				59277C822B89A981005AAFD6 /* SpriteContainer.swift in Sources */,

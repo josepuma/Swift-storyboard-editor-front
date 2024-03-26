@@ -6,6 +6,7 @@
 //
 import SpriteKit
 import JavaScriptCore
+import simd
 
 @objc protocol SpriteExport: JSExport{
     var spritePath: String{ get set}
@@ -52,7 +53,7 @@ import JavaScriptCore
     private var rotateCommands : [Command] = []
     private var scaleCommands : [Command] = []
     private var moveCommands : [VectorCommand] = []
-    private var loopCommands: [Loop] = []
+    private var colorCommands : [ThirdDVectorCommand] = []
     private var areCommandsCalculated :  Bool = false;
     private var startTimes : [Double] = []
     private var endTimes : [Double] = []
@@ -97,7 +98,7 @@ import JavaScriptCore
         spriteInfoText.position = self.spritePosition
         spriteInfoText.numberOfLines = 5
         self.isHidden = true
-        
+        self.colorBlendFactor = 1
         
     }
     
@@ -129,7 +130,7 @@ import JavaScriptCore
     func move(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
-        moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: CGPointMake(startValue.x + 107, startValue.y), endValue: CGPointMake(endValue.x + 107, endValue.y)))
+        moveCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: CGPointMake(startValue.x + 107, startValue.y), endValue: CGPointMake(endValue.x + 107, endValue.y), easing: easing))
     }
     
     func moveX(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
@@ -178,17 +179,20 @@ import JavaScriptCore
         
     }
     
-    func color(r: Double, g: Double, b: Double, easing: Easing = .linear){
-        let spriteColor = NSColor(red: r, green: g, blue: b, alpha: 1)
-        self.color = spriteColor
-        self.colorBlendFactor = 1
+    func color(startTime: Double, endTime: Double, r: Double, g: Double, b: Double, r2: Double, g2: Double, b2: Double, easing: Easing = .linear){
+        //let spriteColor = NSColor(red: r, green: g, blue: b, alpha: 1)
+        startTimes.append(startTime)
+        endTimes.append(endTime)
+        colorCommands.append(ThirdDVectorCommand(startTime: startTime, endTime: endTime, startValue: SIMD3(r, g, b), endValue: SIMD3(r2, g2, b2), easing: easing))
+        //self.color = spriteColor
+        //self.colorBlendFactor = 1
     }
     
     //JavascriptCore Functions
     
     
     func setColor(_ r : Double, _ g: Double, _ b: Double){
-        color(r: r, g: g, b: b)
+        //color(r: r, g: g, b: b)
     }
     
     func setOpacity(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
@@ -279,23 +283,6 @@ import JavaScriptCore
         return start <= timeLinePosition && timeLinePosition <= end
     }
     
-    func valueAt(position: Double, commands: [Command], defaultValue: Double = 1) -> Double{
-        var index = 0
-        if(commands.count == 0){
-            return defaultValue
-        }
-        
-        let foundCommand = findCommandIndex(position: position, commands: commands)
-        index = foundCommand.1
-        
-        if !findCommandIndex(position: position, commands: commands).0 && index > 0{
-            index = index - 1
-        }
-        
-        let command = commands[index]
-        return command.valueAt(position: position)
-    }
-    
     func findCommandIndex(position: Double, commands: [Command]) -> (Bool, Int) {
         var left = 0
         var right = commands.count - 1
@@ -316,8 +303,108 @@ import JavaScriptCore
         return (false, index)
     }
     
-    func valueAtVector(position: Double, commands: [VectorCommand], defaultVale : CGPoint = CGPoint(x: 1, y: 1)) -> CGPoint{
+    func findCommandIndex2D(position: Double, commands: [VectorCommand]) -> (Bool, Int) {
+        var left = 0
+        var right = commands.count - 1
         var index = 0
+        while left <= right {
+            index = left + (( right - left ) >> 1)
+            let commandTime = commands[index].startTime
+            if commandTime == position{
+                return (true, index)
+            }
+            else if commandTime < position {
+                left = index + 1
+            }else{
+                right = index - 1
+            }
+        }
+        index = left
+        return (false, index)
+    }
+    
+    func findCommandIndex3D(position: Double, commands: [ThirdDVectorCommand]) -> (Bool, Int) {
+        var left = 0
+        var right = commands.count - 1
+        var index = 0
+        while left <= right {
+            index = left + (( right - left ) >> 1)
+            let commandTime = commands[index].startTime
+            if commandTime == position{
+                return (true, index)
+            }
+            else if commandTime < position {
+                left = index + 1
+            }else{
+                right = index - 1
+            }
+        }
+        index = left
+        return (false, index)
+    }
+    
+    func valueAt(position: Double, commands: [Command], defaultValue: Double = 1) -> Double{
+        var index = 0
+        if(commands.count == 0){
+            return defaultValue
+        }
+        
+        let foundCommand = findCommandIndex(position: position, commands: commands)
+        index = foundCommand.1
+        
+        if !findCommandIndex(position: position, commands: commands).0 && index > 0{
+            index = index - 1
+        }
+        
+        let command = commands[index]
+        return command.valueAt(position: position)
+    }
+    
+    func valueAtVector(position: Double, commands: [VectorCommand], defaultValue : CGPoint = CGPoint(x: 1, y: 1)) -> CGPoint{
+        var index = 0
+        if(commands.count == 0){
+            return defaultValue
+        }
+        
+        let foundCommand = findCommandIndex2D(position: position, commands: commands)
+        index = foundCommand.1
+        
+        if !findCommandIndex2D(position: position, commands: commands).0 && index > 0{
+            index = index - 1
+        }
+        
+        let command = commands[index]
+        return command.valueAt(position: position)
+        /*var index = 0
+        if(commands.count == 0){
+            return defaultValue
+        }
+        for (i, command) in commands.enumerated() {
+            if(position < command.endTime){
+                index = i
+                break
+            }
+        }
+        let command = commands[index]
+        return command.valueAt(position: position)*/
+    }
+    
+    func valueAt3DVector(position: Double, commands: [ThirdDVectorCommand], defaultValue :  SIMD3<Double> = SIMD3<Double>(x: 1, y: 1, z: 1)) ->  SIMD3<Double>{
+        var index = 0
+        if(commands.count == 0){
+            return defaultValue
+        }
+        
+        let foundCommand = findCommandIndex3D(position: position, commands: commands)
+        index = foundCommand.1
+        
+        if !findCommandIndex3D(position: position, commands: commands).0 && index > 0{
+            index = index - 1
+        }
+        
+        let command = commands[index]
+        return command.valueAt(position: position)
+        /*var index = 0
         if(commands.count == 0){
             return defaultVale
         }
@@ -328,7 +415,7 @@ import JavaScriptCore
             }
         }
         let command = commands[index]
-        return command.valueAt(position: position)
+        return command.valueAt(position: position)*/
     }
     
     public func showBorder(){
@@ -350,6 +437,9 @@ import JavaScriptCore
                     return
                 }
                 self.alpha = opacity
+                let color = valueAt3DVector(position: timePosition, commands: colorCommands)
+                let spriteColor = NSColor(red: color.x, green: color.y, blue: color.z, alpha: 1)
+                self.color = spriteColor
                 
                 if(scaleCommands.count > 0){
                     let scale = valueAt(position: timePosition, commands: scaleCommands)

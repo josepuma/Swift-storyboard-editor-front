@@ -76,4 +76,16 @@ class Interpolation {
     func inverseLerp<V: BinaryFloatingPoint, T: BinaryFloatingPoint>(_ v0: V, _ v1: V, _ v: V) -> T {
         return T((v - v0) / (v1 - v0))
     }
+    
+    func lerp3D(_ start: SIMD3<Double>, _ end: SIMD3<Double>, _ progress: Double) -> SIMD3<Double> {
+        // Clamp progress to ensure it stays between 0 and 1
+        let clampedProgress = max(0, min(progress, 1))
+        
+        // Perform linear interpolation
+        let interpolatedX = start.x + (end.x - start.x) * clampedProgress
+        let interpolatedY = start.y + (end.y - start.y) * clampedProgress
+        let interpolatedZ = start.z + (end.z - start.z) * clampedProgress
+        
+        return SIMD3<Double>(x: interpolatedX, y: interpolatedY, z: interpolatedZ)
+    }
 }
