@@ -51,7 +51,7 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/256415 viewtifulday - With You Tonight"))
+        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/1448953 Quinn Karter - Living in a Dream feat. Natalie Major (Feint Remix) (Cut Ver.)"))
         storyboard.loadTextures(textures: textures)
         scriptsReader = CodeFileReader(scriptFolderPath)
         reloadStoryboardScene()
@@ -85,7 +85,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/256415 viewtifulday - With You Tonight/With You Tonight.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/1448953 Quinn Karter - Living in a Dream feat. Natalie Major (Feint Remix) (Cut Ver.)/audio.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -148,7 +148,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
         DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/256415 viewtifulday - With You Tonight/viewtifulday - With You Tonight (XinCrin).osb")
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/1448953 Quinn Karter - Living in a Dream feat. Natalie Major (Feint Remix) (Cut Ver.)/Quinn Karter - Living in a Dream feat. Natalie Major (Feint Remix) (Cut Ver.) (Tachibana_).osb")
             DispatchQueue.main.async {
                 print("sprites", osbReader.spriteList.count)
                 completion(osbReader.spriteList)
@@ -217,8 +217,7 @@ class StoryboardScene: SKScene, ObservableObject{
                             let fileName = fileURL.relativeString.replacingOccurrences(of: "\(url.relativeString)/", with: "").removingPercentEncoding
                             let spriteImage = try CGImage.load(fileURL: fileURL)
                             let spriteTexture = SKTexture(cgImage: spriteImage)
-                            sprites[fileName!] = spriteTexture
-                            //print(fileName!)
+                            sprites[fileName!.lowercased()] = spriteTexture
                         }
                     }
                 } catch { print(error, fileURL) }
@@ -226,26 +225,6 @@ class StoryboardScene: SKScene, ObservableObject{
             return sprites
         }
         return sprites
-    }
-    
-    private func loadTextures(path: String) -> [String: SKTexture]{
-        let fm = FileManager.default
-        let finalPath = URL(filePath: path)
-        do {
-            let items = try fm.contentsOfDirectory(at: finalPath.absoluteURL, includingPropertiesForKeys: nil, options: [])
-            var sprites : [String: SKTexture] = [:]
-            for item in items {
-                if item.pathExtension == "png" || item.pathExtension == "jpeg" || item.pathExtension == "jpg" {
-                    let spriteImage = try CGImage.load(fileURL: item)
-                    let spriteTexture = SKTexture(cgImage: spriteImage)
-                    sprites[item.lastPathComponent] = spriteTexture
-                }
-            }
-            return sprites
-        }catch {
-            print(error)
-        }
-        return [:]
     }
     
 }

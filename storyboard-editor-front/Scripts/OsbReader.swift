@@ -38,7 +38,7 @@ class OsbReader {
                 //print(line)
                 switch(values[0]){
                     case "Sprite" :
-                        let path = values[3].replacingOccurrences(of: "\"", with: "").replacingOccurrences(of: "\\", with: "/")
+                        let path = removePathQuotes(path: values[3])
                         let origin = values[2].camelCased
                         let x = Double(values[4])
                         let y = Double(values[5])
@@ -78,7 +78,7 @@ class OsbReader {
                     sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!), origin: SpriteOrigin(rawValue: origin)!)
                     break;
                     case "T":
-                        sprite = nil
+                        //sprite = nil
                         break;
                     case "Animation":
                     
@@ -231,7 +231,7 @@ class OsbReader {
     }
     
     private func removePathQuotes(path: String) -> String {
-        return path.replacingOccurrences(of: "\"", with: "/")
+        return path.replacingOccurrences(of: "\"", with: "").replacingOccurrences(of: "\\", with: "/").lowercased()
     }
     
 }

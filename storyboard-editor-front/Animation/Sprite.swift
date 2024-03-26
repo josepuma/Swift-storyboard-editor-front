@@ -79,7 +79,7 @@ import simd
     
     convenience init(spritePath: String) {
         //print("# init done #")
-        self.init(imageNamed: spritePath)
+        self.init(imageNamed: spritePath.lowercased())
         self.spritePath = spritePath
         self.spritePosition = CGPoint(x: ((320 + 107) * 1) , y: (240 * -1) * 1)
         self.position = spritePosition
@@ -88,7 +88,7 @@ import simd
     }
     
     convenience init(spritePath: String, position: CGPoint, origin: SpriteOrigin = SpriteOrigin.centre) {
-        self.init(imageNamed: spritePath)
+        self.init(imageNamed: spritePath.lowercased())
         self.spritePath = spritePath
         self.spritePosition = CGPoint(x: ((position.x + 107) * 1) , y: (position.y * -1) * 1)
         self.position = spritePosition
@@ -375,18 +375,6 @@ import simd
         
         let command = commands[index]
         return command.valueAt(position: position)
-        /*var index = 0
-        if(commands.count == 0){
-            return defaultValue
-        }
-        for (i, command) in commands.enumerated() {
-            if(position < command.endTime){
-                index = i
-                break
-            }
-        }
-        let command = commands[index]
-        return command.valueAt(position: position)*/
     }
     
     func valueAt3DVector(position: Double, commands: [ThirdDVectorCommand], defaultValue :  SIMD3<Double> = SIMD3<Double>(x: 1, y: 1, z: 1)) ->  SIMD3<Double>{
@@ -404,18 +392,6 @@ import simd
         
         let command = commands[index]
         return command.valueAt(position: position)
-        /*var index = 0
-        if(commands.count == 0){
-            return defaultVale
-        }
-        for (i, command) in commands.enumerated() {
-            if(position < command.endTime){
-                index = i
-                break
-            }
-        }
-        let command = commands[index]
-        return command.valueAt(position: position)*/
     }
     
     public func showBorder(){
