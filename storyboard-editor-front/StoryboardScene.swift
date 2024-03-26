@@ -51,7 +51,7 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);"))
+        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/574067 Tia - The Glory Days"))
         storyboard.loadTextures(textures: textures)
         scriptsReader = CodeFileReader(scriptFolderPath)
         reloadStoryboardScene()
@@ -85,7 +85,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/audio.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/574067 Tia - The Glory Days/audio.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -148,7 +148,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
         DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/470977 Mili - world.execute(me);/Mili - world.execute(me); (Exile-).osb")
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/574067 Tia - The Glory Days/Tia - The Glory Days (XinCrin).osb")
             DispatchQueue.main.async {
                 print("sprites", osbReader.spriteList.count)
                 completion(osbReader.spriteList)

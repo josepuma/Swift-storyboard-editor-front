@@ -10,6 +10,19 @@ import SpriteKit
 import SceneKit
 import AppKit
 
+class VariableViewModel: ObservableObject {
+    @Published var variables: [ScriptVariable] = []
+
+    // Function to update a variable's value
+    func updateValue(for variable: ScriptVariable, newValue: Any) {
+        if let index = variables.firstIndex(where: { $0.id == variable.id }) {
+            var mutableVariable = variables[index]
+            mutableVariable.value = newValue
+            variables[index] = mutableVariable
+        }
+    }
+}
+
 struct ContentView: View {
     
     func saveFiles(){
@@ -17,6 +30,7 @@ struct ContentView: View {
     }
     
     @State var files : [ScriptFile] = []
+    @StateObject var viewModel = VariableViewModel()
     
     @State private var musicPosition: Double = 0
     @State private var frameWidth: Double = 854
@@ -27,7 +41,7 @@ struct ContentView: View {
     @State private var selectedEffectName : Effect = Effect(name: "None", filter: CIFilter())
     @StateObject private var contentViewmodel = ContentViewModel()
     @State private var selectedScriptId: UUID?
-    
+    @State private var isSwitchOn = false
     let screenWidth  = NSScreen.main?.frame.width
     let screenHeight = NSScreen.main?.frame.height
     let iconActionsSize = CGFloat(20)
@@ -57,30 +71,94 @@ struct ContentView: View {
                                 }
                         }.onMove{ from, to in
                             files.move(fromOffsets: from, toOffset: to)
-
                         }
                     }
                 }.onChange(of: selectedScriptId, {
                     var fileToRead = files.first(where: { $0.id == selectedScriptId })!
-                    fileToRead.content = contentViewmodel.currentTargetScene!.scriptsReader!.loadScriptContent(scriptPath: fileToRead.path)
+                    let script = contentViewmodel.currentTargetScene!.scriptsReader!.loadScriptContent(scriptPath: fileToRead.path)
+                    fileToRead.content = script.0
+                    fileToRead.variables = script.1
                     selectedScriptFile = fileToRead
                 })
                 .navigationTitle("Scripts")
                 .listStyle(.sidebar)
-                Button {
-                    
-                }label: {
-                    Label("Create New Sprite", systemImage: "wand.and.stars.inverse")
-                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                }
-                .padding()
-                
                 
             }.background(.regularMaterial)
             .frame(width: 240)
             .task(){
                 files = await contentViewmodel.currentTargetScene!.scriptsReader!.loadScriptsFiles()
             }
+            
+            VStack(alignment: .leading, spacing: 0){
+                List {
+                    Section("Properties"){
+                        ForEach(selectedScriptFile.variables) { variable in
+                            switch variable.type {
+                            case "number":
+                                if let numberValue = variable.value as? Double {
+                                    HStack{
+                                        Text(variable.name.capitalizedSentence).frame(maxWidth: .infinity, alignment: .leading)
+                                        TextField("0", value: Binding(get: {
+                                            numberValue
+                                        }, set: { newValue in
+                                            viewModel.updateValue(for: variable, newValue: newValue)
+                                        }), formatter: NumberFormatter()).frame(maxWidth: .infinity, alignment: .trailing)
+                                    }
+                                }
+                            case "boolean":
+                                if let boolValue = variable.value as? Bool {
+                                    HStack{
+                                        Text(variable.name.capitalizedSentence).frame(maxWidth: .infinity, alignment: .leading)
+                                        Toggle(isOn: Binding(
+                                            get: { boolValue },
+                                            set: { newValue in
+                                                viewModel.updateValue(for: variable, newValue: newValue)
+                                            }
+                                        )) {
+                                        
+                                        }
+                                        .toggleStyle(.switch).frame(maxWidth: .infinity, alignment: .trailing)
+                                    }
+                                }
+                            case "string":
+                                if let stringValue = variable.value as? String {
+                                    HStack{
+                                        Text(variable.name.capitalizedSentence).frame(maxWidth: .infinity, alignment: .leading)
+                                        TextField("Content", text: Binding(get: {
+                                            stringValue
+                                        }, set: { newValue in
+                                            viewModel.updateValue(for: variable, newValue: newValue)
+                                        })).frame(maxWidth: .infinity, alignment: .trailing)
+                                    }
+                                }
+                            default:
+                                EmptyView()
+                            }
+                        }
+                    }
+                }
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .listStyle(.inset)
+                .onAppear {
+                    // Populate variables initially
+                    selectedScriptFile.variables = selectedScriptFile.variables.map { variable in
+                        ScriptVariable(name: variable.name, type: variable.type, value: variable.value)
+                    }
+                }
+                
+                
+                if selectedScriptFile.variables.count > 0{
+                    Button {
+                        
+                    }label: {
+                        Label("Save Changes", systemImage: "wand.and.stars.inverse")
+                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                    }
+                    .padding()
+                    .buttonStyle(.borderedProminent)
+                }
+                
+            }.frame(width: 240)
             
             //Main Content
             VStack(spacing: 0){
@@ -164,3 +242,13 @@ struct ContentView: View {
 }
 
 
+extension String {
+    var capitalizedSentence: String {
+        // 1
+        let firstLetter = self.prefix(1).capitalized
+        // 2
+        let remainingLetters = self.dropFirst()
+        // 3
+        return firstLetter + remainingLetters
+    }
+}
