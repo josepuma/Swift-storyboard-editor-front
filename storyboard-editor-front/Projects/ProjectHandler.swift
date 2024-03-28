@@ -14,14 +14,14 @@ class ProjectHandler{
         self.project = project
     }
     
-    func encodeToJSON<T: Codable>(_ object: T)throws -> Data{
+    private func encodeToJSON<T: Codable>(_ object: T)throws -> Data{
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         encoder.dateEncodingStrategy = .iso8601
         return try encoder.encode(object)
     }
     
-    func saveJSONData(_ data: Data, to folderName: String, fileName: String) -> Bool {
+    private func saveJSONData(_ data: Data, to folderName: String, fileName: String) -> Bool {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             print("Error: Unable to access Documents Directory.")
             return false
@@ -49,12 +49,12 @@ class ProjectHandler{
         }
     }
     
-    func saveProjectSettings(){
+    func saveProjectSettings() -> Bool{
         do{
             let jsonData = try encodeToJSON(project)
-            let _ = saveJSONData(jsonData, to: "Swtoard/\(project.name.capitalized)", fileName: "config.json")
+            return saveJSONData(jsonData, to: "Swtoard/\(project.name.capitalized)", fileName: "config.json")
         }catch{
-            
+            return false
         }
     }
 }

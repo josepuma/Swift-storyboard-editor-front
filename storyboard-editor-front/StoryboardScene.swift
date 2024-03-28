@@ -51,16 +51,10 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari"))
+        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/179323 Sakamoto Maaya - Okaerinasai (tomatomerde Remix)"))
         storyboard.loadTextures(textures: textures)
-        scriptsReader = CodeFileReader(scriptFolderPath)
-        reloadStoryboardScene()
-        
-        let project = Project(name: "Naturaleza Inspiradora Proyectos Brillantes", backgroundMusicPath: "audio.mp3", bpm: 190.5, offset: 120)
-        let projectHandler = ProjectHandler(project)
-        projectHandler.saveProjectSettings()
-        
-        
+        //scriptsReader = CodeFileReader(scriptFolderPath)
+        //reloadStoryboardScene()
     }
     
     override func keyDown(with event: NSEvent) {
@@ -87,7 +81,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/audio.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/179323 Sakamoto Maaya - Okaerinasai (tomatomerde Remix)/okaeri.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -150,7 +144,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
         DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/RADWIMPS - Hikari (Haruto).osb")
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/179323 Sakamoto Maaya - Okaerinasai (tomatomerde Remix)/Sakamoto Maaya - Okaerinasai (tomatomerde Remix) (Azer).osb")
             DispatchQueue.main.async {
                 print("sprites", osbReader.spriteList.count)
                 completion(osbReader.spriteList)

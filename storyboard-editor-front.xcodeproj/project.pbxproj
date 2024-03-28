@@ -14,6 +14,7 @@
 		59277C8B2B8ADF99005AAFD6 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C8A2B8ADF99005AAFD6 /* Helpers.swift */; };
 		59277C922B8BF332005AAFD6 /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C912B8BF332005AAFD6 /* WaveformView.swift */; };
 		593E3FF32B8EBFD00058B69F /* Loop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593E3FF22B8EBFD00058B69F /* Loop.swift */; };
+		5982576B2BB5E5F600E21B45 /* ProjectCreatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5982576A2BB5E5F600E21B45 /* ProjectCreatorView.swift */; };
 		5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */; };
 		598446602B7FB57200613DA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5984465F2B7FB57200613DA8 /* ContentView.swift */; };
 		598446622B7FB57400613DA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 598446612B7FB57400613DA8 /* Assets.xcassets */; };
@@ -52,6 +53,7 @@
 		59277C8A2B8ADF99005AAFD6 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		59277C912B8BF332005AAFD6 /* WaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
 		593E3FF22B8EBFD00058B69F /* Loop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loop.swift; sourceTree = "<group>"; };
+		5982576A2BB5E5F600E21B45 /* ProjectCreatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreatorView.swift; sourceTree = "<group>"; };
 		5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "storyboard-editor-front.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5984465D2B7FB57200613DA8 /* storyboard_editor_frontApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storyboard_editor_frontApp.swift; sourceTree = "<group>"; };
 		5984465F2B7FB57200613DA8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				59277C832B8A3B40005AAFD6 /* EffectsContainer.swift */,
 				59277C852B8A45E3005AAFD6 /* Filters.swift */,
 				59D535602B964FCC00368EED /* CodeEditorView.swift */,
+				5982576A2BB5E5F600E21B45 /* ProjectCreatorView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				598446882B8061EE00613DA8 /* StoryboardScene.swift in Sources */,
 				5984467F2B7FD81400613DA8 /* Storyboard.swift in Sources */,
 				59A72B272BB3097200A5F329 /* ThirdDVectorCommand.swift in Sources */,
+				5982576B2BB5E5F600E21B45 /* ProjectCreatorView.swift in Sources */,
 				5984465E2B7FB57200613DA8 /* storyboard_editor_frontApp.swift in Sources */,
 				59277C842B8A3B40005AAFD6 /* EffectsContainer.swift in Sources */,
 				59AA30DF2BB4FECA00508DF5 /* ProjectHandler.swift in Sources */,

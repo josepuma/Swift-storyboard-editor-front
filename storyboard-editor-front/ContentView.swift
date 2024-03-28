@@ -44,6 +44,11 @@ struct ContentView: View {
     @State private var selectedScriptId: UUID?
     @State private var selectedProjectId: UUID?
     @State private var isSwitchOn = false
+    @State private var isPopOverCreateProjectOpen = false
+    @State var name: String = ""
+    @State var backgroundMusicPath: String = ""
+    @State var bpm: Double = 0.0
+    @State var offset: Double = 0.0
     let screenWidth  = NSScreen.main?.frame.width
     let screenHeight = NSScreen.main?.frame.height
     let iconActionsSize = CGFloat(20)
@@ -71,11 +76,21 @@ struct ContentView: View {
                 .listStyle(.sidebar)
             
                 Button {
-                    
+                    isPopOverCreateProjectOpen = true
                 }label: {
                     Label("Create New Project", systemImage: "plus")
                         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                 }
+                .sheet(isPresented: $isPopOverCreateProjectOpen, content: {
+                    ProjectCreatorView(name: $name, backgroundMusicPath: $backgroundMusicPath, bpm: $bpm, offset: $offset){
+                        let project = Project(name: name, backgroundMusicPath: backgroundMusicPath, bpm: bpm, offset: offset)
+                        let newProject = ProjectHandler(project)
+                        if newProject.saveProjectSettings(){
+                            userProjects.insert(project, at: 0)
+                            isPopOverCreateProjectOpen = false
+                        }
+                    }
+                })
                 .padding()
                 .buttonStyle(.borderedProminent)
                 
@@ -120,7 +135,7 @@ struct ContentView: View {
             }.background(.regularMaterial)
             .frame(width: 240)
             .task(){
-                files = await contentViewmodel.currentTargetScene!.scriptsReader!.loadScriptsFiles()
+                //files = await contentViewmodel.currentTargetScene!.scriptsReader!.loadScriptsFiles()
             }
             
             VStack(alignment: .leading, spacing: 0){
