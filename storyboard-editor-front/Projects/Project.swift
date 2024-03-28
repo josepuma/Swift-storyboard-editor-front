@@ -8,8 +8,10 @@
 import Foundation
 
 struct Project: Codable, Identifiable{
+    
     var id = UUID()
     var name: String = ""
+    var folderPath: String = ""
     var backgroundMusicPath: String = ""
     var bpm: Double = 0
     var offset: Double = 0

@@ -29,7 +29,7 @@ struct ContentView: View {
         print(selectedScriptFile)
     }
     
-    @State var userProjects : [Project] = []
+    
     @State var files : [ScriptFile] = []
     @StateObject var viewModel = VariableViewModel()
     
@@ -42,13 +42,10 @@ struct ContentView: View {
     @State private var selectedEffectName : Effect = Effect(name: "None", filter: CIFilter())
     @StateObject private var contentViewmodel = ContentViewModel()
     @State private var selectedScriptId: UUID?
-    @State private var selectedProjectId: UUID?
+    
     @State private var isSwitchOn = false
-    @State private var isPopOverCreateProjectOpen = false
-    @State var name: String = ""
-    @State var backgroundMusicPath: String = ""
-    @State var bpm: Double = 0.0
-    @State var offset: Double = 0.0
+    
+   
     let screenWidth  = NSScreen.main?.frame.width
     let screenHeight = NSScreen.main?.frame.height
     let iconActionsSize = CGFloat(20)
@@ -61,44 +58,8 @@ struct ContentView: View {
         HStack(alignment: .top, spacing: 0){
             
             //Projects container
-            VStack(alignment: .leading, spacing: 0){
-                List(selection: $selectedProjectId){
-                    Section("My Projects"){
-                        ForEach(userProjects) { project in
-                            Label(project.name , systemImage: "folder")
-                                .badge(
-                                    Text("\(String(format: "%.1f", project.bpm)) \(Image(systemName: "metronome"))")
-                                )
-                        }
-                    }
-                }
-                .navigationTitle("My Projects")
-                .listStyle(.sidebar)
-            
-                Button {
-                    isPopOverCreateProjectOpen = true
-                }label: {
-                    Label("Create New Project", systemImage: "plus")
-                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                }
-                .sheet(isPresented: $isPopOverCreateProjectOpen, content: {
-                    ProjectCreatorView(name: $name, backgroundMusicPath: $backgroundMusicPath, bpm: $bpm, offset: $offset){
-                        let project = Project(name: name, backgroundMusicPath: backgroundMusicPath, bpm: bpm, offset: offset)
-                        let newProject = ProjectHandler(project)
-                        if newProject.saveProjectSettings(){
-                            userProjects.insert(project, at: 0)
-                            isPopOverCreateProjectOpen = false
-                        }
-                    }
-                })
-                .padding()
-                .buttonStyle(.borderedProminent)
+            ProjectManagementView(){
                 
-            }.background(.regularMaterial)
-            .frame(width: 240)
-            .task(){
-                let projectReader = ProjectsReader()
-                userProjects = await projectReader.getProjects()
             }
             //Scripts Container
             VStack(alignment: .leading, spacing: 0){
@@ -290,6 +251,11 @@ struct ContentView: View {
     
 }
 
+struct ConteView_Preview : PreviewProvider{
+    static var previews: some View {
+        ContentView()
+    }
+}
 
 extension String {
     var capitalizedSentence: String {
