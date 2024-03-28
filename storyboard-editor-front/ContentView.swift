@@ -29,6 +29,7 @@ struct ContentView: View {
         print(selectedScriptFile)
     }
     
+    @State var userProjects : [Project] = []
     @State var files : [ScriptFile] = []
     @StateObject var viewModel = VariableViewModel()
     
@@ -41,6 +42,7 @@ struct ContentView: View {
     @State private var selectedEffectName : Effect = Effect(name: "None", filter: CIFilter())
     @StateObject private var contentViewmodel = ContentViewModel()
     @State private var selectedScriptId: UUID?
+    @State private var selectedProjectId: UUID?
     @State private var isSwitchOn = false
     let screenWidth  = NSScreen.main?.frame.width
     let screenHeight = NSScreen.main?.frame.height
@@ -48,10 +50,42 @@ struct ContentView: View {
     
     
     @State var selectedScriptFile : ScriptFile = ScriptFile(name: "", path: "")
+    @State var selectedProject : Project = Project()
 
     var body: some View {
         HStack(alignment: .top, spacing: 0){
-            //Sidebar Container
+            
+            //Projects container
+            VStack(alignment: .leading, spacing: 0){
+                List(selection: $selectedProjectId){
+                    Section("My Projects"){
+                        ForEach(userProjects) { project in
+                            Label(project.name , systemImage: "folder")
+                                .badge(
+                                    Text("\(String(format: "%.1f", project.bpm)) \(Image(systemName: "metronome"))")
+                                )
+                        }
+                    }
+                }
+                .navigationTitle("My Projects")
+                .listStyle(.sidebar)
+            
+                Button {
+                    
+                }label: {
+                    Label("Create New Project", systemImage: "plus")
+                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                }
+                .padding()
+                .buttonStyle(.borderedProminent)
+                
+            }.background(.regularMaterial)
+            .frame(width: 240)
+            .task(){
+                let projectReader = ProjectsReader()
+                userProjects = await projectReader.getProjects()
+            }
+            //Scripts Container
             VStack(alignment: .leading, spacing: 0){
                 List(selection: $selectedScriptId){
                     Section("Scripts"){
@@ -81,7 +115,7 @@ struct ContentView: View {
                     selectedScriptFile = fileToRead
                 })
                 .navigationTitle("Scripts")
-                .listStyle(.sidebar)
+                
                 
             }.background(.regularMaterial)
             .frame(width: 240)

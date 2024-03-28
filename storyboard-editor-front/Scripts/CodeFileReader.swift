@@ -97,7 +97,7 @@ class CodeFileReader : SFSMonitorDelegate {
             // Convert global object to dictionary
             if let globalDict = globalObject.toDictionary() {
                 // Iterate over keys of the global object
-                for propertyName in globalDict.keys {
+                for propertyName in globalDict.keys.sorted(by: { "\($0)" < "\($1)" }) {
                     // Check if the property is not a function or class
                     if let propertyValue = globalDict[propertyName] {
                         let valueType = context?.evaluateScript("typeof \(propertyName)").toString()

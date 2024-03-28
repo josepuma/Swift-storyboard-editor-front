@@ -51,14 +51,16 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func didMove(to view: SKView) {
-        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/1448953 Quinn Karter - Living in a Dream feat. Natalie Major (Feint Remix) (Cut Ver.)"))
+        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari"))
         storyboard.loadTextures(textures: textures)
         scriptsReader = CodeFileReader(scriptFolderPath)
         reloadStoryboardScene()
         
-        //queue = SFSMonitor(delegate: scriptsReader)
-        //queue?.setMaxMonitored(number: 200)
-
+        let project = Project(name: "Naturaleza Inspiradora Proyectos Brillantes", backgroundMusicPath: "audio.mp3", bpm: 190.5, offset: 120)
+        let projectHandler = ProjectHandler(project)
+        projectHandler.saveProjectSettings()
+        
+        
     }
     
     override func keyDown(with event: NSEvent) {
@@ -85,7 +87,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/1448953 Quinn Karter - Living in a Dream feat. Natalie Major (Feint Remix) (Cut Ver.)/audio.mp3")
+        player = Player(soundPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/audio.mp3")
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -148,7 +150,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
         DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/1448953 Quinn Karter - Living in a Dream feat. Natalie Major (Feint Remix) (Cut Ver.)/Quinn Karter - Living in a Dream feat. Natalie Major (Feint Remix) (Cut Ver.) (Tachibana_).osb")
+            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/547714 RADWIMPS - Hikari/RADWIMPS - Hikari (Haruto).osb")
             DispatchQueue.main.async {
                 print("sprites", osbReader.spriteList.count)
                 completion(osbReader.spriteList)
@@ -159,9 +161,6 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func reloadStoryboardScene(){
         var sprites : [Sprite] = []
-        
-        
-       
         
         loadOsbStoryboard(){ spritesArray in
             sprites.append(contentsOf: spritesArray)
@@ -228,62 +227,3 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
 }
-
-extension NSImage {
-    
-    var pngData: Data? {
-            guard let tiffRepresentation = tiffRepresentation, let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else { return nil }
-            return bitmapImage.representation(using: .png, properties: [:])
-        }
-
-    func addTextToImage(drawText text: String) -> CGImage {
-        let textColor = NSColor.white
-        let textFont = NSFont(name: "Arial", size: 36)! //Helvetica Bold
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = NSTextAlignment.center
-        
-        let textFontAttributes = [
-            NSAttributedString.Key.font: textFont,
-            NSAttributedString.Key.foregroundColor: textColor,
-            NSAttributedString.Key.backgroundColor: NSColor.red,
-            ] as [NSAttributedString.Key : Any]
-        
-        let size = (text as NSString).size(withAttributes: textFontAttributes)
-        self.size = size
-        let targetImage = NSImage(size: self.size, flipped: false) { (dstRect: CGRect) -> Bool in
-            
-            /*let textColor = NSColor.white
-            let textFont = NSFont(name: "Arial", size: 36)! //Helvetica Bold
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = NSTextAlignment.center
-
-            let textFontAttributes = [
-                NSAttributedString.Key.font: textFont,
-                NSAttributedString.Key.foregroundColor: textColor,
-                ] as [NSAttributedString.Key : Any]*/
-
-            let textOrigin = CGPoint(x: self.size.width / 2, y: -self.size.height/2)
-            let rect = CGRect(origin: textOrigin, size: self.size)
-            text.draw(in: rect, withAttributes: textFontAttributes)
-            return true
-        }
-        let route = URL.documentsDirectory.appendingPathComponent("j.png")
-        let save = targetImage.pngWrite(to: route)
-        if save {
-            print("saved")
-        }
-        return targetImage.cgImage(forProposedRect: nil, context: nil, hints: nil)!
-    }
-    
-    func pngWrite(to url: URL, options: Data.WritingOptions = .atomic) -> Bool {
-            do {
-                try pngData?.write(to: url, options: options)
-                return true
-            } catch {
-                print(error)
-                return false
-            }
-        }
-}
-
-
