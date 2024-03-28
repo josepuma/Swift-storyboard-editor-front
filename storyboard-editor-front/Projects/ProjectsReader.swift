@@ -44,6 +44,6 @@ class ProjectsReader {
         }catch{
             print(error)
         }
-        return projects
+        return projects.sorted { $0.createdAt > $1.createdAt }
     }
 }
