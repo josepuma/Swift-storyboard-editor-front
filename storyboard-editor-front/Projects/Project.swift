@@ -5,7 +5,7 @@
 //  Created by José Puma on 27-03-24.
 //
 
-import Foundation
+import SpriteKit
 
 class Project: Codable, Identifiable, Hashable, Equatable, ObservableObject{
     
@@ -17,7 +17,12 @@ class Project: Codable, Identifiable, Hashable, Equatable, ObservableObject{
     var offset: Double = 0
     var version: Double = 1.0
     var createdAt: Date = Date()
+    var textures: [String: SKTexture] = [:]
     @Published var scripts: [ScriptFile] = []
+    
+    var projectsPath : String {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path()
+    }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -75,5 +80,27 @@ class Project: Codable, Identifiable, Hashable, Equatable, ObservableObject{
         try container.encode(version, forKey: .version)
         try container.encode(createdAt, forKey: .createdAt)
         try container.encode(scripts, forKey: .scripts)
+    }
+    
+    func loadTextures(){
+        var sprites : [String: SKTexture] = [:]
+        let path = URL(fileURLWithPath: "\(projectsPath)Swtoard/\(self.folderPath)/")
+        if let enumerator = FileManager.default.enumerator(at: path, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+            for case let fileURL as URL in enumerator {
+                do {
+                    let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
+                    if fileAttributes.isRegularFile! {
+                        if fileURL.pathExtension == "png" || fileURL.pathExtension == "jpeg" || fileURL.pathExtension == "jpg" {
+                            let fileName = fileURL.relativeString.replacingOccurrences(of: "\(path.relativeString)", with: "").removingPercentEncoding
+                            let spriteImage = try CGImage.load(fileURL: fileURL)
+                            let spriteTexture = SKTexture(cgImage: spriteImage)
+                            sprites[fileName!.lowercased()] = spriteTexture
+                        }
+                    }
+                } catch { print(error, fileURL) }
+            }
+            textures = sprites
+            print(sprites.count)
+        }
     }
 }

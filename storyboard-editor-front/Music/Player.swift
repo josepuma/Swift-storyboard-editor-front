@@ -14,25 +14,32 @@ class Player {
     public var player : AVAudioPlayer!
     private var samples: [Float] = []
     
-    
-    init(soundPath : String){
-        self.soundPath = URL(fileURLWithPath: soundPath);
-        player = try! AVAudioPlayer(contentsOf: self.soundPath!)
+    var projectsPath : String {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path()
+    }
+
+    func loadAudio(_ project: Project){
+        let path = URL(fileURLWithPath: "\(projectsPath)/Swtoard/\(project.folderPath)/\(project.backgroundMusicPath)")
+        player = try! AVAudioPlayer(contentsOf: path)
         player.enableRate = true
-        
     }
     
     func play(){
-        if player.isPlaying{
-            player.pause()
-        }else{
-            player?.play()
-            //player.rate = 0.5
+        if player != nil {
+            if player.isPlaying{
+                player.pause()
+            }else{
+                player?.play()
+                //player.rate = 0.5
+            }
         }
     }
     
     func getPosition() -> Double{
-        return player.currentTime * 1000
+        if player != nil{
+            return player.currentTime * 1000
+        }
+        return 0
     }
     
     func getPositionFormatted() -> String{
@@ -47,9 +54,10 @@ class Player {
     }
     
     func getLength() -> Double{
-        return player.duration * 1000
+        if player != nil{
+            return player.duration * 1000
+        }
+        return 0
     }
-    
-    
     
 }

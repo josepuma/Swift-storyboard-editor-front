@@ -80,7 +80,7 @@ import simd
     convenience init(spritePath: String) {
         //print("# init done #")
         self.init(imageNamed: spritePath.lowercased())
-        self.spritePath = spritePath
+        self.spritePath = spritePath.lowercased()
         self.spritePosition = CGPoint(x: ((320 + 107) * 1) , y: (240 * -1) * 1)
         self.position = spritePosition
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -89,7 +89,7 @@ import simd
     
     convenience init(spritePath: String, position: CGPoint, origin: SpriteOrigin = SpriteOrigin.centre) {
         self.init(imageNamed: spritePath.lowercased())
-        self.spritePath = spritePath
+        self.spritePath = spritePath.lowercased()
         self.spritePosition = CGPoint(x: ((position.x + 107) * 1) , y: (position.y * -1) * 1)
         self.position = spritePosition
         self.anchorPoint = origin.anchorPoint

@@ -18,7 +18,6 @@ class GameScene : SKScene {
         textures = loadTextures(path: "/Users/josepuma/Documents/sprites")
         storyboard.loadTextures(textures: textures)
         
-        sound = Player(soundPath: "/Users/josepuma/Documents/sprites/Niicap - Lifeline.mp3")
         //sound?.play()
         let length = sound?.getLength()
         print("\(length ?? 0)")

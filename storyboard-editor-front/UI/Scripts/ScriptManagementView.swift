@@ -80,8 +80,8 @@ struct ScriptManagementView : View {
                 }.frame(maxWidth: 320)
                 
                 
-                VStack{
-                    StoryboardSceneView(sprites: sprites)
+                VStack(spacing: 0){
+                    StoryboardSceneView(sprites: sprites, project: project)
                         .frame(maxWidth: .infinity)
                     CodeEditorView(script: $selectedScript){
                         if selectedScript.writeScript(project: project){
@@ -94,6 +94,9 @@ struct ScriptManagementView : View {
             
         }.task(id: project) {
             DispatchQueue.main.async {
+                
+                project.loadTextures()
+                
                 let code = CodeFileReader(project)
                 code.loadScripts { spriteArray in
                     sprites.append(contentsOf: spriteArray)
@@ -101,6 +104,7 @@ struct ScriptManagementView : View {
                 }
             }
         }.onChange(of: project, {
+            selectedScript = ScriptFile()
             sprites.removeAll()
             isProjectLoading = true
         })

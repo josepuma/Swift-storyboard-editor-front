@@ -27,9 +27,7 @@ class StoryboardScene: SKScene, ObservableObject{
     var storyboard = Storyboard()
     let serialSpritesQueue = DispatchQueue(label: "sprites.adding.queue")
     let dispatchGroup = DispatchGroup()
-    public var scriptsReader : CodeFileReader?
     var scripts : [ScriptFile] = []
-    let scriptFolderPath = "/Users/josepuma/Documents/sb scripts"
     private var queue : SFSMonitor?
     
     override init(){
@@ -50,9 +48,20 @@ class StoryboardScene: SKScene, ObservableObject{
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func didMove(to view: SKView) {
-        textures = loadTextureAssets(url: URL(filePath: "/Users/josepuma/Downloads/179323 Sakamoto Maaya - Okaerinasai (tomatomerde Remix)"))
+    func loadTexturesSprites(textures: [String: SKTexture], sprites: [Sprite]){
         storyboard.loadTextures(textures: textures)
+        storyboard.addSprites(sprites: sprites)
+        print(storyboard.getSprites().count)
+        for sprite in storyboard.getSprites(){
+
+            self.addChild(sprite)
+            self.renderSprites.append(sprite)
+        }
+        print("sprites finished loading")
+    }
+    
+    override func didMove(to view: SKView) {
+        
         //scriptsReader = CodeFileReader(scriptFolderPath)
         //reloadStoryboardScene()
     }
@@ -81,7 +90,7 @@ class StoryboardScene: SKScene, ObservableObject{
     
     override func sceneDidLoad() {
         scene?.backgroundColor = .clear
-        player = Player(soundPath: "/Users/josepuma/Downloads/179323 Sakamoto Maaya - Okaerinasai (tomatomerde Remix)/okaeri.mp3")
+        player = Player()
     }
     
     @Published var finalMusicPosition : String = "00:00:00" {
@@ -97,10 +106,10 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func update(_ currentTime: TimeInterval) {
-        musicPosition = player.getPositionFormatted()
+        /*musicPosition = player.getPositionFormatted()
         finalMusicPosition = self.musicPosition
         musicPositionTime = player.getPosition()
-        finalMusicPositionTime = player.getPosition()
+        finalMusicPositionTime = player.getPosition()*/
         let positionTimeLine = player.getPosition()
         for sprite in self.renderSprites {
             sprite.update(timePosition: positionTimeLine)
@@ -186,6 +195,10 @@ class StoryboardScene: SKScene, ObservableObject{
 
     }*/
     
+    func loadSprites(_ sprites: [Sprite]){
+        
+    }
+    
     
     func getAudioPosition() -> Double {
         return player.getPosition()
@@ -199,25 +212,5 @@ class StoryboardScene: SKScene, ObservableObject{
         player.setPosition(position: Int(position))
     }
     
-    private func loadTextureAssets(url: URL)  -> [String: SKTexture] {
-        var sprites : [String: SKTexture] = [:]
-        if let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
-            for case let fileURL as URL in enumerator {
-                do {
-                    let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
-                    if fileAttributes.isRegularFile! {
-                        if fileURL.pathExtension == "png" || fileURL.pathExtension == "jpeg" || fileURL.pathExtension == "jpg" {
-                            let fileName = fileURL.relativeString.replacingOccurrences(of: "\(url.relativeString)/", with: "").removingPercentEncoding
-                            let spriteImage = try CGImage.load(fileURL: fileURL)
-                            let spriteTexture = SKTexture(cgImage: spriteImage)
-                            sprites[fileName!.lowercased()] = spriteTexture
-                        }
-                    }
-                } catch { print(error, fileURL) }
-            }
-            return sprites
-        }
-        return sprites
-    }
     
 }
