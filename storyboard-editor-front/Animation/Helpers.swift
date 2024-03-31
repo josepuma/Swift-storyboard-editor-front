@@ -10,6 +10,8 @@ import JavaScriptCore
 
 @objc protocol HelpersExport: JSExport {
     static func GenerateRandom(_ startValue: Double, _ endValue : Double) -> Double
+    static func GetSprites(_ osbPath: String) -> [Sprite]
+    static func Print(_ content: String)
 }
 
 class Helpers : NSObject, HelpersExport {
@@ -17,5 +19,13 @@ class Helpers : NSObject, HelpersExport {
         return Double.random(in: startValue ..< endValue)
     }
     
+    static func GetSprites(_ osbPath: String) -> [Sprite]{
+        let osbReader = OsbReader(osbPath: osbPath)
+        return osbReader.spriteList
+    }
+    
+    static func Print(_ content: String){
+        print(content)
+    }
     
 }
