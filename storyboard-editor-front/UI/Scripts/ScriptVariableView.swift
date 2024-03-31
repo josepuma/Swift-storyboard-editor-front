@@ -10,7 +10,7 @@ import SwiftUI
 struct ScriptVariableView: View {
     @ObservedObject var variable : ScriptVariable
     @FocusState private var isFocused: Bool
-    
+   
     var updateScript: () -> Void
     
     var body: some View {
