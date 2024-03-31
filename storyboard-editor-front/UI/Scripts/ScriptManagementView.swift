@@ -16,6 +16,7 @@ struct ScriptManagementView : View {
     @State private var isProjectLoading = true
     
     @State private var sprites : [Sprite] = []
+    @StateObject private var contentViewmodel = ContentViewModel()
     
     var body: some View {
         HStack(spacing: 0){
@@ -33,9 +34,13 @@ struct ScriptManagementView : View {
                         DisclosureGroup(
                             content: {
                                 Form {
-                                    TextField("SpritePath", text: $textValue, prompt: Text("bg.jpg"))
+                                    ScriptView(script: script, project: project){ spriteArray in
+                                        DispatchQueue.main.async {
+                                            contentViewmodel.currentTargetScene?.loadSprites(spriteArray)
+                                        }
+                                    }
                                 }
-                            },label :{
+                            },label: {
                                 HStack(){
                                     HStack{
                                         Label(script.name , systemImage: "bubbles.and.sparkles")
@@ -81,7 +86,7 @@ struct ScriptManagementView : View {
                 
                 
                 VStack(spacing: 0){
-                    StoryboardSceneView(sprites: sprites, project: project)
+                    StoryboardSceneView(sprites: sprites, project: project, contentViewmodel: contentViewmodel)
                         .frame(maxWidth: .infinity)
                     CodeEditorView(script: $selectedScript){
                         if selectedScript.writeScript(project: project){
@@ -100,6 +105,8 @@ struct ScriptManagementView : View {
                 let code = CodeFileReader(project)
                 code.loadScripts { spriteArray in
                     sprites.append(contentsOf: spriteArray)
+                    contentViewmodel.currentTargetScene?.player.loadAudio(project)
+                    contentViewmodel.currentTargetScene?.loadTexturesSprites(textures: project.textures, sprites: sprites)
                     isProjectLoading = false
                 }
             }
@@ -115,5 +122,16 @@ struct ScriptManagement_Preview : PreviewProvider{
     static var previews: some View{
         let project = Project(name: "Holi", folderPath: "", backgroundMusicPath: "", bpm: 0, scripts: [ ScriptFile(name: "Background") ])
         ScriptManagementView(project: project)
+    }
+}
+
+extension String {
+    var capitalizedSentence: String {
+        // 1
+        let firstLetter = self.prefix(1).capitalized
+        // 2
+        let remainingLetters = self.dropFirst()
+        // 3
+        return firstLetter + remainingLetters
     }
 }

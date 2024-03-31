@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JavaScriptCore
 
 class ScriptFile : ObservableObject, Codable, Identifiable, Hashable, Equatable {
     
@@ -19,6 +20,7 @@ class ScriptFile : ObservableObject, Codable, Identifiable, Hashable, Equatable 
     var order : Int = 0
     
     var sprites : [Sprite] = []
+    @Published var variables : [ScriptVariable] = []
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -78,14 +80,42 @@ class ScriptFile : ObservableObject, Codable, Identifiable, Hashable, Equatable 
             return ""
         }
     }
+    
+    func readScript(project: Project, completion: @escaping(_ spriteArray: [Sprite]) -> Void){
+        var sprites: [Sprite] = []
+        do {
+            let path = URL(fileURLWithPath: "\(projectsPath)/Swtoard/\(project.folderPath)/\(self.path)")
+            let contents = try String(contentsOfFile: path.path)
+            getSpritesFromScript(code: contents){ spriteArray in
+                print("finished reading script \(self.name) and found \(spriteArray.count) sprites")
+                self.sprites.removeAll()
+                self.sprites.append(contentsOf: spriteArray)
+                sprites.append(contentsOf: spriteArray)
+            }
+            completion(sprites)
+        }catch{
+            
+        }
+    }
+    
+    func getSpritesFromScript(code: String, completion: @escaping(_ spriteArray: [Sprite]) -> Void){
+        
+        let context = JSContext()
+        let sprites : [Sprite] = []
+        context?.setObject(Sprite.self, forKeyedSubscript: NSString(string: "Sprite"))
+        context?.setObject(Helpers.self, forKeyedSubscript: NSString(string: "Helpers"))
+        context?.evaluateScript(code)
+        for variable in variables{
+            context?.setObject(variable.value, forKeyedSubscript: variable.name as NSString)
+        }
+        
+        let generateFunction = context?.objectForKeyedSubscript("generate")
+        let response = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
+
+        completion(response ?? [])
+    }
 }
 
-struct ScriptVariable : Identifiable {
-    let id = UUID()
-    let name: String
-    let type: String
-    var value: Any
-}
 
 
 struct ScriptSprite {

@@ -40,7 +40,7 @@ import simd
     func setAdditiveBlend()
 }
 
-@objc public class Sprite : SKSpriteNode, SpriteExport {
+@objc public class Sprite : SKSpriteNode, SpriteExport, Identifiable {
    
     dynamic var spritePath : String = ""
     private var timeLinePosition : Double = 0

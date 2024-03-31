@@ -49,14 +49,16 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     func loadTexturesSprites(textures: [String: SKTexture], sprites: [Sprite]){
-        storyboard.loadTextures(textures: textures)
-        storyboard.addSprites(sprites: sprites)
-        print(storyboard.getSprites().count)
-        for sprite in storyboard.getSprites(){
+        removeAllChildren()
+        self.textures = textures
+        //storyboard.loadTextures(textures: textures)
+        //storyboard.addSprites(sprites: sprites)
+        
+        /*for sprite in storyboard.getSprites(){
 
             self.addChild(sprite)
             self.renderSprites.append(sprite)
-        }
+        }*/
         print("sprites finished loading")
     }
     
@@ -162,41 +164,17 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     
-    /*func reloadStoryboardScene(){
-        var sprites : [Sprite] = []
-        
-        loadOsbStoryboard(){ spritesArray in
-            sprites.append(contentsOf: spritesArray)
-            print("loaded osb sprites \(spritesArray.count)")
-            self.scriptsReader?.loadScripts(){ scriptSpritesArray in
-                sprites.append(contentsOf: scriptSpritesArray.sprites)
-                self.scripts = scriptSpritesArray.scripts
-                print("loaded script sprites \(scriptSpritesArray.sprites.count)")
-                
-                for file in scriptSpritesArray.scripts{
-                    print(file.path)
-                    _ = self.queue?.addURL(URL(filePath: file.path))
-                }
-                
-                self.storyboard.clearSprites()
-                self.storyboard.addSprites(sprites: sprites)
-                self.removeAllChildren()
-                self.renderSprites.removeAll()
-                for sprite in self.storyboard.getSprites(){
-                    self.addChild(sprite)
-                    //self.addChild(sprite.drawBorder())
-                    self.renderSprites.append(sprite)
-                }
-                print("sprites finished loading")
-                
-            }
-            
-        }
-
-    }*/
-    
     func loadSprites(_ sprites: [Sprite]){
-        
+        renderSprites.removeAll()
+        removeAllChildren()
+        for sprite in sprites{
+            let texture = self.textures[sprite.spritePath]
+            if texture != nil {
+                sprite.loadTexture(texture: texture!)
+                self.addChild(sprite)
+                self.renderSprites.append(sprite)
+            }
+        }
     }
     
     

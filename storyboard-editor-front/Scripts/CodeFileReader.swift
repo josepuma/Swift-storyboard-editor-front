@@ -28,38 +28,6 @@ class CodeFileReader : SFSMonitorDelegate {
             print("\(notification.toStrings().map { $0.rawValue }) @ \(url.path)")
         }*/
     }
-    
-    /*func loadScriptsFiles() async -> [ScriptFile]{
-        let fm = FileManager.default
-        var scriptsFilesPath : [ScriptFile] = []
-        do {
-            let scripts = try fm.contentsOfDirectory(atPath: self.scriptsPath)
-            for script in scripts {
-                if URL(filePath: script).pathExtension == "js"{
-                    let contents = try String(contentsOfFile: self.scriptsPath + "/" + script)
-                    let variables = getVariablesFromScript(code: contents)
-                    scriptsFilesPath.append(
-                        ScriptFile(name: (script as NSString).deletingPathExtension.uppercasingFirst, path: self.scriptsPath + "/" + script, variables: variables)
-                    )
-                }
-            }
-            
-        }catch{
-            
-        }
-        return scriptsFilesPath
-    }*/
-    
-    func loadScriptContent(scriptPath: String) -> (String, [ScriptVariable]) {
-        do{
-            let contents = try String(contentsOfFile: scriptPath)
-            let variables = getVariablesFromScript(code: contents)
-            return (contents, variables)
-        }catch {
-            print(error)
-        }
-        return ("", [])
-    }
 
     func loadScripts(completion: @escaping(_ spriteArray: [Sprite]) -> Void){
         var sprites: [Sprite] = []
@@ -67,15 +35,17 @@ class CodeFileReader : SFSMonitorDelegate {
             for script in project.scripts {
                 let path = URL(fileURLWithPath: "\(projectsPath)/Swtoard/\(project.folderPath)/\(script.path)")
                 let contents = try String(contentsOfFile: path.path)
-    
-                //let variables = getVariablesFromScript(code: contents)
-                /*scriptsFiles.append(
-                    ScriptFile(name: script.uppercasingFirst, path: self.scriptsPath + "/" + script, variables: variables)
-                )*/
-                getSpritesFromScript(code: contents){ spriteArray in
-                    print("finished reading script \(script) and found \(spriteArray.count) sprites")
-                    sprites.append(contentsOf: spriteArray)
+                script.variables = []
+                script.sprites = []
+                getVariablesFromScript(code: contents){ variablesArray in
+                    self.getSpritesFromScript(code: contents){ spriteArray in
+                        print("finished reading script \(script) and found \(spriteArray.count) sprites and \(variablesArray.count) variables")
+                        script.sprites.append(contentsOf: spriteArray)
+                        script.variables.append(contentsOf: variablesArray)
+                        sprites.append(contentsOf: spriteArray)
+                    }
                 }
+                
             }
             completion(sprites)
         }catch{
@@ -83,7 +53,7 @@ class CodeFileReader : SFSMonitorDelegate {
         }
     }
     
-    func getVariablesFromScript(code: String) -> [ScriptVariable]{
+    func getVariablesFromScript(code: String, completion: @escaping(_ variablesArray: [ScriptVariable]) -> Void){
         var variables : [ScriptVariable] = []
         let context = JSContext()
         context?.evaluateScript(code)
@@ -105,9 +75,11 @@ class CodeFileReader : SFSMonitorDelegate {
                             } else {
                                 value = propertyValue
                             }
+                            
                             variables.append(
                                 ScriptVariable(name: String(describing: propertyName), type: valueType!, value: value)
                             )
+                            
                             //print("Value of variable \(propertyName): \(value) and type \(valueType)")
                         }
                     }
@@ -117,7 +89,7 @@ class CodeFileReader : SFSMonitorDelegate {
             print("Global object is undefined")
         }
         
-        return variables
+        completion(variables)
     }
     
     func getSpritesFromScript(code: String, completion: @escaping(_ spriteArray: [Sprite]) -> Void){

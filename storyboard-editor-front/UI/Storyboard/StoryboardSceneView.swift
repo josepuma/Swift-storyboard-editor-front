@@ -20,7 +20,7 @@ struct StoryboardSceneView: View{
     @State private var musicPosition: Double = 0
     @State private var musicPositionTime: String = "00:00:00"
     
-    @StateObject private var contentViewmodel = ContentViewModel()
+    @StateObject var contentViewmodel : ContentViewModel
     
     var body: some View{
         VStack{
@@ -90,9 +90,10 @@ struct StoryboardSceneView: View{
                         .help("View your storyboard in full screen")
                 }.padding()
             }
-        }.onAppear(){
+        }
+        /*.onAppear(){
             contentViewmodel.currentTargetScene?.player.loadAudio(project)
             contentViewmodel.currentTargetScene?.loadTexturesSprites(textures: project.textures, sprites: sprites)
-        }
+        }*/
     }
 }
