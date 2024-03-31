@@ -215,7 +215,7 @@ import simd
     }
     
     func setScale(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
-        scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+        scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing.isEmpty ? Easing.linear : Easing(rawValue: easing)!)
     }
     
     func setScaleX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
