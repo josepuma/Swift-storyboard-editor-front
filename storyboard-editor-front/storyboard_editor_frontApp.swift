@@ -10,16 +10,16 @@ import SwiftUI
 @main
 struct storyboard_editor_frontApp: App {
     
-    @State private var myObject = CodeFileWriter.shared
+    //@State private var myObject = CodeFileWriter.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(myObject)
+                //.environmentObject(myObject)
         }.commands{
             CommandMenu("Editor"){
                 Button("Save Changes") {
-                    CodeFileWriter.shared.writeCode()
+                    //CodeFileWriter.shared.writeCode()
                 }.keyboardShortcut("s")
             }
         }

@@ -9,14 +9,21 @@ import SpriteKit
 import CodeEditor
 
 struct CodeEditorView : View {
-        @Binding var selectedScriptFile : ScriptFile
+        @Binding var script : ScriptFile
         @FocusState private var focused: Bool
-        @State private var key = ""
+    
+        var scriptHasBeenSaved: () -> Void
+    
         var body: some View {
-            CodeEditor(source: $selectedScriptFile.content, language: .javascript, theme: .atelierSavannaDark,
+            CodeEditor(source: $script.content, language: .javascript, theme: .atelierSavannaDark,
                        flags: [ .selectable, .editable, .smartIndent ])
             .focusable()
             .focused($focused)
+            .onChange(of: focused, {
+                if !focused {
+                    scriptHasBeenSaved()
+                }
+            })
             .onAppear {
                 focused = true
             }

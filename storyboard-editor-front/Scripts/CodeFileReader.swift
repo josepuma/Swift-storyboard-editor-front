@@ -10,27 +10,26 @@ import JavaScriptCore
 import SFSMonitor
 class CodeFileReader : SFSMonitorDelegate {
     let monitorDispatchQueue =  DispatchQueue(label: "monitorDispatchQueue", qos: .utility)
-        
-       
     
-    private var scriptsPath: String
-    private var scriptsFiles : [ScriptFile] = []
-    public var scripts : [String: String] = [:]
+    var projectsPath : String {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path()
+    }
+    private var project : Project
     
-    init(_ scriptsPath: String){
-        self.scriptsPath = scriptsPath
+    init(_ project: Project){
+        self.project = project
     }
     
     func receivedNotification(_ notification: SFSMonitorNotification, url: URL, queue: SFSMonitor) {
     
         // Place actions into a utility-level Dispatch Queue.
         // Remember to call UI updates from DispatchQueue.main.async blocks.
-        monitorDispatchQueue.async(flags: .barrier) { // Multithread protection
+        /*monitorDispatchQueue.async(flags: .barrier) { // Multithread protection
             print("\(notification.toStrings().map { $0.rawValue }) @ \(url.path)")
-        }
+        }*/
     }
     
-    func loadScriptsFiles() async -> [ScriptFile]{
+    /*func loadScriptsFiles() async -> [ScriptFile]{
         let fm = FileManager.default
         var scriptsFilesPath : [ScriptFile] = []
         do {
@@ -49,7 +48,7 @@ class CodeFileReader : SFSMonitorDelegate {
             
         }
         return scriptsFilesPath
-    }
+    }*/
     
     func loadScriptContent(scriptPath: String) -> (String, [ScriptVariable]) {
         do{
@@ -62,26 +61,23 @@ class CodeFileReader : SFSMonitorDelegate {
         return ("", [])
     }
 
-    func loadScripts(completion: @escaping(_ spriteArray: ScriptSprite) -> Void){
-        let fm = FileManager.default
+    func loadScripts(completion: @escaping(_ spriteArray: [Sprite]) -> Void){
         var sprites: [Sprite] = []
         do {
-            let scripts = try fm.contentsOfDirectory(atPath: self.scriptsPath)
-            for script in scripts {
-                if URL(filePath: script).pathExtension == "js"{
-                    let contents = try String(contentsOfFile: self.scriptsPath + "/" + script)
-                    self.scripts[script] = contents
-                    let variables = getVariablesFromScript(code: contents)
-                    scriptsFiles.append(
-                        ScriptFile(name: script.uppercasingFirst, path: self.scriptsPath + "/" + script, variables: variables)
-                    )
-                    getSpritesFromScript(code: contents){ spriteArray in
-                        print("finished reading script \(script) and found \(spriteArray.count) sprites")
-                        sprites.append(contentsOf: spriteArray)
-                    }
+            for script in project.scripts {
+                let path = URL(fileURLWithPath: "\(projectsPath)/Swtoard/\(project.folderPath)/\(script.path)")
+                let contents = try String(contentsOfFile: path.path)
+    
+                //let variables = getVariablesFromScript(code: contents)
+                /*scriptsFiles.append(
+                    ScriptFile(name: script.uppercasingFirst, path: self.scriptsPath + "/" + script, variables: variables)
+                )*/
+                getSpritesFromScript(code: contents){ spriteArray in
+                    print("finished reading script \(script) and found \(spriteArray.count) sprites")
+                    sprites.append(contentsOf: spriteArray)
                 }
             }
-            completion(ScriptSprite(scripts: scriptsFiles, sprites: sprites))
+            completion(sprites)
         }catch{
             
         }
@@ -140,7 +136,7 @@ class CodeFileReader : SFSMonitorDelegate {
     }
 }
 
-struct ScriptFile : Identifiable {
+/*struct ScriptFile : Identifiable {
     let name: String
     let path: String
     var content: String = ""
@@ -159,4 +155,4 @@ struct ScriptVariable : Identifiable {
 struct ScriptSprite {
     var scripts : [ScriptFile]
     var sprites : [Sprite]
-}
+}*/

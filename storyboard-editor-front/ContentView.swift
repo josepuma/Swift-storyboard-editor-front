@@ -8,30 +8,11 @@
 import SwiftUI
 import SpriteKit
 import SceneKit
-import AppKit
-
-class VariableViewModel: ObservableObject {
-    @Published var variables: [ScriptVariable] = []
-
-    // Function to update a variable's value
-    func updateValue(for variable: ScriptVariable, newValue: Any) {
-        if let index = variables.firstIndex(where: { $0.id == variable.id }) {
-            var mutableVariable = variables[index]
-            mutableVariable.value = newValue
-            variables[index] = mutableVariable
-        }
-    }
-}
 
 struct ContentView: View {
     
-    func saveFiles(){
-        print(selectedScriptFile)
-    }
-    
     
     @State var files : [ScriptFile] = []
-    @StateObject var viewModel = VariableViewModel()
     
     @State private var musicPosition: Double = 0
     @State private var frameWidth: Double = 854
@@ -51,18 +32,16 @@ struct ContentView: View {
     let iconActionsSize = CGFloat(20)
     
     
-    @State var selectedScriptFile : ScriptFile = ScriptFile(name: "", path: "")
+    //@State var selectedScriptFile : ScriptFile = ScriptFile(name: "", path: "")
     @State var selectedProject : Project = Project()
 
     var body: some View {
         HStack(alignment: .top, spacing: 0){
             
             //Projects container
-            ProjectManagementView(){
-                
-            }
+            ProjectManagementView()
             //Scripts Container
-            VStack(alignment: .leading, spacing: 0){
+            /*VStack(alignment: .leading, spacing: 0){
                 List(selection: $selectedScriptId){
                     Section("Scripts"){
                         ForEach(files) { file in
@@ -97,9 +76,9 @@ struct ContentView: View {
             .frame(width: 240)
             .task(){
                 //files = await contentViewmodel.currentTargetScene!.scriptsReader!.loadScriptsFiles()
-            }
+            }*/
             
-            VStack(alignment: .leading, spacing: 0){
+            /*VStack(alignment: .leading, spacing: 0){
                 List {
                     Section("Properties"){
                         ForEach(selectedScriptFile.variables) { variable in
@@ -168,10 +147,10 @@ struct ContentView: View {
                     .buttonStyle(.borderedProminent)
                 }
                 
-            }.frame(width: 240)
+            }.frame(width: 240)*/
             
             //Main Content
-            VStack(spacing: 0){
+            /*VStack(spacing: 0){
                 //Storyboard Visualizer
                 ZStack(alignment: .bottom){
                     SpriteView(scene: contentViewmodel.scene, debugOptions: [.showsFPS, .showsNodeCount, .showsPhysics, .showsQuadCount, .showsFields, .showsDrawCount])
@@ -240,12 +219,9 @@ struct ContentView: View {
                 }
                 //Code Editor
                 CodeEditorView(selectedScriptFile: $selectedScriptFile)
-            }
+            }*/
             
         }.frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: selectedScriptFile.content, {
-                CodeFileWriter.script = selectedScriptFile
-            })
 
     }
     

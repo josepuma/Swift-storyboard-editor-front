@@ -153,7 +153,7 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     
-    func reloadStoryboardScene(){
+    /*func reloadStoryboardScene(){
         var sprites : [Sprite] = []
         
         loadOsbStoryboard(){ spritesArray in
@@ -184,7 +184,7 @@ class StoryboardScene: SKScene, ObservableObject{
             
         }
 
-    }
+    }*/
     
     
     func getAudioPosition() -> Double {

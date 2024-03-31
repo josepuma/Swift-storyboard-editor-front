@@ -7,7 +7,7 @@
 
 import Foundation
 class CodeFileWriter : ObservableObject{
-    static let shared = CodeFileWriter()
+    /*static let shared = CodeFileWriter()
     static var script : ScriptFile = ScriptFile(name: "", path: "")
     func writeCode(){
         do {
@@ -16,5 +16,5 @@ class CodeFileWriter : ObservableObject{
         } catch {
             // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
         }
-    }
+    }*/
 }
