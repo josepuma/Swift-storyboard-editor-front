@@ -91,9 +91,5 @@ struct StoryboardSceneView: View{
                 }.padding()
             }
         }
-        /*.onAppear(){
-            contentViewmodel.currentTargetScene?.player.loadAudio(project)
-            contentViewmodel.currentTargetScene?.loadTexturesSprites(textures: project.textures, sprites: sprites)
-        }*/
     }
 }

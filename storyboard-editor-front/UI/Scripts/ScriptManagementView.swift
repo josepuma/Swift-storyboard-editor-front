@@ -36,7 +36,7 @@ struct ScriptManagementView : View {
                                 Form {
                                     ScriptView(script: script, project: project){ spriteArray in
                                         DispatchQueue.main.async {
-                                            contentViewmodel.currentTargetScene?.loadSprites(spriteArray)
+                                            contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
                                         }
                                     }
                                 }
@@ -47,7 +47,7 @@ struct ScriptManagementView : View {
                                     }
                                     Spacer()
                                     Button{
-                                        let content = script.readScript(project: project)
+                                        let content = script.loadScript(project: project)
                                         script.content = content
                                         selectedScript = script
                                     } label: {
@@ -90,7 +90,9 @@ struct ScriptManagementView : View {
                         .frame(maxWidth: .infinity)
                     CodeEditorView(script: $selectedScript){
                         if selectedScript.writeScript(project: project){
-                            print("script saved")
+                            selectedScript.getSpritesFromScript(){spriteArray in 
+                                contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
+                            }
                         }
                     }
                 }

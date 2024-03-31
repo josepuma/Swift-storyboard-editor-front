@@ -66,6 +66,8 @@ import simd
     private var orientationFlipValueVertically = 1.0
     var isLoaded : Bool = false
     
+    var script : ScriptFile?
+    
     var isActive : Bool {
         if start <= timeLinePosition && timeLinePosition <= end{
             return true
@@ -112,6 +114,11 @@ import simd
     
     func drawInfo() -> SKLabelNode{
         return self.spriteInfoText
+    }
+    
+    func setScriptParent(to script: ScriptFile){
+        self.script = script
+        self.zPosition = CGFloat(script.order)
     }
     
     func drawBorder() -> SKShapeNode{

@@ -30,6 +30,12 @@ class StoryboardScene: SKScene, ObservableObject{
     var scripts : [ScriptFile] = []
     private var queue : SFSMonitor?
     
+    var spritesToUpdate : [Sprite] {
+        return renderSprites.sorted { sprite1, sprite2 in
+            return sprite1.script!.order < sprite2.script!.order
+        }
+    }
+    
     override init(){
         super.init(size: CGSize(width: 854, height: 480))
         musicPublisher
@@ -49,17 +55,17 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     func loadTexturesSprites(textures: [String: SKTexture], sprites: [Sprite]){
-        removeAllChildren()
         self.textures = textures
-        //storyboard.loadTextures(textures: textures)
-        //storyboard.addSprites(sprites: sprites)
-        
-        /*for sprite in storyboard.getSprites(){
-
-            self.addChild(sprite)
-            self.renderSprites.append(sprite)
-        }*/
-        print("sprites finished loading")
+        renderSprites.removeAll()
+        removeAllChildren()
+        for sprite in sprites{
+            let texture = self.textures[sprite.spritePath]
+            if texture != nil {
+                sprite.loadTexture(texture: texture!)
+                self.addChild(sprite)
+                self.renderSprites.append(sprite)
+            }
+        }
     }
     
     override func didMove(to view: SKView) {
@@ -113,7 +119,7 @@ class StoryboardScene: SKScene, ObservableObject{
         musicPositionTime = player.getPosition()
         finalMusicPositionTime = player.getPosition()*/
         let positionTimeLine = player.getPosition()
-        for sprite in self.renderSprites {
+        for sprite in spritesToUpdate {
             sprite.update(timePosition: positionTimeLine)
         }
     }
@@ -157,16 +163,17 @@ class StoryboardScene: SKScene, ObservableObject{
         DispatchQueue.global().async {
             let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/179323 Sakamoto Maaya - Okaerinasai (tomatomerde Remix)/Sakamoto Maaya - Okaerinasai (tomatomerde Remix) (Azer).osb")
             DispatchQueue.main.async {
-                print("sprites", osbReader.spriteList.count)
                 completion(osbReader.spriteList)
             }
         }
     }
     
     
-    func loadSprites(_ sprites: [Sprite]){
-        renderSprites.removeAll()
-        removeAllChildren()
+    func loadSprites(_ sprites: [Sprite], script: ScriptFile){
+        let spritesToRemove = renderSprites.filter { $0.script == script }
+        renderSprites.removeAll{ $0.script == script}
+        removeChildren(in: spritesToRemove)
+
         for sprite in sprites{
             let texture = self.textures[sprite.spritePath]
             if texture != nil {

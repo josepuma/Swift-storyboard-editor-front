@@ -39,6 +39,9 @@ class CodeFileReader : SFSMonitorDelegate {
                 script.sprites = []
                 getVariablesFromScript(code: contents){ variablesArray in
                     self.getSpritesFromScript(code: contents){ spriteArray in
+                        spriteArray.forEach{sp in
+                            sp.setScriptParent(to: script)
+                        }
                         print("finished reading script \(script) and found \(spriteArray.count) sprites and \(variablesArray.count) variables")
                         script.sprites.append(contentsOf: spriteArray)
                         script.variables.append(contentsOf: variablesArray)
@@ -100,11 +103,9 @@ class CodeFileReader : SFSMonitorDelegate {
         context?.evaluateScript(code)
         
         let generateFunction = context?.objectForKeyedSubscript("generate")
-        let response = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
-        context?.evaluateScript(code)
-
+        let spriteArray = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
         
-        completion(response ?? [])
+        completion(spriteArray ?? [])
     }
 }
 

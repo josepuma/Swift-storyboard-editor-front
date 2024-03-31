@@ -70,49 +70,47 @@ class ScriptFile : ObservableObject, Codable, Identifiable, Hashable, Equatable 
         }
     }
     
-    func readScript(project: Project) -> String{
-        do{
-            let path = URL(fileURLWithPath: "\(projectsPath)/Swtoard/\(project.folderPath)/\(self.path)")
-            let contents = try String(contentsOfFile: path.path)
-            return contents
-        }catch {
-            print(error)
-            return ""
-        }
-    }
+    func loadScript(project: Project) -> String{
+           do{
+               let path = URL(fileURLWithPath: "\(projectsPath)/Swtoard/\(project.folderPath)/\(path)")
+               let contents = try String(contentsOfFile: path.path)
+               return contents
+           }catch {
+               print(error)
+               return ""
+           }
+       }
     
     func readScript(project: Project, completion: @escaping(_ spriteArray: [Sprite]) -> Void){
         var sprites: [Sprite] = []
-        do {
-            let path = URL(fileURLWithPath: "\(projectsPath)/Swtoard/\(project.folderPath)/\(self.path)")
-            let contents = try String(contentsOfFile: path.path)
-            getSpritesFromScript(code: contents){ spriteArray in
-                print("finished reading script \(self.name) and found \(spriteArray.count) sprites")
-                self.sprites.removeAll()
-                self.sprites.append(contentsOf: spriteArray)
-                sprites.append(contentsOf: spriteArray)
-            }
-            completion(sprites)
-        }catch{
-            
+        getSpritesFromScript(){ spriteArray in
+            print("finished reading script \(self.name) and found \(spriteArray.count) sprites")
+            self.sprites.removeAll()
+            self.sprites.append(contentsOf: spriteArray)
+            sprites.append(contentsOf: spriteArray)
         }
+        completion(sprites)
     }
     
-    func getSpritesFromScript(code: String, completion: @escaping(_ spriteArray: [Sprite]) -> Void){
+    func getSpritesFromScript(completion: @escaping(_ spriteArray: [Sprite]) -> Void){
         
         let context = JSContext()
         let sprites : [Sprite] = []
         context?.setObject(Sprite.self, forKeyedSubscript: NSString(string: "Sprite"))
         context?.setObject(Helpers.self, forKeyedSubscript: NSString(string: "Helpers"))
-        context?.evaluateScript(code)
+        context?.evaluateScript(content)
         for variable in variables{
             context?.setObject(variable.value, forKeyedSubscript: variable.name as NSString)
         }
         
         let generateFunction = context?.objectForKeyedSubscript("generate")
-        let response = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
+        let spriteArray = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
+        
+        spriteArray?.forEach{ sprite in
+            sprite.setScriptParent(to: self)
+        }
 
-        completion(response ?? [])
+        completion(spriteArray ?? [])
     }
 }
 
