@@ -14,6 +14,7 @@ struct ScriptManagementView : View {
     @State private var textValue = ""
     @State private var selectedScript : ScriptFile = ScriptFile()
     @State private var isProjectLoading = true
+    @State private var errorMessages = ""
     
     @State private var sprites : [Sprite] = []
     @StateObject private var contentViewmodel = ContentViewModel()
@@ -64,6 +65,9 @@ struct ScriptManagementView : View {
                             }
                         )
                     }
+                    
+                    
+                    
                     Button {
                         isPopOverCreateScriptOpen = true
                     }label: {
@@ -90,10 +94,17 @@ struct ScriptManagementView : View {
                         .frame(maxWidth: .infinity)
                     CodeEditorView(script: $selectedScript){
                         if selectedScript.writeScript(project: project){
-                            selectedScript.getSpritesFromScript(){spriteArray in 
+                            selectedScript.getSpritesFromScript(){spriteArray, errorMessage in 
+                                errorMessages = errorMessage
                                 contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
                             }
                         }
+                    }
+                    if !errorMessages.isEmpty{
+                        Text(errorMessages)
+                            .font(.subheadline)
+                            .foregroundStyle(.red)
+                            .fontDesign(.monospaced)
                     }
                 }
             }

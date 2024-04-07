@@ -78,7 +78,6 @@ class StoryboardScene: SKScene, ObservableObject{
         let keyCode: UInt16 = event.keyCode
         let l : UInt16 = 0x7B
         let r : UInt16 = 0x7C
-        print(l, r)
         switch(keyCode){
             case 49: //spacebar
                 player.play()
@@ -114,11 +113,14 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     override func update(_ currentTime: TimeInterval) {
-        /*musicPosition = player.getPositionFormatted()
-        finalMusicPosition = self.musicPosition
-        musicPositionTime = player.getPosition()
-        finalMusicPositionTime = player.getPosition()*/
+        
+        
         let positionTimeLine = player.getPosition()
+        musicPosition = player.getPositionFormatted()
+        finalMusicPosition = self.musicPosition
+        musicPositionTime = positionTimeLine
+        finalMusicPositionTime = positionTimeLine
+        
         for sprite in spritesToUpdate {
             sprite.update(timePosition: positionTimeLine)
         }
@@ -195,6 +197,22 @@ class StoryboardScene: SKScene, ObservableObject{
     
     func updateAudioPosition(position: Double){
         player.setPosition(position: Int(position))
+    }
+    
+    func generateOsbCode(){
+        var osb = "[Events]\n//Background and Video events\n//Storyboard Layer 0 (Background)\n"
+        osb.append("//Storyboard Layer 1 (Fail)\n//Storyboard Layer 2 (Pass)\n//Storyboard Layer 3 (Foreground)\n")
+        for sprite in spritesToUpdate{
+            osb.append(sprite.toOsb())
+        }
+        osb.append("//Storyboard Layer 4 (Overlay)\n//Storyboard Sound Samples\n")
+        
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([.string], owner: nil)
+        pasteboard.setString(osb, forType: .string)
+        
+        print(osb)
+        
     }
     
     

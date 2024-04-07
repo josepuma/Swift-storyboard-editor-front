@@ -10,6 +10,8 @@
 		5902CA272BB91881002E6FE8 /* ScriptVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5902CA262BB91881002E6FE8 /* ScriptVariable.swift */; };
 		5902CA292BB926F0002E6FE8 /* ScriptVariableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5902CA282BB926F0002E6FE8 /* ScriptVariableView.swift */; };
 		5902CA2B2BB9282B002E6FE8 /* ScriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5902CA2A2BB9282B002E6FE8 /* ScriptView.swift */; };
+		591DB1D12BC3264000C3A9EC /* CodeEditorView in Frameworks */ = {isa = PBXBuildFile; productRef = 591DB1D02BC3264000C3A9EC /* CodeEditorView */; };
+		591DB1D32BC3264000C3A9EC /* LanguageSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 591DB1D22BC3264000C3A9EC /* LanguageSupport */; };
 		59277C7B2B893BE5005AAFD6 /* Easing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C7A2B893BE5005AAFD6 /* Easing.swift */; };
 		59277C822B89A981005AAFD6 /* SpriteContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C812B89A981005AAFD6 /* SpriteContainer.swift */; };
 		59277C842B8A3B40005AAFD6 /* EffectsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59277C832B8A3B40005AAFD6 /* EffectsContainer.swift */; };
@@ -45,6 +47,7 @@
 		59AA30DD2BB4FE1D00508DF5 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA30DC2BB4FE1D00508DF5 /* Project.swift */; };
 		59AA30DF2BB4FECA00508DF5 /* ProjectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA30DE2BB4FEC900508DF5 /* ProjectHandler.swift */; };
 		59AA30E12BB514C900508DF5 /* ProjectsReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA30E02BB514C900508DF5 /* ProjectsReader.swift */; };
+		59BD2B1A2BC3505D00D51D4F /* CommandWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BD2B192BC3505D00D51D4F /* CommandWriter.swift */; };
 		59D535612B964FCC00368EED /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535602B964FCC00368EED /* CodeEditorView.swift */; };
 		59D535632B9650B600368EED /* CodeFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535622B9650B600368EED /* CodeFileReader.swift */; };
 		59D535662B98E58B00368EED /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 59D535652B98E58B00368EED /* CodeEditor */; };
@@ -93,6 +96,7 @@
 		59AA30DC2BB4FE1D00508DF5 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		59AA30DE2BB4FEC900508DF5 /* ProjectHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectHandler.swift; sourceTree = "<group>"; };
 		59AA30E02BB514C900508DF5 /* ProjectsReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsReader.swift; sourceTree = "<group>"; };
+		59BD2B192BC3505D00D51D4F /* CommandWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandWriter.swift; sourceTree = "<group>"; };
 		59D535602B964FCC00368EED /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
 		59D535622B9650B600368EED /* CodeFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileReader.swift; sourceTree = "<group>"; };
 		59D535672B993F5100368EED /* CodeFileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileWriter.swift; sourceTree = "<group>"; };
@@ -106,6 +110,8 @@
 				598446762B7FC6BA00613DA8 /* SwiftImageReadWrite in Frameworks */,
 				59D5356B2B9942C700368EED /* DirectoryWatcher in Frameworks */,
 				59D5356E2B9E2FED00368EED /* SFSMonitor in Frameworks */,
+				591DB1D12BC3264000C3A9EC /* CodeEditorView in Frameworks */,
+				591DB1D32BC3264000C3A9EC /* LanguageSupport in Frameworks */,
 				59D535662B98E58B00368EED /* CodeEditor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,6 +172,7 @@
 		5984465C2B7FB57200613DA8 /* storyboard-editor-front */ = {
 			isa = PBXGroup;
 			children = (
+				59BD2B182BC3505000D51D4F /* Osu */,
 				59AA30DB2BB4FE0F00508DF5 /* Projects */,
 				59277C802B89A94C005AAFD6 /* UI */,
 				598446962B8168D000613DA8 /* Extensions */,
@@ -265,6 +272,14 @@
 			path = Projects;
 			sourceTree = "<group>";
 		};
+		59BD2B182BC3505000D51D4F /* Osu */ = {
+			isa = PBXGroup;
+			children = (
+				59BD2B192BC3505D00D51D4F /* CommandWriter.swift */,
+			);
+			path = Osu;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -286,6 +301,8 @@
 				59D535652B98E58B00368EED /* CodeEditor */,
 				59D5356A2B9942C700368EED /* DirectoryWatcher */,
 				59D5356D2B9E2FED00368EED /* SFSMonitor */,
+				591DB1D02BC3264000C3A9EC /* CodeEditorView */,
+				591DB1D22BC3264000C3A9EC /* LanguageSupport */,
 			);
 			productName = "storyboard-editor-front";
 			productReference = 5984465A2B7FB57200613DA8 /* storyboard-editor-front.app */;
@@ -320,6 +337,7 @@
 				59D535642B98E58A00368EED /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				59D535692B9942C700368EED /* XCRemoteSwiftPackageReference "DirectoryWatcher" */,
 				59D5356C2B9E2FEC00368EED /* XCRemoteSwiftPackageReference "SFSMonitor" */,
+				591DB1CF2BC3263F00C3A9EC /* XCRemoteSwiftPackageReference "CodeEditorView" */,
 			);
 			productRefGroup = 5984465B2B7FB57200613DA8 /* Products */;
 			projectDirPath = "";
@@ -348,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				598257722BB5FB2C00E21B45 /* ScriptFile.swift in Sources */,
+				59BD2B1A2BC3505D00D51D4F /* CommandWriter.swift in Sources */,
 				598446812B7FD84300613DA8 /* BaseAnimation.swift in Sources */,
 				598257752BB5FCC300E21B45 /* ScriptManagementView.swift in Sources */,
 				598446932B8098C900613DA8 /* OsbReader.swift in Sources */,
@@ -514,6 +533,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "storyboard-editor-front/storyboard_editor_front.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -541,6 +561,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "storyboard-editor-front/storyboard_editor_front.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -587,6 +608,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		591DB1CF2BC3263F00C3A9EC /* XCRemoteSwiftPackageReference "CodeEditorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mchakravarty/CodeEditorView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.13.0;
+			};
+		};
 		598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dagronf/SwiftImageReadWrite.git";
@@ -622,6 +651,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		591DB1D02BC3264000C3A9EC /* CodeEditorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 591DB1CF2BC3263F00C3A9EC /* XCRemoteSwiftPackageReference "CodeEditorView" */;
+			productName = CodeEditorView;
+		};
+		591DB1D22BC3264000C3A9EC /* LanguageSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 591DB1CF2BC3263F00C3A9EC /* XCRemoteSwiftPackageReference "CodeEditorView" */;
+			productName = LanguageSupport;
+		};
 		598446752B7FC6BA00613DA8 /* SwiftImageReadWrite */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 598446742B7FC6B900613DA8 /* XCRemoteSwiftPackageReference "SwiftImageReadWrite" */;

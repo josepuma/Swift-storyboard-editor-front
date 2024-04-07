@@ -17,7 +17,7 @@ struct ScriptView: View {
         ForEach(script.variables){ variable in
             ScriptVariableView(variable: variable){
                 DispatchQueue.main.async {
-                    script.readScript(project: project){spriteArray in
+                    script.readScript(project: project){spriteArray, errorMessage in
                         updateScript(spriteArray)
                     }
                 }

@@ -20,6 +20,11 @@ struct StoryboardSceneView: View{
     @State private var musicPosition: Double = 0
     @State private var musicPositionTime: String = "00:00:00"
     
+    @State private var frameWidth: Double = 854
+    @State private var frameHeight: Double = 480
+
+    @State private var zoomSize : Double = 80
+    
     @StateObject var contentViewmodel : ContentViewModel
     
     var body: some View{
@@ -29,10 +34,9 @@ struct StoryboardSceneView: View{
                 HStack{
                     Button{
                         contentViewmodel.currentTargetScene?.player.play()
-                        //buttonPlayerStatusText = (contentViewmodel.currentTargetScene!.player.player.isPlaying) ? "Pause" : "Play"
+                        buttonPlayerStatusText = (contentViewmodel.currentTargetScene!.player.player.isPlaying) ? "Pause" : "Play"
                     } label: {
-                        Text("Play")
-                        /*if(contentViewmodel.currentTargetScene!.player.player.isPlaying){
+                        if(contentViewmodel.currentTargetScene!.player.player.isPlaying){
                             Image(systemName: "pause.circle.fill")
                                 .resizable()
                                 .scaledToFit()
@@ -42,13 +46,13 @@ struct StoryboardSceneView: View{
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: iconActionsSize, height: iconActionsSize)
-                        }*/
+                        }
                         
                     }.buttonStyle(.borderless)
                         .foregroundColor(.white)
                     
                     Button{
-                        //contentViewmodel.currentTargetScene!.reloadStoryboardScene()
+                        contentViewmodel.currentTargetScene!.generateOsbCode()
                     } label: {
                         Image(systemName: "arrow.triangle.2.circlepath.circle.fill" )
                             .resizable()
@@ -57,8 +61,7 @@ struct StoryboardSceneView: View{
                     }.buttonStyle(.borderless)
                         .foregroundColor(.white)
                     
-                    
-                    /*Slider(
+                    Slider(
                         value: Binding(get: {
                             musicPosition
                         }, set: {
@@ -74,7 +77,7 @@ struct StoryboardSceneView: View{
                     })
                     .onReceive(contentViewmodel.currentTargetScene!.musicTimePublisher, perform: { target in
                         musicPosition = target
-                    }).accentColor(.white)*/
+                    }).accentColor(.white)
                     
                     
                     Button {

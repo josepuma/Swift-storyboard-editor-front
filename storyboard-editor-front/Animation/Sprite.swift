@@ -17,6 +17,9 @@ import simd
     func setScale(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     func setScale(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     
+    func setScaleVec(_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double, _ endValueY: Double)
+    func setScaleVec(easing: String, _ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double, _ endValueY: Double)
+    
     func setScaleX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     func setScaleX(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     
@@ -35,7 +38,7 @@ import simd
     func setMove(_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double, _ endValueY: Double)
     func setMove(easing: String, _ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double, _ endValueY: Double)
     
-    func setColor(_ r : Double, _ g: Double, _ b: Double)
+    func setColor(_ startTime: Double, _ endTime: Double, _ r : Double, _ g: Double, _ b: Double, _ r2 : Double, _ g2: Double, _ b2: Double)
     
     func setAdditiveBlend()
 }
@@ -53,6 +56,7 @@ import simd
     private var rotateCommands : [Command] = []
     private var scaleCommands : [Command] = []
     private var moveCommands : [VectorCommand] = []
+    private var scaleVecCommands : [VectorCommand] = []
     private var colorCommands : [ThirdDVectorCommand] = []
     private var areCommandsCalculated :  Bool = false;
     private var startTimes : [Double] = []
@@ -87,6 +91,7 @@ import simd
         self.position = spritePosition
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.isHidden = true
+        self.colorBlendFactor = 1
     }
     
     convenience init(spritePath: String, position: CGPoint, origin: SpriteOrigin = SpriteOrigin.centre) {
@@ -152,6 +157,7 @@ import simd
         moveYCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
+    
     func scaleX(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
@@ -176,6 +182,12 @@ import simd
         scaleCommands.append(Command(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing))
     }
     
+    func scaleVec(startTime: Double, endTime: Double, startValue: CGPoint, endValue: CGPoint, easing: Easing = .linear){
+        startTimes.append(startTime)
+        endTimes.append(endTime)
+        scaleVecCommands.append(VectorCommand(startTime: startTime, endTime: endTime, startValue: CGPointMake(startValue.x, startValue.y), endValue: CGPointMake(endValue.x, endValue.y), easing: easing))
+    }
+    
     func rotate(startTime: Double, endTime: Double, startValue: Double, endValue: Double, easing: Easing = .linear){
         startTimes.append(startTime)
         endTimes.append(endTime)
@@ -187,19 +199,16 @@ import simd
     }
     
     func color(startTime: Double, endTime: Double, r: Double, g: Double, b: Double, r2: Double, g2: Double, b2: Double, easing: Easing = .linear){
-        //let spriteColor = NSColor(red: r, green: g, blue: b, alpha: 1)
         startTimes.append(startTime)
         endTimes.append(endTime)
-        colorCommands.append(ThirdDVectorCommand(startTime: startTime, endTime: endTime, startValue: SIMD3(r, g, b), endValue: SIMD3(r2, g2, b2), easing: easing))
-        //self.color = spriteColor
-        //self.colorBlendFactor = 1
+        colorCommands.append(ThirdDVectorCommand(startTime: startTime, endTime: endTime, startValue: SIMD3(r / 255, g / 255, b / 255), endValue: SIMD3(r2 / 255, g2 / 255, b2 / 255), easing: easing))
     }
     
     //JavascriptCore Functions
     
     
-    func setColor(_ r : Double, _ g: Double, _ b: Double){
-        //color(r: r, g: g, b: b)
+    func setColor(_ startTime: Double, _ endTime: Double, _ r : Double, _ g: Double, _ b: Double, _ r2 : Double, _ g2: Double, _ b2: Double){
+        color(startTime: startTime, endTime: endTime, r: r, g: g, b: b, r2: r2, g2: g2, b2: b2)
     }
     
     func setOpacity(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
@@ -216,6 +225,14 @@ import simd
     
     func setScale(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
         scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing.isEmpty ? Easing.linear : Easing(rawValue: easing)!)
+    }
+    
+    func setScaleVec(_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double,  _ endValueY: Double) {
+        scaleVec(startTime: startTime, endTime: endTime, startValue: CGPoint(x: startValueX, y: startValueY), endValue: CGPoint(x: endValueX, y: endValueY))
+    }
+    
+    func setScaleVec(easing: String,_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double,  _ endValueY: Double) {
+        scaleVec(startTime: startTime, endTime: endTime, startValue: CGPoint(x: startValueX, y: startValueY), endValue: CGPoint(x: endValueX, y: endValueY), easing: Easing(rawValue: easing)!)
     }
     
     func setScaleX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
@@ -434,7 +451,7 @@ import simd
                         return
                     }
                 }else{
-                    let scaleX = valueAt(position: timePosition, commands: scaleXCommands)
+                    /*let scaleX = valueAt(position: timePosition, commands: scaleXCommands)
                     let scaleY = valueAt(position: timePosition, commands: scaleYCommands)
                     self.xScale = (scaleX * displaySize) * self.orientationFlipValueHorizontally
                     self.yScale = (scaleY * displaySize) * self.orientationFlipValueVertically
@@ -443,6 +460,19 @@ import simd
                     spriteBorder?.xScale = (scaleX * displaySize) * self.orientationFlipValueVertically
                     
                     if scaleX == 0 || scaleY == 0{
+                        self.isHidden = true
+                        spriteBorder?.isHidden = self.isHidden
+                        return
+                    }*/
+                    let scale = valueAtVector(position: timePosition, commands: scaleVecCommands)
+                    self.xScale = (scale.x * displaySize) * self.orientationFlipValueHorizontally
+                    self.yScale = (scale.y * displaySize) * self.orientationFlipValueVertically
+                    
+                    spriteBorder?.xScale = (scale.x * displaySize) * self.orientationFlipValueVertically
+                    spriteBorder?.yScale = (scale.y * displaySize) * self.orientationFlipValueHorizontally
+                    
+                    
+                    if scale.x == 0 || scale.y == 0{
                         self.isHidden = true
                         spriteBorder?.isHidden = self.isHidden
                         return
@@ -495,7 +525,24 @@ import simd
         areCommandsCalculated = true
     }
     
-    
+    func toOsb() -> String {
+        let osbSprite = CommandWriter(self)
+        osbSprite.loadCommand(_commandType: "F", fadeCommands)
+        osbSprite.loadCommand(_commandType: "R", rotateCommands)
+        osbSprite.loadCommand(_commandType: "S", scaleCommands)
+        osbSprite.loadCommand(_commandType: "MX", moveXCommands)
+        osbSprite.loadCommand(_commandType: "MY", moveYCommands)
+        osbSprite.load2DCommand(_commandType: "M", moveCommands)
+        osbSprite.load2DCommand(_commandType: "V", scaleVecCommands)
+        osbSprite.load3DCommand(_commandType: "C", colorCommands)
+        
+        var osb = osbSprite.toOsb()
+        if blendMode == .add{
+            osb.append(" P,0,\(Int(start)),,A\n")
+        }
+        
+        return osb
+    }
     
     
     

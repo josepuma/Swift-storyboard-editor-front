@@ -20,8 +20,12 @@ class Player {
 
     func loadAudio(_ project: Project){
         let path = URL(fileURLWithPath: "\(projectsPath)/Swtoard/\(project.folderPath)/\(project.backgroundMusicPath)")
-        player = try! AVAudioPlayer(contentsOf: path)
-        player.enableRate = true
+        let fileExists = FileManager.default.fileExists(atPath: path.path)
+        
+        if fileExists{
+            player = try! AVAudioPlayer(contentsOf: path)
+            player.enableRate = true
+        }
     }
     
     func play(){
@@ -44,9 +48,12 @@ class Player {
     
     func getPositionFormatted() -> String{
         //let miliseconds = Int(player.currentTime * 1000)
-        let seconds = Int(player.currentTime)
-        let minutes = seconds / 60
-        return String(format:"%02d:%02d", minutes, seconds)
+        if player != nil{
+            let seconds = Int(player.currentTime)
+            let minutes = seconds / 60
+            return String(format:"%02d:%02d", minutes, seconds)
+        }
+        return ""
     }
     
     func setPosition(position: Int){

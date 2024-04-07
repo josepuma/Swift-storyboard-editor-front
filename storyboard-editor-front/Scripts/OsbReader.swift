@@ -78,7 +78,7 @@ class OsbReader {
                     sprite = Sprite(spritePath: path, position: CGPoint(x: x!, y: y!), origin: SpriteOrigin(rawValue: origin)!)
                     break;
                     case "T":
-                        //sprite = nil
+                        sprite = nil
                         break;
                     case "Animation":
                     
@@ -116,7 +116,7 @@ class OsbReader {
                             loop = nil
                         }
                         loop = Loop(startTime: loopStartTime, loopCount: loopRepetitions)
-                        //sprite = nil
+                        sprite = nil
                         break;
                     default:
                         if(values[3].isEmpty){
@@ -206,7 +206,7 @@ class OsbReader {
                                 let endX = values.count > 7 ? Double(values[7]) : startX
                                 let endY = values.count > 8 ? Double(values[8]) : startY
                                 let endZ = values.count > 9 ? Double(values[9]) : startZ
-                                sprite?.color(startTime: startTime!, endTime: endTime!, r: startX! / 255, g: startY! / 255, b: startZ! / 255, r2: endX! / 255, g2: endY! / 255, b2: endZ! / 255, easing: easing)
+                                sprite?.color(startTime: startTime!, endTime: endTime!, r: startX!, g: startY!, b: startZ!, r2: endX!, g2: endY!, b2: endZ!, easing: easing)
                             case "P":
                                 let type = values[4]
                                 switch type {

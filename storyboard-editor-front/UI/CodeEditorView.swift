@@ -9,9 +9,9 @@ import SpriteKit
 import CodeEditor
 
 struct CodeEditorView : View {
+        @State var scriptHasBeenModified = false
         @Binding var script : ScriptFile
         @FocusState private var focused: Bool
-    
         var scriptHasBeenSaved: () -> Void
     
         var body: some View {
@@ -20,12 +20,18 @@ struct CodeEditorView : View {
             .focusable()
             .focused($focused)
             .onChange(of: focused, {
-                if !focused {
+                if !focused && scriptHasBeenModified {
+                    print("code updated")
                     scriptHasBeenSaved()
                 }
             })
+            .onChange(of: script.content, {
+                print("script has changed?")
+                scriptHasBeenModified = true
+            })
             .onAppear {
                 focused = true
+                scriptHasBeenModified = false
             }
         }
 }

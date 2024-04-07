@@ -81,36 +81,54 @@ class ScriptFile : ObservableObject, Codable, Identifiable, Hashable, Equatable 
            }
        }
     
-    func readScript(project: Project, completion: @escaping(_ spriteArray: [Sprite]) -> Void){
+    func readScript(project: Project, completion: @escaping(_ spriteArray: [Sprite], _ errorMessage: String) -> Void){
         var sprites: [Sprite] = []
-        getSpritesFromScript(){ spriteArray in
+        getSpritesFromScript(){ spriteArray, errorMessage in
             print("finished reading script \(self.name) and found \(spriteArray.count) sprites")
             self.sprites.removeAll()
             self.sprites.append(contentsOf: spriteArray)
             sprites.append(contentsOf: spriteArray)
+            completion(spriteArray, errorMessage)
         }
-        completion(sprites)
     }
     
-    func getSpritesFromScript(completion: @escaping(_ spriteArray: [Sprite]) -> Void){
-        
+    func getSpritesFromScript(completion: @escaping(_ spriteArray: [Sprite], _ errorMessage: String) -> Void) {
         let context = JSContext()
-        let sprites : [Sprite] = []
+        let sprites: [Sprite] = []
         context?.setObject(Sprite.self, forKeyedSubscript: NSString(string: "Sprite"))
         context?.setObject(Helpers.self, forKeyedSubscript: NSString(string: "Helpers"))
+        
+        
+        
         context?.evaluateScript(content)
-        for variable in variables{
-            context?.setObject(variable.value, forKeyedSubscript: variable.name as NSString)
+        
+        // Evaluate the script and check for errors
+        context?.exceptionHandler = { context, exception in
+            if let exception = exception {
+                print(exception)
+                completion(sprites, exception.toString())
+            }
+        }
+        
+        // Check if an error occurred during script evaluation
+        if let error = context?.exception {
+            print(error)
+            completion(sprites, error.toString())
+            return
+        }
+        
+        for variable in variables {
+            //context?.setObject(variable.value, forKeyedSubscript: variable.name as NSString)
         }
         
         let generateFunction = context?.objectForKeyedSubscript("generate")
         let spriteArray = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
         
-        spriteArray?.forEach{ sprite in
+        spriteArray?.forEach { sprite in
             sprite.setScriptParent(to: self)
         }
-
-        completion(spriteArray ?? [])
+        
+        completion(spriteArray ?? [], "")
     }
 }
 
