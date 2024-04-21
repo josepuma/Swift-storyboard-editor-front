@@ -12,6 +12,7 @@ import simd
     
     var textColor : JSValue? { get set }
     var shadowColor: JSValue? { get set }
+    var fontName: String? { get set }
     var width : Double { get }
     var height : Double { get }
     
@@ -55,11 +56,13 @@ import simd
 
 @objc public class Sprite : SKSpriteNode, SpriteExport, Identifiable {
     
+    
+    
     dynamic var spritePath : String = ""
     private var timeLinePosition : Double = 0
     dynamic var textColor: JSValue?
     dynamic var shadowColor: JSValue?
-    
+    dynamic var fontName: String?
     
     //Commands
     private var moveXCommands : [Command] = []

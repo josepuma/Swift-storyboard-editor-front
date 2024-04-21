@@ -79,8 +79,10 @@ class Utilities{
         shadow.shadowBlurRadius = sprite?.shadowBlurRadius ?? CGFloat(0)
         shadow.shadowOffset = CGSize(width: sprite?.shadowOffsetX ?? CGFloat(0), height: sprite?.shadowOffsetY ?? CGFloat(0))
         
+        let font = NSFont(name: sprite!.fontName ?? "", size: 72)
+        
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: 72),
+            .font: font ?? NSFont.systemFont(ofSize: 72),
             .paragraphStyle: paragraphStyle,
             .foregroundColor: sprite?.textTextureColor ?? NSColor.white,
             .shadow: shadow
