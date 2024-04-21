@@ -108,24 +108,3 @@ class CodeFileReader : SFSMonitorDelegate {
         completion(spriteArray ?? [])
     }
 }
-
-/*struct ScriptFile : Identifiable {
-    let name: String
-    let path: String
-    var content: String = ""
-    var variables: [ScriptVariable] = []
-    let id = UUID()
-}
-
-struct ScriptVariable : Identifiable {
-    let id = UUID()
-    let name: String
-    let type: String
-    var value: Any
-}
-
-
-struct ScriptSprite {
-    var scripts : [ScriptFile]
-    var sprites : [Sprite]
-}*/

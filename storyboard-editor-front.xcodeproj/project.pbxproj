@@ -48,6 +48,9 @@
 		59AA30DF2BB4FECA00508DF5 /* ProjectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA30DE2BB4FEC900508DF5 /* ProjectHandler.swift */; };
 		59AA30E12BB514C900508DF5 /* ProjectsReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AA30E02BB514C900508DF5 /* ProjectsReader.swift */; };
 		59BD2B1A2BC3505D00D51D4F /* CommandWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BD2B192BC3505D00D51D4F /* CommandWriter.swift */; };
+		59BD2B1C2BD4880300D51D4F /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BD2B1B2BD4880300D51D4F /* Utilities.swift */; };
+		59BD2B212BD49BB100D51D4F /* CharStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BD2B202BD49BB100D51D4F /* CharStyle.swift */; };
+		59BD2B232BD4B40700D51D4F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BD2B222BD4B40700D51D4F /* Store.swift */; };
 		59D535612B964FCC00368EED /* CodeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535602B964FCC00368EED /* CodeEditorView.swift */; };
 		59D535632B9650B600368EED /* CodeFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D535622B9650B600368EED /* CodeFileReader.swift */; };
 		59D535662B98E58B00368EED /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 59D535652B98E58B00368EED /* CodeEditor */; };
@@ -97,6 +100,9 @@
 		59AA30DE2BB4FEC900508DF5 /* ProjectHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectHandler.swift; sourceTree = "<group>"; };
 		59AA30E02BB514C900508DF5 /* ProjectsReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsReader.swift; sourceTree = "<group>"; };
 		59BD2B192BC3505D00D51D4F /* CommandWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandWriter.swift; sourceTree = "<group>"; };
+		59BD2B1B2BD4880300D51D4F /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		59BD2B202BD49BB100D51D4F /* CharStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharStyle.swift; sourceTree = "<group>"; };
+		59BD2B222BD4B40700D51D4F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		59D535602B964FCC00368EED /* CodeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditorView.swift; sourceTree = "<group>"; };
 		59D535622B9650B600368EED /* CodeFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileReader.swift; sourceTree = "<group>"; };
 		59D535672B993F5100368EED /* CodeFileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileWriter.swift; sourceTree = "<group>"; };
@@ -172,6 +178,7 @@
 		5984465C2B7FB57200613DA8 /* storyboard-editor-front */ = {
 			isa = PBXGroup;
 			children = (
+				59BD2B1D2BD49B4E00D51D4F /* Protocols */,
 				59BD2B182BC3505000D51D4F /* Osu */,
 				59AA30DB2BB4FE0F00508DF5 /* Projects */,
 				59277C802B89A94C005AAFD6 /* UI */,
@@ -188,6 +195,7 @@
 				598446722B7FBB6E00613DA8 /* VisualEffectView.swift */,
 				598446852B8060D500613DA8 /* ContentViewModel.swift */,
 				598446872B8061EE00613DA8 /* StoryboardScene.swift */,
+				59BD2B222BD4B40700D51D4F /* Store.swift */,
 			);
 			path = "storyboard-editor-front";
 			sourceTree = "<group>";
@@ -250,6 +258,7 @@
 		598446962B8168D000613DA8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				59BD2B1B2BD4880300D51D4F /* Utilities.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -278,6 +287,14 @@
 				59BD2B192BC3505D00D51D4F /* CommandWriter.swift */,
 			);
 			path = Osu;
+			sourceTree = "<group>";
+		};
+		59BD2B1D2BD49B4E00D51D4F /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				59BD2B202BD49BB100D51D4F /* CharStyle.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -386,6 +403,7 @@
 				5988B7B02BB8C1D4009F64C1 /* ScriptCreatorView.swift in Sources */,
 				59277C862B8A45E3005AAFD6 /* Filters.swift in Sources */,
 				598257702BB5F57000E21B45 /* ProjectManagementView.swift in Sources */,
+				59BD2B232BD4B40700D51D4F /* Store.swift in Sources */,
 				598446862B8060D600613DA8 /* ContentViewModel.swift in Sources */,
 				59AA30E12BB514C900508DF5 /* ProjectsReader.swift in Sources */,
 				598446602B7FB57200613DA8 /* ContentView.swift in Sources */,
@@ -403,6 +421,8 @@
 				5984468C2B808A0800613DA8 /* Command.swift in Sources */,
 				593E3FF32B8EBFD00058B69F /* Loop.swift in Sources */,
 				5902CA292BB926F0002E6FE8 /* ScriptVariableView.swift in Sources */,
+				59BD2B1C2BD4880300D51D4F /* Utilities.swift in Sources */,
+				59BD2B212BD49BB100D51D4F /* CharStyle.swift in Sources */,
 				59AA30DD2BB4FE1D00508DF5 /* Project.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

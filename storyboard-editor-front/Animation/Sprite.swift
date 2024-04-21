@@ -9,8 +9,16 @@ import JavaScriptCore
 import simd
 
 @objc protocol SpriteExport: JSExport{
-    var spritePath: String{ get set}
-    static func createWith(spritePath: String) -> Sprite
+    
+    var textColor : JSValue? { get set }
+    var shadowColor: JSValue? { get set }
+    var width : Double { get }
+    var height : Double { get }
+    
+    static func createWith(_ spritePath: String) -> Sprite
+    static func createChar(_ character: String, _ locationPath: String) -> Sprite
+    static func createCharWithShadow(_ character: String, _ locationPath: String, _ shadowBlurRadius: Double, _ shadowOffsetX: Double, _ shadowOffsetY: Double) -> Sprite
+    
     func setOpacity(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     func setOpacity(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double)
     
@@ -41,12 +49,18 @@ import simd
     func setColor(_ startTime: Double, _ endTime: Double, _ r : Double, _ g: Double, _ b: Double, _ r2 : Double, _ g2: Double, _ b2: Double)
     
     func setAdditiveBlend()
+    
+    func setOrigin(_ origin: String)
 }
 
 @objc public class Sprite : SKSpriteNode, SpriteExport, Identifiable {
-   
+    
     dynamic var spritePath : String = ""
     private var timeLinePosition : Double = 0
+    dynamic var textColor: JSValue?
+    dynamic var shadowColor: JSValue?
+    
+    
     //Commands
     private var moveXCommands : [Command] = []
     private var moveYCommands : [Command] = []
@@ -68,7 +82,14 @@ import simd
     private var spriteBorder : SKShapeNode?
     private var orientationFlipValueHorizontally = 1.0
     private var orientationFlipValueVertically = 1.0
+    
+    var shadowBlurRadius = CGFloat(0)
+    var shadowOffsetX = CGFloat(0)
+    var shadowOffsetY = CGFloat(0)
+    
     var isLoaded : Bool = false
+    var isTextSprite = false
+    var content: String = ""
     
     var script : ScriptFile?
     
@@ -79,11 +100,104 @@ import simd
         return false
     }
     
-    class func createWith(spritePath: String) -> Sprite {
+    var width : Double {
+        return size.width
+    }
+    
+    var height : Double {
+        return size.height
+    }
+    
+    var textTextureColor: NSColor {
+        var r = 1.0
+        var g = 1.0
+        var b = 1.0
+        if self.textColor?.isObject != nil{
+            if let swiftObject = textColor?.toObject() as? [String: Any] {
+                if let valueR = swiftObject["r"] as? Double {
+                    r = valueR / 255.0
+                }
+                if let valueG = swiftObject["g"] as? Double {
+                    g = valueG / 255.0
+                }
+                if let valueB = swiftObject["b"] as? Double {
+                    b = valueB / 255.0
+                }
+            }
+        }
+        return NSColor(red: r, green: g, blue: b, alpha: 1)
+    }
+    
+    var textTextureShadowColor: NSColor {
+        var r = 1.0
+        var g = 1.0
+        var b = 1.0
+        if self.shadowColor?.isObject != nil{
+            if let swiftObject = shadowColor?.toObject() as? [String: Any] {
+                if let valueR = swiftObject["r"] as? Double {
+                    r = valueR / 255
+                }
+                if let valueG = swiftObject["g"] as? Double {
+                    g = valueG / 255
+                }
+                if let valueB = swiftObject["b"] as? Double {
+                    b = valueB / 255
+                }
+            }
+        }
+        return NSColor(red: r, green: g, blue: b, alpha: 1)
+    }
+    
+    class func createWith(_ spritePath: String) -> Sprite {
+        let texture = Store.textures[spritePath]
+        if(texture != nil){
+            let sprite = Sprite(spritePath: spritePath)
+            sprite.loadTexture(texture: texture ?? SKTexture())
+            return sprite
+        }else{
+            
+        }
         return Sprite(spritePath: spritePath)
     }
     
-    convenience init(spritePath: String) {
+    class func createChar(_ text: String, _ location: String) -> Sprite {
+        let char = text.first?.unicodeScalars.first?.value
+        let path = "\(location)/\(char ?? 0).png"
+        let texture = Store.textures[path]
+        let utilities = Utilities()
+        let sprite = Sprite(spritePath: path, isTextSprite: true, content: String(text.prefix(1)))
+        if(texture != nil){
+            sprite.loadTexture(texture: texture ?? SKTexture())
+            return sprite
+        }else{
+            let newTexture = utilities.generateTextureFromSprite(from: sprite)
+            sprite.loadTexture(texture: newTexture)
+            Store.textures[sprite.spritePath] = newTexture
+            return sprite
+        }
+    }
+    
+    class func createCharWithShadow(_ text: String, _ location: String, _ shadowBlurRadius: Double, _ shadowOffsetX: Double, _ shadowOffsetY: Double) -> Sprite {
+        let char = text.first?.unicodeScalars.first?.value
+        let path = "\(location)/\(char ?? 0).png"
+        let texture = Store.textures[path]
+        let utilities = Utilities()
+        let sprite = Sprite(spritePath: path, isTextSprite: true, content: String(text.prefix(1)))
+        sprite.shadowBlurRadius = CGFloat(shadowBlurRadius)
+        sprite.shadowOffsetX = CGFloat(shadowOffsetX)
+        sprite.shadowOffsetY = CGFloat(shadowOffsetY)
+        if(texture != nil){
+            sprite.loadTexture(texture: texture ?? SKTexture())
+            return sprite
+        }else{
+            let newTexture = utilities.generateTextureFromSprite(from: sprite)
+            sprite.loadTexture(texture: newTexture)
+            Store.textures[path] = newTexture
+            return sprite
+        }
+    }
+    
+    convenience init(spritePath: String, isTextSprite: Bool = false, content : String = "") {
         //print("# init done #")
         self.init(imageNamed: spritePath.lowercased())
         self.spritePath = spritePath.lowercased()
@@ -92,6 +206,8 @@ import simd
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.isHidden = true
         self.colorBlendFactor = 1
+        self.isTextSprite = isTextSprite
+        self.content = content
     }
     
     convenience init(spritePath: String, position: CGPoint, origin: SpriteOrigin = SpriteOrigin.centre) {
@@ -106,7 +222,6 @@ import simd
         spriteInfoText.numberOfLines = 5
         self.isHidden = true
         self.colorBlendFactor = 1
-        
     }
     
     override init(texture: SKTexture!, color: NSColor, size: CGSize) {
@@ -296,6 +411,11 @@ import simd
         self.orientationFlipValueVertically = -1.0
     }
     
+    func setOrigin(_ origin: String){
+        if(!origin.isEmpty){
+            self.anchorPoint = SpriteOrigin(rawValue: origin.camelCased)?.anchorPoint ?? CGPoint(x: 0.5, y: 0.5)
+        }
+    }
     //
     
     func loadTexture(texture: SKTexture){

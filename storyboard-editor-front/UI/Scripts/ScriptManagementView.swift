@@ -14,7 +14,7 @@ struct ScriptManagementView : View {
     @State private var textValue = ""
     @State private var selectedScript : ScriptFile = ScriptFile()
     @State private var isProjectLoading = true
-    @State private var errorMessages = ""
+    @State private var errorMessages = "Errors will be shown here"
     
     @State private var sprites : [Sprite] = []
     @StateObject private var contentViewmodel = ContentViewModel()
@@ -94,12 +94,18 @@ struct ScriptManagementView : View {
                         .frame(maxWidth: .infinity)
                     CodeEditorView(script: $selectedScript){
                         if selectedScript.writeScript(project: project){
-                            selectedScript.getSpritesFromScript(){spriteArray, errorMessage in 
-                                errorMessages = errorMessage
-                                contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
+                            DispatchQueue.main.async {
+                                selectedScript.getSpritesFromScript(){spriteArray, errorMessage in
+                                    errorMessages = errorMessage
+                                    contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
+                                }
                             }
                         }
                     }
+                    
+                    
+                    
+                    
                     if !errorMessages.isEmpty{
                         Text(errorMessages)
                             .font(.subheadline)
@@ -116,6 +122,7 @@ struct ScriptManagementView : View {
                 project.loadTextures()
                 
                 let code = CodeFileReader(project)
+                Store.textures = project.textures
                 code.loadScripts { spriteArray in
                     sprites.append(contentsOf: spriteArray)
                     contentViewmodel.currentTargetScene?.player.loadAudio(project)

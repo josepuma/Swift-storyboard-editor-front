@@ -93,33 +93,33 @@ class ScriptFile : ObservableObject, Codable, Identifiable, Hashable, Equatable 
     }
     
     func getSpritesFromScript(completion: @escaping(_ spriteArray: [Sprite], _ errorMessage: String) -> Void) {
+        
         let context = JSContext()
         let sprites: [Sprite] = []
+        var errores = ""
         context?.setObject(Sprite.self, forKeyedSubscript: NSString(string: "Sprite"))
+        context?.setObject(CharStyle.self, forKeyedSubscript: NSString(string: "CharStyle"))
         context?.setObject(Helpers.self, forKeyedSubscript: NSString(string: "Helpers"))
-        
-        
-        
         context?.evaluateScript(content)
-        
         // Evaluate the script and check for errors
         context?.exceptionHandler = { context, exception in
             if let exception = exception {
-                print(exception)
-                completion(sprites, exception.toString())
+                //completion(sprites, exception.toString())
+                errores.append(exception.toString() + "\n")
             }
         }
         
+        
         // Check if an error occurred during script evaluation
         if let error = context?.exception {
-            print(error)
-            completion(sprites, error.toString())
-            return
+            //print(error)
+            errores.append(error.toString() + "\n")
+            //completion(sprites, error.toString())
         }
         
-        for variable in variables {
+        //for variable in variables {
             //context?.setObject(variable.value, forKeyedSubscript: variable.name as NSString)
-        }
+        //}
         
         let generateFunction = context?.objectForKeyedSubscript("generate")
         let spriteArray = generateFunction?.call(withArguments: [sprites]).toArray() as? [Sprite]
@@ -127,8 +127,7 @@ class ScriptFile : ObservableObject, Codable, Identifiable, Hashable, Equatable 
         spriteArray?.forEach { sprite in
             sprite.setScriptParent(to: self)
         }
-        
-        completion(spriteArray ?? [], "")
+        completion(spriteArray ?? [], errores)
     }
 }
 

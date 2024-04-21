@@ -21,12 +21,10 @@ struct CodeEditorView : View {
             .focused($focused)
             .onChange(of: focused, {
                 if !focused && scriptHasBeenModified {
-                    print("code updated")
                     scriptHasBeenSaved()
                 }
             })
             .onChange(of: script.content, {
-                print("script has changed?")
                 scriptHasBeenModified = true
             })
             .onAppear {

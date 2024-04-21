@@ -22,9 +22,10 @@ class StoryboardScene: SKScene, ObservableObject{
     public let musicTimePublisher = CurrentValueSubject<Double, Never>(0)
     private var cancellableSet = Set<AnyCancellable>()
     private var renderSprites: [Sprite] = []
-    public var textures : [String: SKTexture] = [:]
+    
     
     var storyboard = Storyboard()
+    let utilities = Utilities()
     let serialSpritesQueue = DispatchQueue(label: "sprites.adding.queue")
     let dispatchGroup = DispatchGroup()
     var scripts : [ScriptFile] = []
@@ -55,29 +56,36 @@ class StoryboardScene: SKScene, ObservableObject{
     }
     
     func loadTexturesSprites(textures: [String: SKTexture], sprites: [Sprite]){
-        self.textures = textures
+        Store.textures = textures
         renderSprites.removeAll()
         removeAllChildren()
         for sprite in sprites{
-            let texture = self.textures[sprite.spritePath]
-            if texture != nil {
-                sprite.loadTexture(texture: texture!)
+            if(sprite.isTextSprite){
+                let newTexture = utilities.generateTextureFromSprite(from: sprite)
+                sprite.loadTexture(texture: newTexture)
                 self.addChild(sprite)
                 self.renderSprites.append(sprite)
+            }else{
+                self.addChild(sprite)
+                self.renderSprites.append(sprite)
+               /* let texture = Store.textures[sprite.spritePath]
+                if texture != nil {
+                    //sprite.loadTexture(texture: texture!)
+                    
+                }*/
             }
         }
     }
     
     override func didMove(to view: SKView) {
         
-        //scriptsReader = CodeFileReader(scriptFolderPath)
-        //reloadStoryboardScene()
+        
     }
     
     override func keyDown(with event: NSEvent) {
         let keyCode: UInt16 = event.keyCode
-        let l : UInt16 = 0x7B
-        let r : UInt16 = 0x7C
+        //let l : UInt16 = 0x7B
+        //let r : UInt16 = 0x7C
         switch(keyCode){
             case 49: //spacebar
                 player.play()
@@ -161,15 +169,6 @@ class StoryboardScene: SKScene, ObservableObject{
         
     }
     
-    func loadOsbStoryboard(completion: @escaping(_ spriteArray: [Sprite]) -> Void ) {
-        DispatchQueue.global().async {
-            let osbReader = OsbReader(osbPath: "/Users/josepuma/Downloads/179323 Sakamoto Maaya - Okaerinasai (tomatomerde Remix)/Sakamoto Maaya - Okaerinasai (tomatomerde Remix) (Azer).osb")
-            DispatchQueue.main.async {
-                completion(osbReader.spriteList)
-            }
-        }
-    }
-    
     
     func loadSprites(_ sprites: [Sprite], script: ScriptFile){
         let spritesToRemove = renderSprites.filter { $0.script == script }
@@ -177,11 +176,27 @@ class StoryboardScene: SKScene, ObservableObject{
         removeChildren(in: spritesToRemove)
 
         for sprite in sprites{
-            let texture = self.textures[sprite.spritePath]
-            if texture != nil {
-                sprite.loadTexture(texture: texture!)
+            if(sprite.isTextSprite){
+                /*let texture = Store.textures[sprite.spritePath]
+                if texture != nil{
+                    sprite.loadTexture(texture: texture!)
+                }else{
+                    let newTexture = utilities.generateTextureFromSprite(from: sprite)
+                    //Store.textures[sprite.spritePath] = newTexture
+                    sprite.loadTexture(texture: newTexture)
+                }*/
+                let newTexture = utilities.generateTextureFromSprite(from: sprite)
+                sprite.loadTexture(texture: newTexture)
                 self.addChild(sprite)
                 self.renderSprites.append(sprite)
+            }else{
+                self.addChild(sprite)
+                self.renderSprites.append(sprite)
+                /*let texture = Store.textures[sprite.spritePath]
+                if texture != nil {
+                    sprite.loadTexture(texture: texture!)
+                    
+                }*/
             }
         }
     }
