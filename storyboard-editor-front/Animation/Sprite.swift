@@ -549,7 +549,6 @@ import simd
         timeLinePosition = timePosition
         if(areCommandsCalculated){
             if isActive {
-                
                 self.isHidden = false
                 //spriteInfoText.isHidden = false
                 let opacity = valueAt(position: timePosition, commands: fadeCommands)
@@ -574,6 +573,7 @@ import simd
                         return
                     }
                 }else{
+                    
                     /*let scaleX = valueAt(position: timePosition, commands: scaleXCommands)
                     let scaleY = valueAt(position: timePosition, commands: scaleYCommands)
                     self.xScale = (scaleX * displaySize) * self.orientationFlipValueHorizontally

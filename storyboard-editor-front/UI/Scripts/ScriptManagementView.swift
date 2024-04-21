@@ -15,7 +15,7 @@ struct ScriptManagementView : View {
     @State private var selectedScript : ScriptFile = ScriptFile()
     @State private var isProjectLoading = true
     @State private var errorMessages = "Errors will be shown here"
-    
+    @State private var isEditorHidden = false
     @State private var sprites : [Sprite] = []
     @StateObject private var contentViewmodel = ContentViewModel()
     
@@ -90,18 +90,22 @@ struct ScriptManagementView : View {
                 
                 
                 VStack(spacing: 0){
-                    StoryboardSceneView(sprites: sprites, project: project, contentViewmodel: contentViewmodel)
-                        .frame(maxWidth: .infinity)
-                    CodeEditorView(script: $selectedScript){
-                        if selectedScript.writeScript(project: project){
-                            DispatchQueue.main.async {
-                                selectedScript.getSpritesFromScript(){spriteArray, errorMessage in
-                                    errorMessages = errorMessage
-                                    contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
+                    StoryboardSceneView(sprites: sprites, project: project, contentViewmodel: contentViewmodel){
+                        isEditorHidden = !isEditorHidden
+                    }.frame(maxWidth: .infinity)
+                    if(!isEditorHidden){
+                        CodeEditorView(script: $selectedScript){
+                            if selectedScript.writeScript(project: project){
+                                DispatchQueue.main.async {
+                                    selectedScript.getSpritesFromScript(){spriteArray, errorMessage in
+                                        errorMessages = errorMessage
+                                        contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
+                                    }
                                 }
                             }
                         }
                     }
+                    
                     
                     
                     
@@ -153,5 +157,24 @@ extension String {
         let remainingLetters = self.dropFirst()
         // 3
         return firstLetter + remainingLetters
+    }
+}
+
+struct ResizableView<Content: View>: View {
+    let content: Content
+    @State private var size: CGSize = CGSize(width: 200, height: 100) // Initial size
+    
+    var body: some View {
+        content
+            .frame(width: size.width, height: size.height)
+            .border(Color.black) // Optional: Add border for visual clarity
+            .gesture(
+                DragGesture()
+                    .onChanged { value in
+                        let translation = value.translation
+                        size.width += translation.width
+                        size.height += translation.height
+                    }
+            )
     }
 }

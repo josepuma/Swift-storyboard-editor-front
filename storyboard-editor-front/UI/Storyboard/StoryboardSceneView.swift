@@ -26,6 +26,7 @@ struct StoryboardSceneView: View{
     @State private var zoomSize : Double = 80
     
     @StateObject var contentViewmodel : ContentViewModel
+    var openFullScreen: () -> Void
     
     var body: some View{
         VStack{
@@ -81,8 +82,9 @@ struct StoryboardSceneView: View{
                     
                     
                     Button {
-                        contentViewmodel.scene.view?.window?.collectionBehavior = .fullScreenPrimary
-                        contentViewmodel.scene.view?.enterFullScreenMode(.main!)
+                        //contentViewmodel.scene.view?.window?.collectionBehavior = .fullScreenPrimary
+                        //contentViewmodel.scene.view?.enterFullScreenMode(.main!)
+                        openFullScreen()
                     } label: {
                         Image(systemName: "arrow.down.backward.and.arrow.up.forward.square.fill")
                             .resizable()
@@ -92,6 +94,7 @@ struct StoryboardSceneView: View{
                         .foregroundColor(.white)
                         .help("View your storyboard in full screen")
                 }.padding()
+            
             }
         }
     }
