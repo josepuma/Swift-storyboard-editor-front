@@ -31,62 +31,68 @@ struct ScriptManagementView : View {
                 ).progressViewStyle(.circular)
             }else{
                 VStack{
-                    List(project.scripts) { script in
-                        DisclosureGroup(
-                            content: {
-                                Form {
-                                    ScriptView(script: script, project: project){ spriteArray in
-                                        DispatchQueue.main.async {
-                                            contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
+                    if(!isEditorHidden){
+                        List(project.scripts) { script in
+                            DisclosureGroup(
+                                content: {
+                                    Form {
+                                        ScriptView(script: script, project: project){ spriteArray in
+                                            DispatchQueue.main.async {
+                                                contentViewmodel.currentTargetScene?.loadSprites(spriteArray, script: selectedScript)
+                                            }
                                         }
                                     }
-                                }
-                            },label: {
-                                HStack(){
-                                    HStack{
-                                        Label(script.name , systemImage: "bubbles.and.sparkles")
+                                },label: {
+                                    HStack(){
+                                        HStack{
+                                            Label(script.name , systemImage: "bubbles.and.sparkles")
+                                        }
+                                        Spacer()
+                                        Button{
+                                            let content = script.loadScript(project: project)
+                                            script.content = content
+                                            selectedScript = script
+                                        } label: {
+                                            Image(systemName: "chevron.left.forwardslash.chevron.right")
+                                        }.buttonStyle(.plain)
+                                        Button{
+                                            
+                                        } label: {
+                                            Image(systemName: "trash")
+                                        }.buttonStyle(.plain)
+                                            .foregroundColor(.red)
                                     }
-                                    Spacer()
-                                    Button{
-                                        let content = script.loadScript(project: project)
-                                        script.content = content
-                                        selectedScript = script
-                                    } label: {
-                                        Image(systemName: "chevron.left.forwardslash.chevron.right")
-                                    }.buttonStyle(.plain)
-                                    Button{
-                                        
-                                    } label: {
-                                        Image(systemName: "trash")
-                                    }.buttonStyle(.plain)
-                                    .foregroundColor(.red)
-                                }
                                     
-                            }
-                        )
-                    }
-                    
-                    
-                    
-                    Button {
-                        isPopOverCreateScriptOpen = true
-                    }label: {
-                        Label("Create New Script", systemImage: "plus")
-                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    }.buttonStyle(.borderedProminent)
-                    .sheet(isPresented: $isPopOverCreateScriptOpen, content: {
-                        ScriptCreatorView {scriptName in
-                            let script = ScriptFile(name: scriptName, order: project.scripts.count + 1)
-                            project.scripts.append(script)
-                            
-                            let projectToSave = ProjectHandler(project)
-                            if projectToSave.saveProjectSettings(){
-                                isPopOverCreateScriptOpen = false
-                            }
+                                }
+                            )
                         }
-                    })
-                    .padding()
-                }.frame(maxWidth: 320)
+                        
+                    
+                    
+                    
+                    
+                        Button {
+                            isPopOverCreateScriptOpen = true
+                        }label: {
+                            Label("Create New Script", systemImage: "plus")
+                                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                        }.buttonStyle(.borderedProminent)
+                            .sheet(isPresented: $isPopOverCreateScriptOpen, content: {
+                                ScriptCreatorView {scriptName in
+                                    let script = ScriptFile(name: scriptName, order: project.scripts.count + 1)
+                                    project.scripts.append(script)
+                                    
+                                    let projectToSave = ProjectHandler(project)
+                                    if projectToSave.saveProjectSettings(){
+                                        isPopOverCreateScriptOpen = false
+                                    }
+                                }
+                            })
+                            .padding()
+                        
+                        
+                    }
+                }.frame(maxWidth: isEditorHidden ? 0 : 320)
                 
                 
                 VStack(spacing: 0){
@@ -157,24 +163,5 @@ extension String {
         let remainingLetters = self.dropFirst()
         // 3
         return firstLetter + remainingLetters
-    }
-}
-
-struct ResizableView<Content: View>: View {
-    let content: Content
-    @State private var size: CGSize = CGSize(width: 200, height: 100) // Initial size
-    
-    var body: some View {
-        content
-            .frame(width: size.width, height: size.height)
-            .border(Color.black) // Optional: Add border for visual clarity
-            .gesture(
-                DragGesture()
-                    .onChanged { value in
-                        let translation = value.translation
-                        size.width += translation.width
-                        size.height += translation.height
-                    }
-            )
     }
 }
