@@ -11,15 +11,15 @@ class CommandWriter{
     private var commandsToExport : String = ""
     
     init(_ sprite: Sprite){
-        commandsToExport.append("Sprite,Background,Centre,\"\(sprite.spritePath)\",320,240\n")
+        commandsToExport.append("Sprite,\(sprite.layer),\(sprite.origin),\"\(sprite.spritePath)\",320,240\n")
     }
     
     func loadCommand(_commandType: String, _ commands: [Command]){
         for command in commands {
-            var startValue = round(command.startValue * 100) / 100
-            var endValue = round(command.endValue * 100) / 100
+            let startValue = round(command.startValue * 10000) / 10000
+            let endValue = round(command.endValue * 10000) / 10000
             if _commandType == "MX"{
-                commandsToExport.append(" \(_commandType),\(command.easing.index ?? 0),\(Int(command.startTime)),\(Int(command.endTime)),\(startValue - 107),\(endValue)\n")
+                commandsToExport.append(" \(_commandType),\(command.easing.index ?? 0),\(Int(command.startTime)),\(Int(command.endTime)),\(startValue - 107),\(endValue - 107)\n")
             }else{
                 commandsToExport.append(" \(_commandType),\(command.easing.index ?? 0),\(Int(command.startTime)),\(Int(command.endTime)),\(startValue),\(endValue)\n")
             }
@@ -28,10 +28,10 @@ class CommandWriter{
     
     func load2DCommand(_commandType: String,_ commands: [VectorCommand]){
         for command in commands {
-            var startValueX = round(command.startValue.x * 100) / 100
-            var startValueY = round(command.startValue.y * 100) / 100
-            var endValueX = round(command.endValue.x * 100) / 100
-            var endValueY = round(command.endValue.y * 100) / 100
+            let startValueX = round(command.startValue.x * 10000) / 10000
+            let startValueY = round(command.startValue.y * 10000) / 10000
+            let endValueX = round(command.endValue.x * 10000) / 10000
+            let endValueY = round(command.endValue.y * 10000) / 10000
             
             if _commandType == "M"{
                 commandsToExport.append(" \(_commandType),\(command.easing.index ?? 0),\(Int(command.startTime)),\(Int(command.endTime)),\(startValueX - 107),\(startValueY),\(endValueX - 107),\(endValueY)\n")

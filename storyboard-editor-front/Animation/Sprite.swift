@@ -52,6 +52,7 @@ import simd
     func setAdditiveBlend()
     
     func setOrigin(_ origin: String)
+    func setLayer(_ layer: String)
 }
 
 @objc public class Sprite : SKSpriteNode, SpriteExport, Identifiable {
@@ -85,6 +86,9 @@ import simd
     private var spriteBorder : SKShapeNode?
     private var orientationFlipValueHorizontally = 1.0
     private var orientationFlipValueVertically = 1.0
+    
+    var origin = "Centre"
+    var layer = "Foreground"
     
     var shadowBlurRadius = CGFloat(0)
     var shadowOffsetX = CGFloat(0)
@@ -334,7 +338,7 @@ import simd
     }
     
     func setOpacity(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
-        fade(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+        fade(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing) ?? Easing.linear)
     }
     
     func setScale(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
@@ -342,7 +346,7 @@ import simd
     }
     
     func setScale(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
-        scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing.isEmpty ? Easing.linear : Easing(rawValue: easing)!)
+        scale(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: easing.isEmpty ? Easing.linear : Easing(rawValue: easing) ?? Easing.linear)
     }
     
     func setScaleVec(_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double,  _ endValueY: Double) {
@@ -350,7 +354,7 @@ import simd
     }
     
     func setScaleVec(easing: String,_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double,  _ endValueY: Double) {
-        scaleVec(startTime: startTime, endTime: endTime, startValue: CGPoint(x: startValueX, y: startValueY), endValue: CGPoint(x: endValueX, y: endValueY), easing: Easing(rawValue: easing)!)
+        scaleVec(startTime: startTime, endTime: endTime, startValue: CGPoint(x: startValueX, y: startValueY), endValue: CGPoint(x: endValueX, y: endValueY), easing: Easing(rawValue: easing) ?? Easing.linear)
     }
     
     func setScaleX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
@@ -358,7 +362,7 @@ import simd
     }
     
     func setScaleX(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
-        scaleX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+        scaleX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing) ?? Easing.linear)
     }
     
     func setScaleY(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
@@ -366,7 +370,7 @@ import simd
     }
     
     func setScaleY(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
-        scaleY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+        scaleY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing) ?? Easing.linear)
     }
     
     func setRotation(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
@@ -374,7 +378,7 @@ import simd
     }
     
     func setRotation(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
-        rotate(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+        rotate(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing) ?? Easing.linear)
     }
     
     func setMoveX(_ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
@@ -382,7 +386,7 @@ import simd
     }
     
     func setMoveX(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
-        moveX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+        moveX(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing) ?? Easing.linear)
     }
     
     
@@ -391,7 +395,7 @@ import simd
     }
     
     func setMoveY(easing: String, _ startTime: Double, _ endTime: Double, _ startValue: Double, _ endValue: Double) {
-        moveY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)!)
+        moveY(startTime: startTime, endTime: endTime, startValue: startValue, endValue: endValue, easing: Easing(rawValue: easing)  ?? Easing.linear)
     }
     
     func setMove(_ startTime: Double, _ endTime: Double, _ startValueX: Double, _ startValueY: Double, _ endValueX: Double,  _ endValueY: Double) {
@@ -416,7 +420,16 @@ import simd
     
     func setOrigin(_ origin: String){
         if(!origin.isEmpty){
+            self.origin = origin.uppercasingFirst
             self.anchorPoint = SpriteOrigin(rawValue: origin.camelCased)?.anchorPoint ?? CGPoint(x: 0.5, y: 0.5)
+        }
+    }
+    
+    func setLayer(_ layer: String){
+        if(!layer.isEmpty){
+            self.layer = layer.uppercasingFirst
+        }else{
+            self.layer = "Foreground"
         }
     }
     //
